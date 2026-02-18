@@ -1,0 +1,26 @@
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspace
+      - node_modules_cache:/workspace/node_modules
+      - gem_cache:/workspace/vendor/bundle
+    env_file: ../.env.development
+    tty: true
+    stdin_open: true
+    command: ['sleep', 'infinity']
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8
+    env_file: ../.env.development
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  node_modules_cache:
+  gem_cache:
+  db_data:
