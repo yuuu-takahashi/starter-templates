@@ -1,0 +1,52 @@
+name: Code Check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+defaults:
+  run:
+    shell: bash
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: format
+        run: yarn format
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: rubocop
+        run: bundle exec rubocop -A
+
+      - name: erb_lint
+        run: bundle exec erb_lint app/views/**/*.erb
+
+      - name: htmlbeautifier
+        run: find app/views -name "*.erb" -exec bundle exec htmlbeautifier {} \;
