@@ -1,0 +1,11 @@
+{
+  "name": "sample",
+  "version": "1.0.0",
+  "description": "",
+  "devDependencies": {
+    "prettier": "^3.4.2"
+  },
+  "scripts": {},
+  "author": "",
+  "license": "ISC"
+}
