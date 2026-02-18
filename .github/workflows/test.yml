@@ -1,0 +1,186 @@
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      nextjs: ${{ steps.filter.outputs.nextjs }}
+      react: ${{ steps.filter.outputs.react }}
+      rails: ${{ steps.filter.outputs.rails }}
+      rails_api: ${{ steps.filter.outputs.rails_api }}
+      sinatra: ${{ steps.filter.outputs.sinatra }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            nextjs:
+              - 'nextjs/**'
+            react:
+              - 'react/**'
+            rails:
+              - 'rails/**'
+            rails_api:
+              - 'rails-api/**'
+            sinatra:
+              - 'sinatra/**'
+
+  nextjs:
+    needs: changes
+    if: needs.changes.outputs.nextjs == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "yarn"
+          cache-dependency-path: "nextjs/yarn.lock"
+      - name: Install dependencies
+        run: yarn install
+        working-directory: nextjs
+      - name: test
+        run: yarn test
+        working-directory: nextjs
+
+  react:
+    needs: changes
+    if: needs.changes.outputs.react == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "yarn"
+          cache-dependency-path: "react/yarn.lock"
+      - name: Install dependencies
+        run: yarn install
+        working-directory: react
+      - name: test
+        run: yarn test
+        working-directory: react
+
+  rails:
+    needs: changes
+    if: needs.changes.outputs.rails == 'true'
+    runs-on: ubuntu-latest
+    container:
+      image: ruby:3.3.6
+    services:
+      db:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    env:
+      DATABASE_HOST: db
+      DATABASE_USER: root
+      DATABASE_PASSWORD: password
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache Ruby gems
+        uses: actions/cache@v4
+        with:
+          path: rails/vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('rails/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: Install Node.js & Yarn inside the container
+        run: |
+          apt-get update
+          apt-get install -y curl
+          curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+          apt-get install -y nodejs
+          npm install -g yarn
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: rails/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('rails/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: bundle install --path vendor/bundle
+        working-directory: rails
+      - name: Install JS dependencies
+        run: yarn install
+        working-directory: rails
+      - name: Run tests
+        run: |
+          bin/rails db:prepare
+          bundle exec rspec
+        working-directory: rails
+
+  rails_api:
+    needs: changes
+    if: needs.changes.outputs.rails_api == 'true'
+    runs-on: ubuntu-latest
+    container:
+      image: ruby:3.3.6
+    services:
+      db:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache Ruby gems
+        uses: actions/cache@v4
+        with:
+          path: rails-api/vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('rails-api/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: Install dependencies
+        run: bundle install --path vendor/bundle
+        working-directory: rails-api
+      - name: Run tests
+        run: |
+          cp .env.test .env
+          bundle exec rails db:create db:migrate
+          bundle exec rspec
+        working-directory: rails-api
+
+  sinatra:
+    needs: changes
+    if: needs.changes.outputs.sinatra == 'true'
+    runs-on: ubuntu-latest
+    container:
+      image: ruby:3.3.6
+    services:
+      db:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache Ruby gems
+        uses: actions/cache@v4
+        with:
+          path: sinatra/vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('sinatra/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: Install dependencies
+        run: bundle install --path vendor/bundle
+        working-directory: sinatra
+      - name: Run tests
+        run: bundle exec rspec
+        working-directory: sinatra

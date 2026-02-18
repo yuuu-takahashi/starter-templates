@@ -1,0 +1,11 @@
+{
+  "name": "template",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate:ci": "node scripts/generate-root-workflow.js"
+  },
+  "devDependencies": {
+    "yaml": "^2.6.1"
+  }
+}

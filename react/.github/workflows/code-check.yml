@@ -4,15 +4,17 @@ on:
   pull_request:
   push:
     branches: [main]
+
 defaults:
   run:
     shell: bash
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref }}
   cancel-in-progress: true
 
 jobs:
-  format:
+  check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

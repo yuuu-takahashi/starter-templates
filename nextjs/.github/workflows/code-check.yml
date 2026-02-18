@@ -2,16 +2,19 @@ name: Code Check
 
 on:
   pull_request:
+  push:
     branches: [main]
+
 defaults:
   run:
     shell: bash
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref }}
   cancel-in-progress: true
 
 jobs:
-  format:
+  check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -29,8 +32,11 @@ jobs:
       - name: format
         run: yarn format
 
-      - name: Run Tests
+      - name: lint
+        run: yarn lint
+
+      - name: test
         run: yarn test
 
-      - name: Build
+      - name: build
         run: yarn build
