@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+if ! foreman version &> /dev/null
+then
+  echo "Installing foreman..."
+  gem install foreman
+fi
+
+# Add ts-node for TypeScript support
+if ! command -v ts-node &> /dev/null
+then
+  echo "Installing ts-node..."
+  yarn add -D ts-node
+fi
+
+# Run the development server with ts-node support
+foreman start -f Procfile.dev "$@"

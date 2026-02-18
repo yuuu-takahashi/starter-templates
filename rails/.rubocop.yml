@@ -1,0 +1,47 @@
+require:
+  - rubocop-rails
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.3
+
+inherit_mode:
+  merge:
+    - Exclude
+
+inherit_from:
+  - .rubocop_todo.yml
+
+# Rails cops
+Rails:
+  Enabled: true
+
+# RSpec cops
+RSpec:
+  Enabled: true
+
+# Exclude files
+AllCops:
+  Exclude:
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+    - 'bin/**/*'
+    - 'vendor/**/*'
+    - 'node_modules/**/*'
+    - 'public/**/*'
+    - 'tmp/**/*'
+    - 'log/**/*'
+    - 'storage/**/*'
+    - 'coverage/**/*'
+    - 'spec/support/**/*'
+    - 'spec/fixtures/**/*'
+    - 'spec/factories/**/*'
+    - 'spec/rails_helper.rb'
+    - 'spec/spec_helper.rb'
+    - 'spec/support/**/*'
+    - 'spec/fixtures/**/*'
+    - 'spec/factories/**/*'
+    - 'spec/rails_helper.rb'
+    - 'spec/spec_helper.rb'

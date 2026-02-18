@@ -1,0 +1,47 @@
+{
+  "name": "template-rails",
+  "dockerComposeFile": "./docker-compose.yml",
+  "service": "web",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "aliariff.vscode-erb-beautify",
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode",
+        "Gruntfuggly.todo-tree",
+        "mhutchie.git-graph",
+        "Shopify.ruby-extensions-pack",
+        "aliariff.vscode-erb-beautify",
+        "streetsidesoftware.code-spell-checker",
+        "donjayamanne.githistory",
+        "github.vscode-github-actions",
+        "yzhang.markdown-all-in-one",
+        "DavidAnson.vscode-markdownlint"
+      ],
+      "settings": {
+        "editor.tabSize": 2,
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll": "explicit"
+        },
+        "eslint.validate": ["javascript"],
+        "[ruby]": {
+          "editor.defaultFormatter": "Shopify.ruby-lsp"
+        },
+        "ruby.lint": {
+          "rubocop": true
+        },
+        "[erb]": {
+          "editor.defaultFormatter": "aliariff.vscode-erb-beautify"
+        },
+        "vscode-erb-beautify.useBundler": true
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+<h1>Users List</h1>
+<table>
+  <thead>
+    <tr>
+      <th><%= render(TextComponent.new(text: 'ID')) %></th>
+      <th><%= render(TextComponent.new(text: 'NAME')) %></th>
+      <th><%= render(TextComponent.new(text: 'EMAIL')) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.id %></td>
+        <td><%= user.name %></td>
+        <td><%= user.email %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
