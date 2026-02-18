@@ -18,6 +18,8 @@ concurrency:
 jobs:
   changes:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
     outputs:
       nextjs: ${{ steps.filter.outputs.nextjs }}
       react: ${{ steps.filter.outputs.react }}
@@ -102,7 +104,6 @@ jobs:
         run: cd rails && yarn install && yarn format && yarn lint
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version-file: "rails/.ruby-version"
           working-directory: "rails"
           bundler-cache: true
       - name: rubocop
@@ -130,7 +131,6 @@ jobs:
         run: cd rails-api && yarn install && yarn format
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version-file: "rails-api/.ruby-version"
           working-directory: "rails-api"
           bundler-cache: true
       - name: rubocop
@@ -152,7 +152,6 @@ jobs:
         run: cd sinatra && yarn install && yarn format
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version-file: "sinatra/.ruby-version"
           working-directory: "sinatra"
           bundler-cache: true
       - name: rubocop

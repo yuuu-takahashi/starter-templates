@@ -16,6 +16,8 @@ concurrency:
 jobs:
   changes:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
     outputs:
       nextjs: ${{ steps.filter.outputs.nextjs }}
       react: ${{ steps.filter.outputs.react }}

@@ -111,7 +111,6 @@ function mergeFormatAndLintSteps(formatJob, lintJob, dir) {
   steps.push({
     uses: "ruby/setup-ruby@v1",
     with: {
-      "ruby-version-file": `${dir}/.ruby-version`,
       "working-directory": dir,
       "bundler-cache": true,
     },
