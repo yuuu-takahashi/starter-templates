@@ -10,6 +10,13 @@ import { join } from "path";
 
 const ROOT: string = process.cwd();
 
+// ── Shared VSCode extensions ──────────────────────────────────────────────────
+
+const BASE_EXTENSIONS: string[] = ["esbenp.prettier-vscode"];
+const NODE_EXTENSIONS: string[] = ["dbaeumer.vscode-eslint"];
+const RUBY_EXTENSIONS: string[] = ["Shopify.ruby-extensions-pack"];
+const ERB_EXTENSIONS: string[] = ["aliariff.vscode-erb-beautify"];
+
 // ── Shared VSCode settings ────────────────────────────────────────────────────
 
 type VscodeSettings = Record<string, unknown>;
@@ -75,7 +82,7 @@ const STACKS: Stack[] = [
       ],
       customizations: {
         vscode: {
-          extensions: ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint"],
+          extensions: [...BASE_EXTENSIONS, ...NODE_EXTENSIONS],
           settings: {
             ...BASE_SETTINGS,
             "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
@@ -96,7 +103,7 @@ const STACKS: Stack[] = [
       ],
       customizations: {
         vscode: {
-          extensions: ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint"],
+          extensions: [...BASE_EXTENSIONS, ...NODE_EXTENSIONS],
           settings: {
             ...BASE_SETTINGS,
             "eslint.validate": ["javascript"],
@@ -117,7 +124,7 @@ const STACKS: Stack[] = [
       ],
       customizations: {
         vscode: {
-          extensions: ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint"],
+          extensions: [...BASE_EXTENSIONS, ...NODE_EXTENSIONS],
           settings: {
             ...BASE_SETTINGS,
             "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
@@ -135,11 +142,7 @@ const STACKS: Stack[] = [
       workspaceFolder: "/workspace",
       customizations: {
         vscode: {
-          extensions: [
-            "esbenp.prettier-vscode",
-            "Shopify.ruby-extensions-pack",
-            "aliariff.vscode-erb-beautify",
-          ],
+          extensions: [...BASE_EXTENSIONS, ...RUBY_EXTENSIONS, ...ERB_EXTENSIONS],
           settings: { ...BASE_SETTINGS, ...RUBY_SETTINGS, ...ERB_SETTINGS },
         },
       },
@@ -154,7 +157,7 @@ const STACKS: Stack[] = [
       workspaceFolder: "/workspace",
       customizations: {
         vscode: {
-          extensions: ["esbenp.prettier-vscode", "Shopify.ruby-extensions-pack"],
+          extensions: [...BASE_EXTENSIONS, ...RUBY_EXTENSIONS],
           settings: { ...BASE_SETTINGS, ...RUBY_SETTINGS },
         },
       },
@@ -170,10 +173,10 @@ const STACKS: Stack[] = [
       customizations: {
         vscode: {
           extensions: [
-            "esbenp.prettier-vscode",
-            "Shopify.ruby-extensions-pack",
-            "aliariff.vscode-erb-beautify",
-            "dbaeumer.vscode-eslint",
+            ...BASE_EXTENSIONS,
+            ...RUBY_EXTENSIONS,
+            ...ERB_EXTENSIONS,
+            ...NODE_EXTENSIONS,
             "eamodio.gitlens",
             "Gruntfuggly.todo-tree",
             "mhutchie.git-graph",
@@ -206,7 +209,7 @@ const STACKS: Stack[] = [
       ],
       customizations: {
         vscode: {
-          extensions: ["esbenp.prettier-vscode", "Shopify.ruby-extensions-pack"],
+          extensions: [...BASE_EXTENSIONS, ...RUBY_EXTENSIONS],
           settings: { ...BASE_SETTINGS, ...RUBY_SETTINGS },
         },
       },
