@@ -181,6 +181,8 @@ GEM
     nio4r (2.7.4)
     nokogiri (1.18.7-aarch64-linux-gnu)
       racc (~> 1.4)
+    nokogiri (1.18.7-arm64-darwin)
+      racc (~> 1.4)
     nokogiri (1.18.7-x86_64-linux-gnu)
       racc (~> 1.4)
     package_json (0.1.0)
@@ -303,6 +305,8 @@ GEM
       rubocop-minitest
       rubocop-performance
       rubocop-rails
+    rubocop-rspec (3.4.0)
+      rubocop (~> 1.61)
     ruby-lsp (0.4.5)
       language_server-protocol (~> 3.17.0)
       sorbet-runtime
@@ -379,6 +383,7 @@ GEM
 
 PLATFORMS
   aarch64-linux
+  arm64-darwin-24
   x86_64-linux
 
 DEPENDENCIES
@@ -402,6 +407,7 @@ DEPENDENCIES
   rspec-rails (~> 7.1)
   rubocop (~> 1.71.0)
   rubocop-rails-omakase
+  rubocop-rspec
   ruby-lsp (~> 0.4.0)
   selenium-webdriver
   shakapacker (= 8.2)

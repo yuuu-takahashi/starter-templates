@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe TextComponent, type: :component do
   it 'renders something useful' do
     expect(

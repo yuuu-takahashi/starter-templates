@@ -29,3 +29,10 @@
 
 en:
   hello: 'Hello world'
+  users:
+    create:
+      notice: User was successfully created.
+    update:
+      notice: User was successfully updated.
+    destroy:
+      notice: User was successfully destroyed.
