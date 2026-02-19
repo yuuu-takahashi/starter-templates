@@ -31,7 +31,7 @@ function buildRootWorkflow() {
 
   jobs.changes = {
     "runs-on": "ubuntu-latest",
-    permissions: { "pull-requests": "read" },
+    permissions: { contents: "read", "pull-requests": "read" },
     outputs: Object.fromEntries(STACKS.map((s) => [s.id, "${{ steps.filter.outputs." + s.id + " }}"])),
     steps: [
       { uses: "actions/checkout@v4" },
@@ -151,6 +151,7 @@ function emitYaml(jobs) {
     "  changes:",
     "    runs-on: ubuntu-latest",
     "    permissions:",
+    "      contents: read",
     "      pull-requests: read",
     "    outputs:",
     ...STACKS.map((s) => `      ${s.id}: \${{ steps.filter.outputs.${s.id} }}`),
