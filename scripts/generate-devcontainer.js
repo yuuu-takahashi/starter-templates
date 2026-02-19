@@ -56,6 +56,27 @@ const STACKS = [
     },
   },
   {
+    dir: "nodejs",
+    config: {
+      name: "template-nodejs",
+      build: { dockerfile: "Dockerfile", context: ".." },
+      workspaceFolder: "/workspace",
+      mounts: [
+        "source=${localWorkspaceFolder},target=/workspace,type=bind",
+        "source=${localWorkspaceFolderBasename}_node_modules,target=/workspace/node_modules,type=volume",
+      ],
+      customizations: {
+        vscode: {
+          extensions: ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint"],
+          settings: {
+            ...BASE_SETTINGS,
+            "eslint.validate": ["javascript"],
+          },
+        },
+      },
+    },
+  },
+  {
     dir: "react",
     config: {
       name: "template-react",

@@ -22,6 +22,7 @@ jobs:
       pull-requests: read
     outputs:
       nextjs: ${{ steps.filter.outputs.nextjs }}
+      nodejs: ${{ steps.filter.outputs.nodejs }}
       react: ${{ steps.filter.outputs.react }}
       rails: ${{ steps.filter.outputs.rails }}
       rails_api: ${{ steps.filter.outputs.rails_api }}
@@ -34,6 +35,8 @@ jobs:
           filters: |
             nextjs:
               - 'nextjs/**'
+            nodejs:
+              - 'nodejs/**'
             react:
               - 'react/**'
             rails:
@@ -67,6 +70,27 @@ jobs:
         run: yarn test
       - name: build
         run: yarn build
+
+  nodejs:
+    needs: changes
+    if: needs.changes.outputs.nodejs == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nodejs
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "yarn"
+          cache-dependency-path: "nodejs/yarn.lock"
+      - name: Install dependencies
+        run: yarn install
+      - name: format
+        run: yarn format
+      - name: lint
+        run: yarn lint
 
   react:
     needs: changes

@@ -12,6 +12,7 @@ import YAML from "yaml";
 const ROOT = join(process.cwd());
 const STACKS = [
   { id: "nextjs", dir: "nextjs", pathFilter: "nextjs/**" },
+  { id: "nodejs", dir: "nodejs", pathFilter: "nodejs/**" },
   { id: "react", dir: "react", pathFilter: "react/**" },
   { id: "rails", dir: "rails", pathFilter: "rails/**" },
   { id: "rails_api", dir: "rails-api", pathFilter: "rails-api/**" },
