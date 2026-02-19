@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "generate:ci": "node scripts/generate-root-workflow.js"
+    "generate:ci": "node scripts/generate-root-workflow.js",
+    "generate:devcontainer": "node scripts/generate-devcontainer.js"
   },
   "devDependencies": {
     "yaml": "^2.6.1"
