@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env tsx
 /**
  * Generates .devcontainer/devcontainer.json (and docker-compose.yml where shared)
  * for each template. Edit this file to change devcontainer settings.
@@ -8,11 +8,20 @@
 import { writeFileSync } from "fs";
 import { join } from "path";
 
-const ROOT = process.cwd();
+const ROOT: string = process.cwd();
+
+// ── Shared VSCode extensions ──────────────────────────────────────────────────
+
+const BASE_EXTENSIONS: string[] = ["esbenp.prettier-vscode"];
+const NODE_EXTENSIONS: string[] = ["dbaeumer.vscode-eslint"];
+const RUBY_EXTENSIONS: string[] = ["Shopify.ruby-extensions-pack"];
+const ERB_EXTENSIONS: string[] = ["aliariff.vscode-erb-beautify"];
 
 // ── Shared VSCode settings ────────────────────────────────────────────────────
 
-const BASE_SETTINGS = {
+type VscodeSettings = Record<string, unknown>;
+
+const BASE_SETTINGS: VscodeSettings = {
   "editor.tabSize": 2,
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
@@ -21,19 +30,46 @@ const BASE_SETTINGS = {
   "editor.codeActionsOnSave": { "source.fixAll": "explicit" },
 };
 
-const RUBY_SETTINGS = {
+const RUBY_SETTINGS: VscodeSettings = {
   "[ruby]": { "editor.defaultFormatter": "Shopify.ruby-lsp" },
   "ruby.lint": { "rubocop": true },
 };
 
-const ERB_SETTINGS = {
+const ERB_SETTINGS: VscodeSettings = {
   "[erb]": { "editor.defaultFormatter": "aliariff.vscode-erb-beautify" },
   "vscode-erb-beautify.useBundler": true,
 };
 
 // ── Per-project devcontainer.json definitions ─────────────────────────────────
 
-const STACKS = [
+interface DevcontainerBuild {
+  dockerfile: string;
+  context: string;
+}
+
+interface VscodeCustomization {
+  extensions: string[];
+  settings: VscodeSettings;
+}
+
+interface DevcontainerConfig {
+  name: string;
+  build?: DevcontainerBuild;
+  dockerComposeFile?: string;
+  service?: string;
+  workspaceFolder: string;
+  mounts?: string[];
+  customizations: {
+    vscode: VscodeCustomization;
+  };
+}
+
+interface Stack {
+  dir: string;
+  config: DevcontainerConfig;
+}
+
+const STACKS: Stack[] = [
   {
     dir: "nextjs",
     config: {
@@ -46,10 +82,31 @@ const STACKS = [
       ],
       customizations: {
         vscode: {
-          extensions: ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint"],
+          extensions: [...BASE_EXTENSIONS, ...NODE_EXTENSIONS],
           settings: {
             ...BASE_SETTINGS,
             "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+          },
+        },
+      },
+    },
+  },
+  {
+    dir: "nodejs",
+    config: {
+      name: "template-nodejs",
+      build: { dockerfile: "Dockerfile", context: ".." },
+      workspaceFolder: "/workspace",
+      mounts: [
+        "source=${localWorkspaceFolder},target=/workspace,type=bind",
+        "source=${localWorkspaceFolderBasename}_node_modules,target=/workspace/node_modules,type=volume",
+      ],
+      customizations: {
+        vscode: {
+          extensions: [...BASE_EXTENSIONS, ...NODE_EXTENSIONS],
+          settings: {
+            ...BASE_SETTINGS,
+            "eslint.validate": ["javascript"],
           },
         },
       },
@@ -67,7 +124,7 @@ const STACKS = [
       ],
       customizations: {
         vscode: {
-          extensions: ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint"],
+          extensions: [...BASE_EXTENSIONS, ...NODE_EXTENSIONS],
           settings: {
             ...BASE_SETTINGS,
             "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
@@ -85,11 +142,7 @@ const STACKS = [
       workspaceFolder: "/workspace",
       customizations: {
         vscode: {
-          extensions: [
-            "esbenp.prettier-vscode",
-            "Shopify.ruby-extensions-pack",
-            "aliariff.vscode-erb-beautify",
-          ],
+          extensions: [...BASE_EXTENSIONS, ...RUBY_EXTENSIONS, ...ERB_EXTENSIONS],
           settings: { ...BASE_SETTINGS, ...RUBY_SETTINGS, ...ERB_SETTINGS },
         },
       },
@@ -104,7 +157,7 @@ const STACKS = [
       workspaceFolder: "/workspace",
       customizations: {
         vscode: {
-          extensions: ["esbenp.prettier-vscode", "Shopify.ruby-extensions-pack"],
+          extensions: [...BASE_EXTENSIONS, ...RUBY_EXTENSIONS],
           settings: { ...BASE_SETTINGS, ...RUBY_SETTINGS },
         },
       },
@@ -120,10 +173,10 @@ const STACKS = [
       customizations: {
         vscode: {
           extensions: [
-            "esbenp.prettier-vscode",
-            "Shopify.ruby-extensions-pack",
-            "aliariff.vscode-erb-beautify",
-            "dbaeumer.vscode-eslint",
+            ...BASE_EXTENSIONS,
+            ...RUBY_EXTENSIONS,
+            ...ERB_EXTENSIONS,
+            ...NODE_EXTENSIONS,
             "eamodio.gitlens",
             "Gruntfuggly.todo-tree",
             "mhutchie.git-graph",
@@ -156,7 +209,7 @@ const STACKS = [
       ],
       customizations: {
         vscode: {
-          extensions: ["esbenp.prettier-vscode", "Shopify.ruby-extensions-pack"],
+          extensions: [...BASE_EXTENSIONS, ...RUBY_EXTENSIONS],
           settings: { ...BASE_SETTINGS, ...RUBY_SETTINGS },
         },
       },
@@ -167,7 +220,7 @@ const STACKS = [
 // ── Shared docker-compose for Ruby+DB stacks ──────────────────────────────────
 // Used by sinatra and rails-api (identical configuration).
 
-const RUBY_DB_COMPOSE = `\
+const RUBY_DB_COMPOSE: string = `\
 services:
   web:
     build:
@@ -198,10 +251,10 @@ volumes:
 
 // ── Generator ─────────────────────────────────────────────────────────────────
 
-const JSON_HEADER =
-  "// Generated by scripts/generate-devcontainer.js — edit that file instead.\n";
-const YAML_HEADER =
-  "# Generated by scripts/generate-devcontainer.js — edit that file instead.\n";
+const JSON_HEADER: string =
+  "// Generated by scripts/generate-devcontainer.ts — edit that file instead.\n";
+const YAML_HEADER: string =
+  "# Generated by scripts/generate-devcontainer.ts — edit that file instead.\n";
 
 for (const { dir, config } of STACKS) {
   const outPath = join(ROOT, dir, ".devcontainer", "devcontainer.json");
