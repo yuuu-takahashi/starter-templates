@@ -3,12 +3,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "generate:ci": "node scripts/generate-root-workflow.js",
-    "generate:devcontainer": "node scripts/generate-devcontainer.js",
-    "generate:configs": "node scripts/generate-configs.js",
+    "generate:ci": "tsx scripts/generate-root-workflow.ts",
+    "generate:devcontainer": "tsx scripts/generate-devcontainer.ts",
+    "generate:configs": "tsx scripts/generate-configs.ts",
     "generate:all": "yarn generate:ci && yarn generate:devcontainer && yarn generate:configs"
   },
   "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0",
     "yaml": "^2.6.1"
   }
 }
