@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "generate:ci": "node scripts/generate-root-workflow.js",
-    "generate:devcontainer": "node scripts/generate-devcontainer.js"
+    "generate:devcontainer": "node scripts/generate-devcontainer.js",
+    "generate:configs": "node scripts/generate-configs.js",
+    "generate:all": "yarn generate:ci && yarn generate:devcontainer && yarn generate:configs"
   },
   "devDependencies": {
     "yaml": "^2.6.1"
