@@ -34,3 +34,6 @@ Rails:
 # RSpec cops
 RSpec:
   Enabled: true
+
+Style/Documentation:
+  Enabled: false
