@@ -1,33 +1,46 @@
 #!/usr/bin/env tsx
 /**
  * Generates shared config files for all templates:
- *   - .prettierrc.json
+ *   - .prettierrc.json (from shared/prettier/)
+ *   - .editorconfig (from shared/editorconfig/)
  *   - .github/workflows/static-analysis.yml
  * Run: yarn generate:configs
  */
 
-import { writeFileSync, mkdirSync } from "fs";
+import { readFileSync, writeFileSync, mkdirSync } from "fs";
 import { join } from "path";
 
 const ROOT: string = process.cwd();
 
-// ── .prettierrc.json ──────────────────────────────────────────────────────────
+const SHARED_PRETTIER = join(ROOT, "shared", "prettier", ".prettierrc.json");
+const SHARED_EDITORCONFIG = join(ROOT, "shared", "editorconfig", ".editorconfig");
 
-const PRETTIER_STACKS: string[] = ["templates/nextjs", "templates/nodejs", "templates/react", "templates/rails", "templates/rails-api", "templates/ruby", "templates/sinatra"];
+// 横断的な共通設定を配るテンプレート一覧（Prettier / EditorConfig 対象）
+const SHARED_CONFIG_STACKS: string[] = [
+  "templates/nextjs",
+  "templates/nodejs",
+  "templates/react",
+  "templates/rails",
+  "templates/rails-api",
+  "templates/ruby",
+  "templates/sinatra",
+];
 
-interface PrettierConfig {
-  semi: boolean;
-  singleQuote: boolean;
+// ── .prettierrc.json（shared からコピー）──────────────────────────────────────
+
+const prettierContent = readFileSync(SHARED_PRETTIER, "utf8");
+for (const dir of SHARED_CONFIG_STACKS) {
+  const outPath = join(ROOT, dir, ".prettierrc.json");
+  writeFileSync(outPath, prettierContent, "utf8");
+  console.log("Generated:", outPath);
 }
 
-const PRETTIER_CONFIG: PrettierConfig = {
-  semi: true,
-  singleQuote: true,
-};
+// ── .editorconfig（shared からコピー）──────────────────────────────────────────
 
-for (const dir of PRETTIER_STACKS) {
-  const outPath = join(ROOT, dir, ".prettierrc.json");
-  writeFileSync(outPath, JSON.stringify(PRETTIER_CONFIG, null, 2) + "\n", "utf8");
+const editorconfigContent = readFileSync(SHARED_EDITORCONFIG, "utf8");
+for (const dir of SHARED_CONFIG_STACKS) {
+  const outPath = join(ROOT, dir, ".editorconfig");
+  writeFileSync(outPath, editorconfigContent, "utf8");
   console.log("Generated:", outPath);
 }
 
