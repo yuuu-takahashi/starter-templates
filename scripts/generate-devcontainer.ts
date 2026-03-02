@@ -1,7 +1,11 @@
 #!/usr/bin/env tsx
 /**
  * Generates .devcontainer/devcontainer.json (and docker-compose.yml where shared)
- * for each template. Edit this file to change devcontainer settings.
+ * for each template.
+ *
+ * - 拡張機能・VSCode 設定の共通定義 → shared/devcontainer/defaults.json を編集
+ * - 各テンプレートのビルド・マウント・どの組み合わせを使うか → このファイルの STACKS を編集
+ *
  * Run: yarn generate:devcontainer
  */
 

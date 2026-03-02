@@ -7,12 +7,14 @@
  *   - templates/nodejs/eslint.config.mjs (from languages/node/eslint.config.base.mjs)
  *   - .rubocop.yml (Ruby: languages/ruby のベース + テンプレート用 fragment をマージ)
  *   - .github/workflows/static-analysis.yml
+ *   - templates/<id>/README.md (from scripts/template-readme-config.ts)
  * Run: yarn generate:configs
  */
 
 import { readFileSync, writeFileSync, mkdirSync } from "fs";
 import { join } from "path";
 import YAML from "yaml";
+import { TEMPLATE_README_CONFIGS, getGeneratedReadmeContent } from "./template-readme-config.js";
 
 const ROOT: string = process.cwd();
 
@@ -123,5 +125,13 @@ for (const dir of STATIC_ANALYSIS_STACKS) {
   mkdirSync(outDir, { recursive: true });
   const outPath = join(outDir, "static-analysis.yml");
   writeFileSync(outPath, staticAnalysisContent, "utf8");
+  console.log("Generated:", outPath);
+}
+
+// ── templates/<id>/README.md（template-readme-config から生成）────────────────────
+
+for (const config of TEMPLATE_README_CONFIGS) {
+  const outPath = join(ROOT, "templates", config.id, "README.md");
+  writeFileSync(outPath, getGeneratedReadmeContent(config), "utf8");
   console.log("Generated:", outPath);
 }
