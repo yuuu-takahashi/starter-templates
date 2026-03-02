@@ -14,6 +14,10 @@
 
 各ディレクトリの README を参照して利用してください。
 
+## languages/
+
+リンター・フォーマッター・Dockerfile など**言語レベル**の共通資産は [languages/](languages/) にまとめています（Node 用・Ruby 用）。`yarn generate:devcontainer` がここを参照して各テンプレートにコピーします。
+
 ## CI の管理
 
 - **正本**: 各テンプレート配下の `.github/workflows/code-check.yml`（例: `templates/nextjs/.github/workflows/code-check.yml`）。記事で共有する・eject でコピーするのはこれ。
