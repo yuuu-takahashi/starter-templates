@@ -32,15 +32,15 @@ jobs:
         with:
           filters: |
             nextjs:
-              - 'nextjs/**'
+              - 'templates/nextjs/**'
             react:
-              - 'react/**'
+              - 'templates/react/**'
             rails:
-              - 'rails/**'
+              - 'templates/rails/**'
             rails_api:
-              - 'rails-api/**'
+              - 'templates/rails-api/**'
             sinatra:
-              - 'sinatra/**'
+              - 'templates/sinatra/**'
 
   nextjs:
     needs: changes
@@ -52,13 +52,13 @@ jobs:
         with:
           node-version: "22.x"
           cache: "yarn"
-          cache-dependency-path: "nextjs/yarn.lock"
+          cache-dependency-path: "templates/nextjs/yarn.lock"
       - name: Install dependencies
         run: yarn install
-        working-directory: nextjs
+        working-directory: templates/nextjs
       - name: test
         run: yarn test
-        working-directory: nextjs
+        working-directory: templates/nextjs
 
   react:
     needs: changes
@@ -70,13 +70,13 @@ jobs:
         with:
           node-version: "22.x"
           cache: "yarn"
-          cache-dependency-path: "react/yarn.lock"
+          cache-dependency-path: "templates/react/yarn.lock"
       - name: Install dependencies
         run: yarn install
-        working-directory: react
+        working-directory: templates/react
       - name: test
         run: yarn test
-        working-directory: react
+        working-directory: templates/react
 
   rails:
     needs: changes
@@ -99,8 +99,8 @@ jobs:
       - name: Cache Ruby gems
         uses: actions/cache@v4
         with:
-          path: rails/vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('rails/Gemfile.lock') }}
+          path: templates/rails/vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('templates/rails/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
       - name: Install Node.js & Yarn inside the container
@@ -113,21 +113,21 @@ jobs:
       - name: Cache node_modules
         uses: actions/cache@v4
         with:
-          path: rails/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('rails/yarn.lock') }}
+          path: templates/rails/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('templates/rails/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install dependencies
         run: bundle install --path vendor/bundle
-        working-directory: rails
+        working-directory: templates/rails
       - name: Install JS dependencies
         run: yarn install
-        working-directory: rails
+        working-directory: templates/rails
       - name: Run tests
         run: |
           bin/rails db:prepare
           bundle exec rspec
-        working-directory: rails
+        working-directory: templates/rails
 
   rails_api:
     needs: changes
@@ -146,19 +146,19 @@ jobs:
       - name: Cache Ruby gems
         uses: actions/cache@v4
         with:
-          path: rails-api/vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('rails-api/Gemfile.lock') }}
+          path: templates/rails-api/vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('templates/rails-api/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
       - name: Install dependencies
         run: bundle install --path vendor/bundle
-        working-directory: rails-api
+        working-directory: templates/rails-api
       - name: Run tests
         run: |
           cp .env.test .env
           bundle exec rails db:create db:migrate
           bundle exec rspec
-        working-directory: rails-api
+        working-directory: templates/rails-api
 
   sinatra:
     needs: changes
@@ -177,13 +177,13 @@ jobs:
       - name: Cache Ruby gems
         uses: actions/cache@v4
         with:
-          path: sinatra/vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('sinatra/Gemfile.lock') }}
+          path: templates/sinatra/vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('templates/sinatra/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
       - name: Install dependencies
         run: bundle install --path vendor/bundle
-        working-directory: sinatra
+        working-directory: templates/sinatra
       - name: Run tests
         run: bundle exec rspec
-        working-directory: sinatra
+        working-directory: templates/sinatra

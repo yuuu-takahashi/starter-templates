@@ -2,7 +2,7 @@
 {
   "name": "template-nextjs",
   "build": {
-    "dockerfile": "../../.devcontainer/Dockerfile.node",
+    "dockerfile": "Dockerfile",
     "context": ".."
   },
   "workspaceFolder": "/workspace",

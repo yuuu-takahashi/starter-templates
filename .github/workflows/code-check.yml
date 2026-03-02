@@ -35,31 +35,31 @@ jobs:
         with:
           filters: |-
             nextjs:
-              - 'nextjs/**'
+              - 'templates/nextjs/**'
             nodejs:
-              - 'nodejs/**'
+              - 'templates/nodejs/**'
             react:
-              - 'react/**'
+              - 'templates/react/**'
             rails:
-              - 'rails/**'
+              - 'templates/rails/**'
             rails_api:
-              - 'rails-api/**'
+              - 'templates/rails-api/**'
             sinatra:
-              - 'sinatra/**'
+              - 'templates/sinatra/**'
   nextjs:
     needs: changes
     if: needs.changes.outputs.nextjs == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: nextjs
+        working-directory: templates/nextjs
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22.x
           cache: yarn
-          cache-dependency-path: nextjs/yarn.lock
+          cache-dependency-path: templates/nextjs/yarn.lock
       - name: Install dependencies
         run: yarn install
       - name: format
@@ -76,14 +76,14 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: nodejs
+        working-directory: templates/nodejs
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22.x
           cache: yarn
-          cache-dependency-path: nodejs/yarn.lock
+          cache-dependency-path: templates/nodejs/yarn.lock
       - name: Install dependencies
         run: yarn install
       - name: format
@@ -96,14 +96,14 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: react
+        working-directory: templates/react
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22.x
           cache: yarn
-          cache-dependency-path: react/yarn.lock
+          cache-dependency-path: templates/react/yarn.lock
       - name: Install dependencies
         run: yarn install
       - name: format
@@ -120,22 +120,22 @@ jobs:
         with:
           node-version: 22.x
           cache: yarn
-          cache-dependency-path: rails/yarn.lock
+          cache-dependency-path: templates/rails/yarn.lock
       - name: yarn format & lint
-        run: cd rails && yarn install && yarn format && yarn lint
+        run: cd templates/rails && yarn install && yarn format && yarn lint
       - uses: ruby/setup-ruby@v1
         with:
-          working-directory: rails
+          working-directory: templates/rails
           bundler-cache: true
       - name: rubocop
         run: bundle exec rubocop -A
-        working-directory: rails
+        working-directory: templates/rails
       - name: erb_lint
         run: bundle exec erb_lint app/views/**/*.erb
-        working-directory: rails
+        working-directory: templates/rails
       - name: htmlbeautifier
         run: find app/views -name "*.erb" -exec bundle exec htmlbeautifier {} \;
-        working-directory: rails
+        working-directory: templates/rails
   rails_api:
     needs: changes
     if: needs.changes.outputs.rails_api == 'true'
@@ -146,16 +146,16 @@ jobs:
         with:
           node-version: 22.x
           cache: yarn
-          cache-dependency-path: rails-api/yarn.lock
+          cache-dependency-path: templates/rails-api/yarn.lock
       - name: yarn format & lint
-        run: cd rails-api && yarn install && yarn format
+        run: cd templates/rails-api && yarn install && yarn format
       - uses: ruby/setup-ruby@v1
         with:
-          working-directory: rails-api
+          working-directory: templates/rails-api
           bundler-cache: true
       - name: rubocop
         run: bundle exec rubocop -A
-        working-directory: rails-api
+        working-directory: templates/rails-api
   sinatra:
     needs: changes
     if: needs.changes.outputs.sinatra == 'true'
@@ -166,19 +166,19 @@ jobs:
         with:
           node-version: 22.x
           cache: yarn
-          cache-dependency-path: sinatra/yarn.lock
+          cache-dependency-path: templates/sinatra/yarn.lock
       - name: yarn format & lint
-        run: cd sinatra && yarn install && yarn format
+        run: cd templates/sinatra && yarn install && yarn format
       - uses: ruby/setup-ruby@v1
         with:
-          working-directory: sinatra
+          working-directory: templates/sinatra
           bundler-cache: true
       - name: rubocop
         run: bundle exec rubocop -A
-        working-directory: sinatra
+        working-directory: templates/sinatra
       - name: erb_lint
         run: bundle exec erb_lint app/views/**/*.erb
-        working-directory: sinatra
+        working-directory: templates/sinatra
       - name: htmlbeautifier
         run: find app/views -name "*.erb" -exec bundle exec htmlbeautifier {} \;
-        working-directory: sinatra
+        working-directory: templates/sinatra
