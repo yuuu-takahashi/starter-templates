@@ -2,7 +2,7 @@
 
 # template-rails
 
-このプロジェクトは Ruby on Rails のテンプレートです。
+このリポジトリは Ruby on Rails のテンプレートプロジェクトです。
 このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。
 
 ## ディレクトリ構成

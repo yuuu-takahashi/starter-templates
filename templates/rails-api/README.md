@@ -2,7 +2,7 @@
 
 # template-rails-api
 
-このリポジトリはRuby on Railsのテンプレートプロジェクトです。
+このリポジトリは Ruby on Rails（API）のテンプレートプロジェクトです。
 このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。
 
 ## ディレクトリ構成

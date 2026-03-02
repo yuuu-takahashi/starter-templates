@@ -2,7 +2,7 @@
 
 # template-react
 
-このプロジェクトは React + Webpack のテンプレートです。
+このリポジトリは React + Webpack のテンプレートプロジェクトです。
 このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。
 
 ## ディレクトリ構成

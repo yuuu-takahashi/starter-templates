@@ -22,5 +22,5 @@
    cd template-ruby
    ```
 
-2. VS Codeの左下「><」アイコンをクリックし、「Remote-Containers: Reopen in Container」を選択して起動します。
+2. VS Codeの左下「><」アイコンをクリックし、「Remote-Containers: Reopen in Container」を選択し、起動
 

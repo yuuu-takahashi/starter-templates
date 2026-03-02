@@ -1,7 +1,30 @@
 /**
  * 各テンプレートの README.md 生成用メタデータ。
  * scripts/generate-configs.ts から参照され、各 templates/<id>/README.md を生成する。
+ * 共通の文面は SHARED_README_* 定数で一元管理し、テンプレートごとの差分は config のみで指定する。
  */
+
+// ── 共通文面（全テンプレートで同じ文言）────────────────────────────────────────
+
+const SHARED_README_DEV_CONTAINER_NOTE =
+  "このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。";
+
+const SHARED_README_SECTION_DIRECTORY = "## ディレクトリ構成";
+const SHARED_README_SECTION_SETUP = "## 開発環境構築";
+const SHARED_README_SECTION_REQUIRED_TOOLS = "### 必要なツール";
+const SHARED_README_SECTION_PREPARE = "### 開発環境の準備";
+const SHARED_README_SECTION_DEV_GUIDE = "## 開発作業ガイド";
+
+const SHARED_README_REQUIRED_TOOLS_LIST = [
+  "- [VS Code](https://code.visualstudio.com/)",
+  "- [Docker](https://www.docker.com/ja-jp/)",
+  "- VS Codeの[Dev Containers拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)",
+];
+
+const SHARED_README_PREVIEW_LINE = (url: string) =>
+  `ブラウザで <${url}> を開き、表示確認`;
+
+// ── 型定義 ───────────────────────────────────────────────────────────────────
 
 export type TemplateReadmeStep = {
   label?: string;
@@ -44,7 +67,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
   {
     id: "nextjs",
     title: "template-nextjs",
-    description: "このリポジトリは Nextjs のテンプレートプロジェクトです。",
+    description: "このリポジトリは Next.js のテンプレートプロジェクトです。",
     repoSlug: "template-nextjs",
     treeExclude: "vendor|node_modules",
     setupSteps: [
@@ -62,7 +85,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
   {
     id: "react",
     title: "template-react",
-    description: "このプロジェクトは React + Webpack のテンプレートです。",
+    description: "このリポジトリは React + Webpack のテンプレートプロジェクトです。",
     repoSlug: "template-react",
     treeExclude: "vendor|node_modules",
     setupSteps: [
@@ -80,7 +103,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
   {
     id: "rails",
     title: "template-rails",
-    description: "このプロジェクトは Ruby on Rails のテンプレートです。",
+    description: "このリポジトリは Ruby on Rails のテンプレートプロジェクトです。",
     repoSlug: "template-rails",
     treeExclude: "vendor|node_modules|tmp",
     setupSteps: [
@@ -98,7 +121,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
   {
     id: "rails-api",
     title: "template-rails-api",
-    description: "このリポジトリはRuby on Railsのテンプレートプロジェクトです。",
+    description: "このリポジトリは Ruby on Rails（API）のテンプレートプロジェクトです。",
     repoSlug: "template-rails-api",
     treeExclude: "vendor|node_modules|tmp",
     setupSteps: [
@@ -120,7 +143,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     repoSlug: "template-ruby",
     setupSteps: [
       { label: "リポジトリをクローン", commands: ["git clone git@github.com:yuuu-takahashi/template-ruby.git", "cd template-ruby"] },
-      { label: "VS Codeの左下「><」アイコンをクリックし、「Remote-Containers: Reopen in Container」を選択して起動します。", commands: [] },
+      { label: "VS Codeの左下「><」アイコンをクリックし、「Remote-Containers: Reopen in Container」を選択し、起動", commands: [] },
     ],
     devGuide: [],
   },
@@ -153,11 +176,11 @@ function renderReadme(c: TemplateReadmeConfig): string {
   lines.push(`# ${c.title}`);
   lines.push("");
   lines.push(`${c.description}`);
-  lines.push("このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。");
+  lines.push(SHARED_README_DEV_CONTAINER_NOTE);
   lines.push("");
 
   if (c.treeExclude) {
-    lines.push("## ディレクトリ構成");
+    lines.push(SHARED_README_SECTION_DIRECTORY);
     lines.push("");
     lines.push("```bash");
     lines.push(`tree -I '${c.treeExclude}'`);
@@ -165,15 +188,13 @@ function renderReadme(c: TemplateReadmeConfig): string {
     lines.push("");
   }
 
-  lines.push("## 開発環境構築");
+  lines.push(SHARED_README_SECTION_SETUP);
   lines.push("");
-  lines.push("### 必要なツール");
+  lines.push(SHARED_README_SECTION_REQUIRED_TOOLS);
   lines.push("");
-  lines.push("- [VS Code](https://code.visualstudio.com/)");
-  lines.push("- [Docker](https://www.docker.com/ja-jp/)");
-  lines.push("- VS Codeの[Dev Containers拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)");
+  SHARED_README_REQUIRED_TOOLS_LIST.forEach((item) => lines.push(item));
   lines.push("");
-  lines.push("### 開発環境の準備");
+  lines.push(SHARED_README_SECTION_PREPARE);
   lines.push("");
 
   c.setupSteps.forEach((step, i) => {
@@ -191,12 +212,12 @@ function renderReadme(c: TemplateReadmeConfig): string {
   });
 
   if (c.previewUrl) {
-    lines.push(`ブラウザで <${c.previewUrl}> を開き、表示確認`);
+    lines.push(SHARED_README_PREVIEW_LINE(c.previewUrl));
     lines.push("");
   }
 
   if (c.devGuide.length > 0) {
-    lines.push("## 開発作業ガイド");
+    lines.push(SHARED_README_SECTION_DEV_GUIDE);
     lines.push("");
     c.devGuide.forEach((g) => {
       lines.push(`- ${g.title}`);
