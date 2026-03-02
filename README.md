@@ -4,7 +4,7 @@
 
 ## テンプレート一覧
 
-各テンプレートは [templates/](templates/) 配下にあります。
+各テンプレートは [templates/](templates/) 配下にあります。**各フォルダはこのリポジトリから切り出して単体プロジェクトとして利用できます**（[templates/README.md](templates/README.md) 参照）。
 
 - **templates/nextjs** - Next.js (App Router)
 - **templates/react** - React + Webpack
