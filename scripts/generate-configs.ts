@@ -12,7 +12,7 @@
  *   - .github/dependabot.yml
  *   - .gitignore (from shared/gitignore/.gitignore.<stack>)
  *   - templates/<id>/README.md (from scripts/template-readme-config.ts)
- *   - .env.example / .env.test (DB 利用テンプレート: shared/env/* から生成)
+ *   - .env.example / .env.test / .env.development (DB 利用テンプレート: shared/env/* から生成)
  * Run: yarn generate:configs
  */
 
@@ -198,7 +198,7 @@ for (const [dir, srcName] of Object.entries(TEST_SOURCE)) {
   console.log("Generated:", outPath);
 }
 
-// ── .env.example / .env.test（shared/env: db.env 共通 + 各 variant の .env.head を結合して生成）────
+// ── .env.example / .env.test / .env.development（shared/env: db.env 共通 + 各 variant の .env.head を結合して生成）────
 
 const SHARED_ENV = join(ROOT, "shared", "env");
 const DB_ENV_PATH = join(SHARED_ENV, "db.env");
@@ -209,13 +209,18 @@ const ENV_TEMPLATES: Array<{ dir: string; variant: "rails" | "sinatra"; template
 
 const dbEnvContent = readFileSync(DB_ENV_PATH, "utf8");
 
+type EnvKind = "example" | "test" | "development";
+const ENV_KINDS: Array<{ kind: EnvKind; envValue: string; suffix: string }> = [
+  { kind: "example", envValue: "development", suffix: "_development" },
+  { kind: "test", envValue: "test", suffix: "_test" },
+  { kind: "development", envValue: "development", suffix: "_development" },
+];
+
 for (const { dir, variant, templateId } of ENV_TEMPLATES) {
   const headPath = join(SHARED_ENV, `${variant}.env.head`);
   const headTemplate = readFileSync(headPath, "utf8");
 
-  for (const kind of ["example", "test"] as const) {
-    const envValue = kind === "example" ? "development" : "test";
-    const suffix = kind === "example" ? "_development" : "_test";
+  for (const { kind, envValue, suffix } of ENV_KINDS) {
     const head = headTemplate.replace(/\{\{ENV\}\}/g, envValue);
     const db = dbEnvContent
       .replace(/\{\{TEMPLATE_ID\}\}/g, templateId)

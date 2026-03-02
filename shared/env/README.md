@@ -1,6 +1,6 @@
 # 環境変数テンプレート
 
-DB 利用テンプレート（rails-api, sinatra）の `.env.example` / `.env.test` は、ここにあるテンプレートから `yarn generate:configs` で生成されます。
+DB 利用テンプレート（rails-api, sinatra）の `.env.example` / `.env.test` / `.env.development` は、ここにあるテンプレートから `yarn generate:configs` で生成されます。
 
 ## 構成（共通化）
 
@@ -10,7 +10,7 @@ DB 利用テンプレート（rails-api, sinatra）の `.env.example` / `.env.te
 
 生成時は「各 variant の .env.head」＋「db.env」を結合し、`{{TEMPLATE_ID}}`・`{{SUFFIX}}`・`{{ENV}}` を置換して各テンプレートへ出力します。
 
-- **rails-api**: `rails.env.head` + `db.env` → `templates/rails-api/.env.example`, `.env.test`
-- **sinatra**: `sinatra.env.head` + `db.env` → `templates/sinatra/.env.example`, `.env.test`
+- **rails-api**: `rails.env.head` + `db.env` → `templates/rails-api/.env.example`, `.env.test`, `.env.development`
+- **sinatra**: `sinatra.env.head` + `db.env` → `templates/sinatra/.env.example`, `.env.test`, `.env.development`
 
 編集後は `yarn generate:configs` を実行して各テンプレートへ反映してください。
