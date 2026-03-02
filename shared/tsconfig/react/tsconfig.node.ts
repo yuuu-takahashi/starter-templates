@@ -1,0 +1,23 @@
+/**
+ * React テンプレート用 tsconfig.node。generate-configs で tsconfig.node.json を生成。
+ */
+export default {
+  compilerOptions: {
+    tsBuildInfoFile: "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    target: "ES2022",
+    lib: ["ES2024"],
+    module: "ESNext",
+    skipLibCheck: true,
+    moduleResolution: "bundler",
+    allowImportingTsExtensions: true,
+    isolatedModules: true,
+    moduleDetection: "force",
+    noEmit: true,
+    strict: true,
+    noUnusedLocals: true,
+    noUnusedParameters: true,
+    noFallthroughCasesInSwitch: true,
+    noUncheckedSideEffectImports: true,
+  },
+  include: ["vite.config.ts"],
+};
