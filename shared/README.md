@@ -4,7 +4,7 @@
 
 - **prettier/** — `.prettierrc.json`（全テンプレート）※ツール互換のため .json のまま
 - **editorconfig/** — `.editorconfig`（全テンプレート）
-- **workflows/** — 各テンプレートの `.github/workflows/static-analysis.yml` の元
+- **workflows/** — 各テンプレートの `.github/` の元（`static-analysis.yml` / `code-check.yml` / `test.yml` / `dependabot.yml` をテンプレート種別に応じて生成）
 - **devcontainer/** — devcontainer 用の VSCode 拡張機能・設定の共通定義（`yarn generate:devcontainer` で各テンプレートに反映）
 
 編集後は `yarn generate:configs`（prettier / editorconfig / workflows）または `yarn generate:devcontainer`（devcontainer）を実行して反映してください。

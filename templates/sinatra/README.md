@@ -31,7 +31,7 @@ tree -I 'vendor|node_modules'
 2. 環境変数の設定
 
    ```bash
-   cp example.env .env.development
+   cp .env.example .env.development
    ```
 
 3. VS Codeの左下「><」アイコンをクリックし、「Remote-Containers: Reopen in Container」を選択し、起動

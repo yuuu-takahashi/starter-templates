@@ -103,7 +103,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     treeExclude: "vendor|node_modules|tmp",
     setupSteps: [
       { label: "リポジトリをクローン", commands: ["git clone git@github.com:yuuu-takahashi/template-rails-api.git", "cd template-rails-api"] },
-      { label: "環境変数の設定", commands: ["cp example.env .env.development"] },
+      { label: "環境変数の設定", commands: ["cp .env.example .env.development"] },
       { label: "VS Codeの左下「><」アイコンをクリックし、「Remote-Containers: Reopen in Container」を選択し、起動", commands: [] },
       { label: "データベース準備", commands: ["bin/rails db:prepare"] },
       { label: "開発サーバー起動", commands: ["bin/rails s"] },
@@ -132,7 +132,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     treeExclude: "vendor|node_modules",
     setupSteps: [
       { label: "リポジトリをクローン", commands: ["git clone git@github.com:yuuu-takahashi/template-sinatra.git", "cd template-sinatra"] },
-      { label: "環境変数の設定", commands: ["cp example.env .env.development"] },
+      { label: "環境変数の設定", commands: ["cp .env.example .env.development"] },
       { label: "VS Codeの左下「><」アイコンをクリックし、「Remote-Containers: Reopen in Container」を選択し、起動", commands: [] },
       { label: "データベース準備", commands: ["bundle exec rake db:setup", "bundle exec rake db:seed"] },
       { label: "開発サーバー起動", commands: ["bundle exec ruby index.rb"] },
