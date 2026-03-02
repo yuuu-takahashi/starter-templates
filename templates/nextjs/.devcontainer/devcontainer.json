@@ -2,8 +2,8 @@
 {
   "name": "template-nextjs",
   "build": {
-    "dockerfile": "../../.devcontainer/Dockerfile.node",
-    "context": ".."
+    "dockerfile": "../../../.devcontainer/Dockerfile.node",
+    "context": "../../.."
   },
   "workspaceFolder": "/workspace",
   "mounts": [

@@ -4,17 +4,19 @@
 
 ## テンプレート一覧
 
-- **nextjs** - Next.js (App Router)
-- **react** - React + Webpack
-- **rails** - Ruby on Rails
-- **rails-api** - Rails API
-- **sinatra** - Sinatra
+各テンプレートは [templates/](templates/) 配下にあります。
+
+- **templates/nextjs** - Next.js (App Router)
+- **templates/react** - React + Webpack
+- **templates/rails** - Ruby on Rails
+- **templates/rails-api** - Rails API
+- **templates/sinatra** - Sinatra
 
 各ディレクトリの README を参照して利用してください。
 
 ## CI の管理
 
-- **正本**: 各テンプレート配下の `.github/workflows/code-check.yml`（記事で共有する・eject でコピーするのはこれ）
+- **正本**: 各テンプレート配下の `.github/workflows/code-check.yml`（例: `templates/nextjs/.github/workflows/code-check.yml`）。記事で共有する・eject でコピーするのはこれ。
 - **ルートの `.github/workflows/code-check.yml`**: 上記から **生成** したファイル（モノレポ用の path フィルタ付き）。手で編集しないでください。
 - テンプレートのワークフローを変更したら、ルートで次を実行してルートの workflow を更新してください:
 

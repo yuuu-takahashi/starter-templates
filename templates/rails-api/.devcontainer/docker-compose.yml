@@ -3,7 +3,7 @@ services:
   web:
     build:
       context: ..
-      dockerfile: ../.devcontainer/Dockerfile.ruby
+      dockerfile: ../../../.devcontainer/Dockerfile.ruby
     volumes:
       - ..:/workspace
       - node_modules_cache:/workspace/node_modules

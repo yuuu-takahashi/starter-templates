@@ -71,10 +71,10 @@ interface Stack {
 
 const STACKS: Stack[] = [
   {
-    dir: "nextjs",
+    dir: "templates/nextjs",
     config: {
       name: "template-nextjs",
-      build: { dockerfile: "../../.devcontainer/Dockerfile.node", context: ".." },
+      build: { dockerfile: "../../../.devcontainer/Dockerfile.node", context: "../../.." },
       workspaceFolder: "/workspace",
       mounts: [
         "source=${localWorkspaceFolder},target=/workspace,type=bind",
@@ -92,7 +92,7 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: "nodejs",
+    dir: "templates/nodejs",
     config: {
       name: "template-nodejs",
       build: { dockerfile: "Dockerfile", context: ".." },
@@ -113,10 +113,10 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: "react",
+    dir: "templates/react",
     config: {
       name: "template-react",
-      build: { dockerfile: "../../.devcontainer/Dockerfile.node", context: ".." },
+      build: { dockerfile: "../../../.devcontainer/Dockerfile.node", context: "../../.." },
       workspaceFolder: "/workspace",
       mounts: [
         "source=${localWorkspaceFolder},target=/workspace,type=bind",
@@ -134,7 +134,7 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: "sinatra",
+    dir: "templates/sinatra",
     config: {
       name: "template-sinatra",
       dockerComposeFile: "./docker-compose.yml",
@@ -149,7 +149,7 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: "rails-api",
+    dir: "templates/rails-api",
     config: {
       name: "template-rails-api",
       dockerComposeFile: "./docker-compose.yml",
@@ -164,7 +164,7 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: "rails",
+    dir: "templates/rails",
     config: {
       name: "template-rails",
       dockerComposeFile: "./docker-compose.yml",
@@ -197,7 +197,7 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: "ruby",
+    dir: "templates/ruby",
     config: {
       name: "Ruby",
       build: { dockerfile: "Dockerfile", context: ".." },
@@ -220,12 +220,13 @@ const STACKS: Stack[] = [
 // ── Shared docker-compose for Ruby+DB stacks ──────────────────────────────────
 // Used by sinatra and rails-api (identical configuration).
 
+// From templates/<name>/.devcontainer/ → ".." is template dir, repo root is ../../..
 const RUBY_DB_COMPOSE: string = `\
 services:
   web:
     build:
       context: ..
-      dockerfile: ../.devcontainer/Dockerfile.ruby
+      dockerfile: ../../../.devcontainer/Dockerfile.ruby
     volumes:
       - ..:/workspace
       - node_modules_cache:/workspace/node_modules
@@ -262,7 +263,7 @@ for (const { dir, config } of STACKS) {
   console.log("Generated:", outPath);
 }
 
-for (const dir of ["sinatra", "rails-api"]) {
+for (const dir of ["templates/sinatra", "templates/rails-api"]) {
   const outPath = join(ROOT, dir, ".devcontainer", "docker-compose.yml");
   writeFileSync(outPath, YAML_HEADER + RUBY_DB_COMPOSE, "utf8");
   console.log("Generated:", outPath);
