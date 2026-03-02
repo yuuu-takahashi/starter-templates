@@ -1,0 +1,34 @@
+# Rails テンプレート用の追加設定（.rubocop_base.yml とマージして出力される）
+
+require:
+  - rubocop-rails
+  - rubocop-rspec
+
+AllCops:
+  Exclude:
+    - "db/**/*"
+    - "config/**/*"
+    - "script/**/*"
+    - "bin/**/*"
+    - "vendor/**/*"
+    - "node_modules/**/*"
+    - "public/**/*"
+    - "tmp/**/*"
+    - "log/**/*"
+    - "storage/**/*"
+    - "coverage/**/*"
+    - "spec/support/**/*"
+    - "spec/fixtures/**/*"
+    - "spec/factories/**/*"
+    - "spec/rails_helper.rb"
+    - "spec/spec_helper.rb"
+
+inherit_mode:
+  merge:
+    - Exclude
+
+Rails:
+  Enabled: true
+
+RSpec:
+  Enabled: true

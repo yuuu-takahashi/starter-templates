@@ -1,0 +1,52 @@
+{
+  "extensions": {
+    "base": [
+      "esbenp.prettier-vscode"
+    ],
+    "node": [
+      "dbaeumer.vscode-eslint"
+    ],
+    "ruby": [
+      "Shopify.ruby-extensions-pack"
+    ],
+    "erb": [
+      "aliariff.vscode-erb-beautify"
+    ],
+    "tooling": [
+      "eamodio.gitlens",
+      "Gruntfuggly.todo-tree",
+      "mhutchie.git-graph",
+      "streetsidesoftware.code-spell-checker",
+      "donjayamanne.githistory",
+      "github.vscode-github-actions",
+      "yzhang.markdown-all-in-one",
+      "DavidAnson.vscode-markdownlint"
+    ]
+  },
+  "settings": {
+    "base": {
+      "editor.tabSize": 2,
+      "files.trimTrailingWhitespace": true,
+      "files.insertFinalNewline": true,
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+      "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+      }
+    },
+    "ruby": {
+      "[ruby]": {
+        "editor.defaultFormatter": "Shopify.ruby-lsp"
+      },
+      "ruby.lint": {
+        "rubocop": true
+      }
+    },
+    "erb": {
+      "[erb]": {
+        "editor.defaultFormatter": "aliariff.vscode-erb-beautify"
+      },
+      "vscode-erb-beautify.useBundler": true
+    }
+  }
+}

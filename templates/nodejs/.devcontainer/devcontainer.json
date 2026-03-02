@@ -12,10 +12,7 @@
   ],
   "customizations": {
     "vscode": {
-      "extensions": [
-        "esbenp.prettier-vscode",
-        "dbaeumer.vscode-eslint"
-      ],
+      "extensions": ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint"],
       "settings": {
         "editor.tabSize": 2,
         "files.trimTrailingWhitespace": true,
@@ -25,9 +22,7 @@
         "editor.codeActionsOnSave": {
           "source.fixAll": "explicit"
         },
-        "eslint.validate": [
-          "javascript"
-        ]
+        "eslint.validate": ["javascript"]
       }
     }
   }

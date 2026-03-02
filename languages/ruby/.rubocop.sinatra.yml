@@ -1,0 +1,9 @@
+# Sinatra テンプレート用の追加設定（.rubocop_base.yml とマージして出力される）
+
+Metrics/BlockLength:
+  Exclude:
+    - "Rakefile"
+    - "spec/**/*"
+
+Style/FrozenStringLiteralComment:
+  Enabled: false

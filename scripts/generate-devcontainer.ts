@@ -10,35 +10,38 @@ import { join } from "path";
 
 const ROOT: string = process.cwd();
 
-// ── Shared VSCode extensions ──────────────────────────────────────────────────
+// ── Shared devcontainer defaults (extensions + settings) ───────────────────────
+// 共通定義: shared/devcontainer/defaults.json を編集すること。
 
-const BASE_EXTENSIONS: string[] = ["esbenp.prettier-vscode"];
-const NODE_EXTENSIONS: string[] = ["dbaeumer.vscode-eslint"];
-const RUBY_EXTENSIONS: string[] = ["Shopify.ruby-extensions-pack"];
-const ERB_EXTENSIONS: string[] = ["aliariff.vscode-erb-beautify"];
+const DEFAULTS_PATH = join(ROOT, "shared", "devcontainer", "defaults.json");
+const DEFAULTS = JSON.parse(
+  readFileSync(DEFAULTS_PATH, "utf8")
+) as {
+  extensions: {
+    base: string[];
+    node: string[];
+    ruby: string[];
+    erb: string[];
+    tooling: string[];
+  };
+  settings: {
+    base: Record<string, unknown>;
+    ruby: Record<string, unknown>;
+    erb: Record<string, unknown>;
+  };
+};
 
-// ── Shared VSCode settings ────────────────────────────────────────────────────
+const BASE_EXTENSIONS = DEFAULTS.extensions.base;
+const NODE_EXTENSIONS = DEFAULTS.extensions.node;
+const RUBY_EXTENSIONS = DEFAULTS.extensions.ruby;
+const ERB_EXTENSIONS = DEFAULTS.extensions.erb;
+const TOOLING_EXTENSIONS = DEFAULTS.extensions.tooling;
 
 type VscodeSettings = Record<string, unknown>;
 
-const BASE_SETTINGS: VscodeSettings = {
-  "editor.tabSize": 2,
-  "files.trimTrailingWhitespace": true,
-  "files.insertFinalNewline": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": { "source.fixAll": "explicit" },
-};
-
-const RUBY_SETTINGS: VscodeSettings = {
-  "[ruby]": { "editor.defaultFormatter": "Shopify.ruby-lsp" },
-  "ruby.lint": { "rubocop": true },
-};
-
-const ERB_SETTINGS: VscodeSettings = {
-  "[erb]": { "editor.defaultFormatter": "aliariff.vscode-erb-beautify" },
-  "vscode-erb-beautify.useBundler": true,
-};
+const BASE_SETTINGS: VscodeSettings = DEFAULTS.settings.base;
+const RUBY_SETTINGS: VscodeSettings = DEFAULTS.settings.ruby;
+const ERB_SETTINGS: VscodeSettings = DEFAULTS.settings.erb;
 
 // ── Per-project devcontainer.json definitions ─────────────────────────────────
 
@@ -181,14 +184,7 @@ const STACKS: Stack[] = [
             ...RUBY_EXTENSIONS,
             ...ERB_EXTENSIONS,
             ...NODE_EXTENSIONS,
-            "eamodio.gitlens",
-            "Gruntfuggly.todo-tree",
-            "mhutchie.git-graph",
-            "streetsidesoftware.code-spell-checker",
-            "donjayamanne.githistory",
-            "github.vscode-github-actions",
-            "yzhang.markdown-all-in-one",
-            "DavidAnson.vscode-markdownlint",
+            ...TOOLING_EXTENSIONS,
           ],
           settings: {
             ...BASE_SETTINGS,
