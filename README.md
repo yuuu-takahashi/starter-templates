@@ -4,15 +4,17 @@
 
 ## テンプレート一覧
 
-各テンプレートは [templates/](templates/) 配下にあります。**各フォルダはこのリポジトリから切り出して単体プロジェクトとして利用できます**（[templates/README.md](templates/README.md) 参照）。
+各テンプレートは [templates/](templates/) 配下にあります。**各フォルダはこのリポジトリから切り出して単体プロジェクトとして利用できます。**
 
+- **templates/nodejs** - Node.js
 - **templates/nextjs** - Next.js (App Router)
 - **templates/react** - React + Webpack
 - **templates/rails** - Ruby on Rails
 - **templates/rails-api** - Rails API
+- **templates/ruby** - Ruby
 - **templates/sinatra** - Sinatra
 
-各ディレクトリの README を参照して利用してください。
+各テンプレートの README は `yarn generate:configs` で生成されます。内容を変える場合は `scripts/template-readme-config.ts` を編集してから再実行してください。
 
 ## languages/
 
