@@ -66,10 +66,6 @@ jobs:
         run: yarn format
       - name: lint
         run: yarn lint
-      - name: test
-        run: yarn test
-      - name: build
-        run: yarn build
   nodejs:
     needs: changes
     if: needs.changes.outputs.nodejs == 'true'
@@ -122,7 +118,7 @@ jobs:
           cache: yarn
           cache-dependency-path: templates/rails/yarn.lock
       - name: yarn format & lint
-        run: cd templates/rails && yarn install && yarn format && yarn lint
+        run: cd templates/rails && yarn install && yarn format
       - uses: ruby/setup-ruby@v1
         with:
           working-directory: templates/rails

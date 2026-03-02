@@ -198,19 +198,30 @@ for (const [dir, srcName] of Object.entries(TEST_SOURCE)) {
   console.log("Generated:", outPath);
 }
 
-// ── .env.example / .env.test（shared/env から {{TEMPLATE_ID}} を置換して生成）────
+// ── .env.example / .env.test（shared/env: db.env 共通 + 各 variant の .env.head を結合して生成）────
 
 const SHARED_ENV = join(ROOT, "shared", "env");
+const DB_ENV_PATH = join(SHARED_ENV, "db.env");
 const ENV_TEMPLATES: Array<{ dir: string; variant: "rails" | "sinatra"; templateId: string }> = [
   { dir: "templates/rails-api", variant: "rails", templateId: "template-rails-api" },
   { dir: "templates/sinatra", variant: "sinatra", templateId: "template-sinatra" },
 ];
 
+const dbEnvContent = readFileSync(DB_ENV_PATH, "utf8");
+
 for (const { dir, variant, templateId } of ENV_TEMPLATES) {
-  for (const env of ["example", "test"] as const) {
-    const srcPath = join(SHARED_ENV, `${variant}.env.${env}`);
-    const content = readFileSync(srcPath, "utf8").replace(/\{\{TEMPLATE_ID\}\}/g, templateId);
-    const outPath = join(ROOT, dir, `.env.${env}`);
+  const headPath = join(SHARED_ENV, `${variant}.env.head`);
+  const headTemplate = readFileSync(headPath, "utf8");
+
+  for (const kind of ["example", "test"] as const) {
+    const envValue = kind === "example" ? "development" : "test";
+    const suffix = kind === "example" ? "_development" : "_test";
+    const head = headTemplate.replace(/\{\{ENV\}\}/g, envValue);
+    const db = dbEnvContent
+      .replace(/\{\{TEMPLATE_ID\}\}/g, templateId)
+      .replace(/\{\{SUFFIX\}\}/g, suffix);
+    const content = head + db;
+    const outPath = join(ROOT, dir, `.env.${kind}`);
     writeFileSync(outPath, content, "utf8");
     console.log("Generated:", outPath);
   }
