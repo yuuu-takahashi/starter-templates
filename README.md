@@ -2,7 +2,14 @@
 
 各フレームワークのスターターテンプレートをまとめたモノレポです。
 
-## テンプレート一覧
+## テンプレートの種類
+
+| ディレクトリ | 用途 |
+|-------------|------|
+| [templates/](templates/) | **シンプルなテンプレート** — 最小構成。スクリプトで自動生成され、共通設定の正本は [shared/](shared/) にあります。 |
+| [starters/](starters/) | **個人開発用テンプレート** — すぐ使える形に整えたテンプレート。スクリプトで自動生成され、そのまま新規プロジェクトの起点として利用します。 |
+
+## テンプレート一覧（templates/）
 
 各テンプレートは [templates/](templates/) 配下にあります。**各フォルダはこのリポジトリから切り出して単体プロジェクトとして利用できます。**
 
@@ -66,7 +73,7 @@ starter-templates/
 │   ├── versions.json Node.js / Ruby バージョンの正本
 │   ├── vitest/       vitest.config.ts のソース
 │   └── workflows/    GitHub Actions ワークフローのソース
-├── templates/        生成されたテンプレート（手動編集禁止）
+├── templates/        シンプルなテンプレート（スクリプト生成・手動編集禁止）
 │   ├── nextjs/
 │   ├── nodejs/
 │   ├── rails/
@@ -74,6 +81,7 @@ starter-templates/
 │   ├── reactjs/
 │   ├── ruby/
 │   └── sinatra/
+├── starters/         個人開発用テンプレート（すぐ使える・手動管理）
 └── languages/        言語別の補助設定（Ruby など）
 ```
 

@@ -20,6 +20,7 @@
 | `env/` | `*.env.head`, `db.env` | `templates/*/.env.example`, `.env.test`, `.env.development` | `gen-workflows.ts` |
 | `npm/` | `<stack>.json`（package.json のソース） | `templates/*/package.json` | `generate-deps.ts` |
 | `gemfile/` | `Gemfile.<stack>` | `templates/*/Gemfile` | `generate-deps.ts` |
+| `dotnet/` | `*.csproj`（C# プロジェクトの正本） | `templates/csharp/*.csproj` | `generate-deps.ts` |
 | `devcontainer/` | `defaults.json`, `devcontainer.json.ts` など | `templates/*/.devcontainer/devcontainer.json` | `generate-devcontainer.ts` |
 | `docker/` | `Dockerfile.<stack>` | `templates/*/.devcontainer/Dockerfile` | `generate-devcontainer.ts` |
 
