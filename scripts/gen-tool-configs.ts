@@ -30,6 +30,7 @@ export async function run(): Promise<void> {
     { dir: "templates/react", source: "eslint.config.react.js" },
     { dir: "templates/nextjs", source: "eslint.config.nextjs.js" },
     { dir: "templates/rails", source: "eslint.config.rails.js" },
+    { dir: "templates/rails-api", source: "eslint.config.rails.js" },
   ];
   for (const { dir, source } of ESLINT_SOURCE) {
     const stack = source.replace("eslint.config.", "").replace(".js", "");
@@ -85,8 +86,4 @@ export async function run(): Promise<void> {
   const nextjsTs = await import(pathToFileURL(join(SHARED_TSCONFIG, "nextjs", "tsconfig.ts")).href);
   writeFileSync(join(ROOT, "templates/nextjs", "tsconfig.json"), JSON.stringify(nextjsTs.default, null, 2), "utf8");
   console.log("Generated:", join(ROOT, "templates/nextjs", "tsconfig.json"));
-
-  const railsTs = await import(pathToFileURL(join(SHARED_TSCONFIG, "rails", "tsconfig.ts")).href);
-  writeFileSync(join(ROOT, "templates/rails", "tsconfig.json"), JSON.stringify(railsTs.default, null, 2), "utf8");
-  console.log("Generated:", join(ROOT, "templates/rails", "tsconfig.json"));
 }

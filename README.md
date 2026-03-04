@@ -1,31 +1,41 @@
-# template
+# starter-templates
 
-各フレームワークのスターターテンプレートをまとめたリポジトリです。
+各フレームワークのスターターテンプレートをまとめたモノレポです。
 
 ## テンプレート一覧
 
 各テンプレートは [templates/](templates/) 配下にあります。**各フォルダはこのリポジトリから切り出して単体プロジェクトとして利用できます。**
 
-- **templates/nodejs** - Node.js
-- **templates/nextjs** - Next.js (App Router)
-- **templates/react** - React + Webpack
-- **templates/rails** - Ruby on Rails
-- **templates/rails-api** - Rails API
-- **templates/ruby** - Ruby
-- **templates/sinatra** - Sinatra
+| テンプレート | 概要 |
+|------------|------|
+| [templates/nodejs](templates/nodejs) | Node.js |
+| [templates/nextjs](templates/nextjs) | Next.js（App Router） |
+| [templates/react](templates/react) | React + Vite |
+| [templates/rails](templates/rails) | Ruby on Rails |
+| [templates/rails-api](templates/rails-api) | Rails API |
+| [templates/ruby](templates/ruby) | Ruby |
+| [templates/sinatra](templates/sinatra) | Sinatra |
 
-各テンプレートの README は `yarn generate:configs` で生成されます。内容を変える場合は `scripts/template-readme-config.ts` を編集してから再実行してください。
+## ファイルの正本について
 
-## languages/
+`templates/` 以下のファイルは**スクリプトで自動生成**されます。直接編集しても次回の生成で上書きされます。
+設定を変更する場合は [shared/](shared/) 配下のファイルを編集してください。
 
-リンター・フォーマッター・Dockerfile など**言語レベル**の共通資産は [languages/](languages/) にまとめています（Node 用・Ruby 用）。`yarn generate:devcontainer` がここを参照して各テンプレートにコピーします。
+詳細は [CONTRIBUTING.md](CONTRIBUTING.md) を参照してください。
+
+## スクリプト
+
+| コマンド | 役割 |
+|---------|------|
+| `yarn generate:all` | 全スクリプトをまとめて実行 |
+| `yarn generate:configs` | 設定ファイルを生成（ESLint / Prettier / tsconfig / workflow など） |
+| `yarn generate:deps` | `package.json` と `Gemfile` を生成 |
+| `yarn generate:devcontainer` | Dev Container 設定を生成 |
+| `yarn generate:ci` | ルートの CI ワークフローを生成 |
+
+テンプレートの README を変更する場合は `scripts/template-readme-config.ts` を編集してから `yarn generate:configs` を実行してください。
 
 ## CI の管理
 
-- **正本**: 各テンプレート配下の `.github/workflows/code-check.yml`（例: `templates/nextjs/.github/workflows/code-check.yml`）。記事で共有する・eject でコピーするのはこれ。
-- **ルートの `.github/workflows/code-check.yml`**: 上記から **生成** したファイル（モノレポ用の path フィルタ付き）。手で編集しないでください。
-- テンプレートのワークフローを変更したら、ルートで次を実行してルートの workflow を更新してください:
-
-  ```bash
-  npm run generate:ci
-  ```
+- **各テンプレートの `.github/workflows/`** — 正本。テンプレートを単体利用するときに使うファイルです。
+- **ルートの `.github/workflows/code-check.yml`** — 上記から生成したモノレポ用ファイル（path フィルタ付き）。手動編集不要。ワークフローを変更したら `yarn generate:ci` で再生成してください。

@@ -11,6 +11,10 @@
 
 （開発依存）
 
+- @eslint/js — ESLint の JavaScript 推奨ルール
+- eslint — JavaScript / TypeScript の静的解析
+- eslint-config-prettier — Prettier と競合する ESLint ルールを無効化
+- globals — グローバル変数の定義セット
 - prettier — コードフォーマッター
 
 ### 主な Gem

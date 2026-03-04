@@ -9,57 +9,13 @@
 
 ### 主な npm パッケージ
 
-（本番依存）
-
-- @babel/core — JavaScript トランスパイラのコア
-- @babel/plugin-transform-runtime — ランタイムヘルパーの最適化
-- @babel/preset-env — 最新 JS を旧環境向けに変換
-- @babel/preset-react — JSX を変換
-- @babel/runtime — Babel ランタイムヘルパー
-- @types/babel__core — Babel Core の TypeScript 型定義
-- @types/webpack — Webpack の TypeScript 型定義
-- babel-loader — Webpack 用 Babel ローダー
-- babel-plugin-macros — Babel マクロのサポート
-- babel-plugin-transform-react-remove-prop-types — 本番ビルドで PropTypes を除去
-- compression-webpack-plugin — Webpack の gzip 圧縮プラグイン
-- css-loader — CSS ファイルを Webpack で読み込む
-- css-minimizer-webpack-plugin — CSS を最小化
-- mini-css-extract-plugin — CSS を別ファイルとして出力
-- prop-types — React の実行時 PropTypes チェック
-- react — UI ライブラリ
-- react-dom — React の DOM レンダラー
-- react-on-rails — Rails と React を統合
-- shakapacker — Webpack 設定の Rails 向けラッパー
-- style-loader — CSS を DOM に注入
-- terser-webpack-plugin — JavaScript を最小化
-- webpack — モジュールバンドラー
-- webpack-assets-manifest — Webpack アセットのマニフェスト生成
-- webpack-cli — Webpack のコマンドラインツール
-- webpack-merge — Webpack 設定のマージユーティリティ
-
 （開発依存）
 
-- @babel/plugin-proposal-class-properties — クラスプロパティ構文のサポート
-- @babel/plugin-proposal-object-rest-spread — オブジェクトスプレッド構文のサポート
-- @babel/preset-typescript — TypeScript を変換
 - @eslint/js — ESLint の JavaScript 推奨ルール
-- @pmmmwh/react-refresh-webpack-plugin — React Fast Refresh の Webpack プラグイン
-- @types/node — Node.js の TypeScript 型定義
-- @types/react — React の TypeScript 型定義
-- @types/react-dom — React DOM の TypeScript 型定義
-- @typescript-eslint/eslint-plugin — TypeScript 向け ESLint ルール
-- @typescript-eslint/parser — TypeScript の ESLint パーサー
 - eslint — JavaScript / TypeScript の静的解析
 - eslint-config-prettier — Prettier と競合する ESLint ルールを無効化
-- eslint-plugin-react — React 向け ESLint ルール
-- eslint-plugin-react-hooks — React Hooks のルールチェック
 - globals — グローバル変数の定義セット
 - prettier — コードフォーマッター
-- react-refresh — React Fast Refresh サポート
-- ts-loader — Webpack 用 TypeScript ローダー
-- ts-node — TypeScript を直接実行
-- typescript — TypeScript コンパイラ
-- webpack-dev-server — 開発用ホットリロードサーバー
 
 ### 主な Gem
 
@@ -79,14 +35,12 @@
 - prettier — コードフォーマッター
 - puma — マルチスレッド Web サーバー
 - rails — Ruby on Rails フレームワーク
-- react_on_rails — Rails と React を統合
 - rspec-rails — Rails 向けテストフレームワーク
 - rubocop — Ruby の静的解析・フォーマッター
 - rubocop-rails-omakase — Rails 公式の RuboCop プリセット
 - rubocop-rspec — RSpec 向け RuboCop ルール
 - ruby-lsp — Ruby 言語サーバー
 - selenium-webdriver — ブラウザ自動操作（E2E テスト）
-- shakapacker — Webpack 設定の Rails 向けラッパー
 - sprockets-rails — アセットパイプライン
 - stimulus-rails — 軽量 JavaScript フレームワーク（Stimulus）
 - turbo-rails — 高速なページ遷移・フォーム送信（Turbo）
