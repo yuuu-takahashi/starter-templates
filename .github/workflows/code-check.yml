@@ -52,7 +52,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 22.10.0
           cache: yarn
           cache-dependency-path: yarn.lock
       - name: Install dependencies
@@ -72,7 +72,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 22.10.0
           cache: yarn
           cache-dependency-path: templates/nextjs/yarn.lock
       - name: Install dependencies
@@ -92,7 +92,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 22.10.0
           cache: yarn
           cache-dependency-path: templates/nodejs/yarn.lock
       - name: Install dependencies
@@ -112,7 +112,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 22.10.0
           cache: yarn
           cache-dependency-path: templates/react/yarn.lock
       - name: Install dependencies
@@ -129,7 +129,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 22.10.0
           cache: yarn
           cache-dependency-path: templates/rails/yarn.lock
       - name: yarn format & lint
@@ -155,7 +155,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 22.10.0
           cache: yarn
           cache-dependency-path: templates/rails-api/yarn.lock
       - name: yarn format & lint
@@ -175,7 +175,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 22.10.0
           cache: yarn
           cache-dependency-path: templates/sinatra/yarn.lock
       - name: yarn format & lint
