@@ -1,0 +1,32 @@
+/**
+ * Rails テンプレート用 tsconfig。generate-configs で tsconfig.json を生成。
+ */
+export default {
+  compilerOptions: {
+    target: "es2018",
+    jsx: "react",
+    module: "esnext",
+    moduleResolution: "node",
+    baseUrl: ".",
+    paths: {
+      "*": ["*", "*.js", "*.ts", "*.tsx"],
+    },
+    typeRoots: ["./node_modules/@types", "./app/javascript/types"],
+    allowImportingTsExtensions: true,
+    resolveJsonModule: true,
+    noEmit: true,
+    isolatedModules: true,
+    allowSyntheticDefaultImports: true,
+    esModuleInterop: true,
+    forceConsistentCasingInFileNames: true,
+    strict: true,
+    skipLibCheck: true,
+  },
+  include: [
+    "app/javascript/**/*.ts",
+    "app/javascript/**/*.tsx",
+    "config/webpack/**/*.ts",
+    "config/webpack/**/*.tsx",
+  ],
+  exclude: ["node_modules"],
+};

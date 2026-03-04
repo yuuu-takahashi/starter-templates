@@ -1,7 +1,7 @@
 module DBSetup
   def self.create_database
     client = MySQLClient.connect_without_database
-    database_name = ENV['DATABASE_NAME']
+    database_name = ENV.fetch('DATABASE_NAME', nil)
     databases = client.fetch("SHOW DATABASES LIKE '#{database_name}'").all
     if databases.any?
       puts "Database '#{database_name}' already exists."
@@ -16,7 +16,7 @@ module DBSetup
   end
 
   def self.drop_database
-    database_name = ENV['DATABASE_NAME']
+    database_name = ENV.fetch('DATABASE_NAME', nil)
     databases = client.fetch("SHOW DATABASES LIKE '#{database_name}'").all
     if databases.any?
       client.run("DROP DATABASE `#{database_name}`")
@@ -53,9 +53,7 @@ module DBSetup
   def self.generate_migrate_file(name)
     Sequel.extension :migration
     migration_file = File.join('db/migrate', "#{Time.now.strftime('%Y%m%d%H%M%S')}_#{name}.rb")
-    File.open(migration_file, 'w') do |file|
-      file.write(migration_template)
-    end
+    File.write(migration_file, migration_template)
     puts "Migration file '#{migration_file}' created successfully!"
   end
 

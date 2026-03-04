@@ -1,5 +1,5 @@
 {
-  "name": "sample",
+  "name": "template-ruby",
   "version": "1.0.0",
   "description": "",
   "devDependencies": {
@@ -9,3 +9,4 @@
   "author": "",
   "license": "ISC"
 }
+

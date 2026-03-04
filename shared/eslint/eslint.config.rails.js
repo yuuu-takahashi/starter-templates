@@ -1,0 +1,29 @@
+import globals from "globals";
+import pluginJs from "@eslint/js";
+import prettier from "eslint-config-prettier";
+
+export default [
+  { files: ["**/*.{js,mjs,cjs}"] },
+  {
+    languageOptions: {
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: "module",
+      },
+    },
+  },
+  {
+    ignores: [
+      "vendor",
+      "public/assets",
+      "public/packs",
+      ".ruby-lsp",
+      "app/assets/config/manifest.js",
+      "app/views/pwa/service-worker.js",
+      "eslint.config.js",
+    ],
+  },
+  ...[pluginJs.configs.recommended],
+  ...[prettier],
+];

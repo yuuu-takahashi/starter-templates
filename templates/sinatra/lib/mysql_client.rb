@@ -17,15 +17,15 @@ module MySQLClient
   end
 
   def self.connect
-    connect_to_database(database: ENV['DATABASE_NAME'])
+    connect_to_database(database: ENV.fetch('DATABASE_NAME', nil))
   end
 
   def connect_to_database(database: nil)
     Sequel.connect(
       adapter: 'mysql2',
-      host: ENV['DATABASE_HOST'],
-      user: ENV['DATABASE_USER'],
-      password: ENV['DATABASE_PASSWORD'],
+      host: ENV.fetch('DATABASE_HOST', nil),
+      user: ENV.fetch('DATABASE_USER', nil),
+      password: ENV.fetch('DATABASE_PASSWORD', nil),
       database: database
     )
   end

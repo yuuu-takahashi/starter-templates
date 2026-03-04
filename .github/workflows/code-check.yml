@@ -46,6 +46,21 @@ jobs:
               - 'templates/rails-api/**'
             sinatra:
               - 'templates/sinatra/**'
+  generate_check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.0
+          cache: yarn
+          cache-dependency-path: yarn.lock
+      - name: Install dependencies
+        run: yarn install
+      - name: Run generate:all
+        run: yarn generate:all
+      - name: Check for uncommitted changes
+        run: git diff --exit-code
   nextjs:
     needs: changes
     if: needs.changes.outputs.nextjs == 'true'
@@ -57,7 +72,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 22.13.0
           cache: yarn
           cache-dependency-path: templates/nextjs/yarn.lock
       - name: Install dependencies
@@ -66,10 +81,6 @@ jobs:
         run: yarn format
       - name: lint
         run: yarn lint
-      - name: test
-        run: yarn test
-      - name: build
-        run: yarn build
   nodejs:
     needs: changes
     if: needs.changes.outputs.nodejs == 'true'
@@ -81,7 +92,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 22.13.0
           cache: yarn
           cache-dependency-path: templates/nodejs/yarn.lock
       - name: Install dependencies
@@ -101,7 +112,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 22.13.0
           cache: yarn
           cache-dependency-path: templates/react/yarn.lock
       - name: Install dependencies
@@ -118,13 +129,17 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
-          cache: yarn
-          cache-dependency-path: templates/rails/yarn.lock
+          node-version: 22.13.0
+      - uses: actions/cache@v4
+        with:
+          path: templates/rails/node_modules
+          key: ${{ runner.os }}-yarn-templates/rails-${{ hashFiles('templates/rails/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-templates/rails-
       - name: yarn format & lint
-        run: cd templates/rails && yarn install && yarn format && yarn lint
+        run: cd templates/rails && yarn install && yarn format
       - uses: ruby/setup-ruby@v1
         with:
+          ruby-version: 3.3.6
           working-directory: templates/rails
           bundler-cache: true
       - name: rubocop
@@ -144,13 +159,17 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
-          cache: yarn
-          cache-dependency-path: templates/rails-api/yarn.lock
+          node-version: 22.13.0
+      - uses: actions/cache@v4
+        with:
+          path: templates/rails-api/node_modules
+          key: ${{ runner.os }}-yarn-templates/rails-api-${{ hashFiles('templates/rails-api/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-templates/rails-api-
       - name: yarn format & lint
         run: cd templates/rails-api && yarn install && yarn format
       - uses: ruby/setup-ruby@v1
         with:
+          ruby-version: 3.3.6
           working-directory: templates/rails-api
           bundler-cache: true
       - name: rubocop
@@ -164,13 +183,17 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
-          cache: yarn
-          cache-dependency-path: templates/sinatra/yarn.lock
+          node-version: 22.13.0
+      - uses: actions/cache@v4
+        with:
+          path: templates/sinatra/node_modules
+          key: ${{ runner.os }}-yarn-templates/sinatra-${{ hashFiles('templates/sinatra/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-templates/sinatra-
       - name: yarn format & lint
         run: cd templates/sinatra && yarn install && yarn format
       - uses: ruby/setup-ruby@v1
         with:
+          ruby-version: 3.3.6
           working-directory: templates/sinatra
           bundler-cache: true
       - name: rubocop

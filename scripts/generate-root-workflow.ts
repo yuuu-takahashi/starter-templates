@@ -10,6 +10,10 @@ import { join } from "path";
 import YAML from "yaml";
 
 const ROOT: string = join(process.cwd());
+const VERSIONS = JSON.parse(readFileSync(join(ROOT, "shared", "versions.json"), "utf8")) as {
+  node: string;
+  ruby: string;
+};
 
 interface Stack {
   id: string;
@@ -63,7 +67,7 @@ const transformNodeOnlySteps = (steps: WorkflowStep[], dir: string): WorkflowSte
       result.push({
         uses: "actions/setup-node@v4",
         with: {
-          "node-version": "22.x",
+          "node-version": VERSIONS.node,
           cache: "yarn",
           "cache-dependency-path": `${dir}/yarn.lock`,
         },
@@ -90,9 +94,16 @@ const mergeFormatAndLintSteps = (
   steps.push({
     uses: "actions/setup-node@v4",
     with: {
-      "node-version": "22.x",
-      cache: "yarn",
-      "cache-dependency-path": `${dir}/yarn.lock`,
+      "node-version": VERSIONS.node,
+    },
+  });
+  const lockPath = `${dir}/yarn.lock`;
+  steps.push({
+    uses: "actions/cache@v4",
+    with: {
+      path: `${dir}/node_modules`,
+      key: "${{ runner.os }}-yarn-" + dir + "-${{ hashFiles('" + lockPath + "') }}",
+      "restore-keys": "${{ runner.os }}-yarn-" + dir + "-",
     },
   });
   steps.push({
@@ -102,6 +113,7 @@ const mergeFormatAndLintSteps = (
   steps.push({
     uses: "ruby/setup-ruby@v1",
     with: {
+      "ruby-version": VERSIONS.ruby,
       "working-directory": dir,
       "bundler-cache": true,
     },
@@ -132,6 +144,20 @@ const buildRootWorkflow = (): Record<string, WorkflowJob> => {
     steps: [
       { uses: "actions/checkout@v4" },
       { uses: "dorny/paths-filter@v3", id: "filter", with: { filters: filtersBlock } },
+    ],
+  };
+
+  jobs.generate_check = {
+    "runs-on": "ubuntu-latest",
+    steps: [
+      { uses: "actions/checkout@v4" },
+      {
+        uses: "actions/setup-node@v4",
+        with: { "node-version": VERSIONS.node, cache: "yarn", "cache-dependency-path": "yarn.lock" },
+      },
+      { name: "Install dependencies", run: "yarn install" },
+      { name: "Run generate:all", run: "yarn generate:all" },
+      { name: "Check for uncommitted changes", run: "git diff --exit-code" },
     ],
   };
 

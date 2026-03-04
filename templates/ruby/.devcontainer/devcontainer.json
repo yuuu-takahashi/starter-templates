@@ -33,6 +33,28 @@
           "rubocop": true
         }
       }
+    },
+    "cursor": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "Shopify.ruby-extensions-pack"
+      ],
+      "settings": {
+        "editor.tabSize": 2,
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll": "explicit"
+        },
+        "[ruby]": {
+          "editor.defaultFormatter": "Shopify.ruby-lsp"
+        },
+        "ruby.lint": {
+          "rubocop": true
+        }
+      }
     }
   }
 }

@@ -14,4 +14,9 @@ export default defineConfig({
       '@': path.resolve(fileURLToPath(new URL('.', import.meta.url)), 'src'),
     },
   },
+  test: {
+    globals: true,
+    environment: 'happy-dom',
+    include: ['src/**/*.{test,spec}.{ts,tsx}'],
+  },
 });
