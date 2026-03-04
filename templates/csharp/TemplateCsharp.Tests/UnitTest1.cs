@@ -1,3 +1,5 @@
+using Xunit;
+
 namespace TemplateCsharp.Tests;
 
 public class UnitTest1
