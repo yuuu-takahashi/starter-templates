@@ -46,6 +46,21 @@ jobs:
               - 'templates/rails-api/**'
             sinatra:
               - 'templates/sinatra/**'
+  generate_check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: yarn
+          cache-dependency-path: yarn.lock
+      - name: Install dependencies
+        run: yarn install
+      - name: Run generate:all
+        run: yarn generate:all
+      - name: Check for uncommitted changes
+        run: git diff --exit-code
   nextjs:
     needs: changes
     if: needs.changes.outputs.nextjs == 'true'
