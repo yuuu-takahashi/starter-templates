@@ -9,13 +9,13 @@
 
 ### 主な Gem
 
-- rubocop
-- ruby-lsp
+- rubocop — Ruby の静的解析・フォーマッター
+- ruby-lsp — Ruby 言語サーバー
 
 ### Dev Container でインストールされる主な拡張機能
 
-- `Shopify.ruby-extensions-pack`
-- `esbenp.prettier-vscode`
+- Shopify.ruby-extensions-pack — Ruby 開発ツール一式（Ruby LSP など）
+- esbenp.prettier-vscode — コードフォーマット（Prettier）
 
 ## 開発環境構築
 

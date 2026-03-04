@@ -11,39 +11,39 @@
 
 （本番依存）
 
-- react
-- react-dom
-- react-router
+- react — UI ライブラリ
+- react-dom — React の DOM レンダラー
+- react-router — ルーティングライブラリ
 
 （開発依存）
 
-- @eslint/js
-- @types/node
-- @types/react
-- @types/react-dom
-- @types/react-router-dom
-- @vitejs/plugin-react
-- eslint
-- eslint-config-prettier
-- eslint-import-resolver-typescript
-- eslint-plugin-import
-- eslint-plugin-jsx-a11y
-- eslint-plugin-react
-- eslint-plugin-react-hooks
-- eslint-plugin-react-refresh
-- eslint-plugin-unused-imports
-- globals
-- happy-dom
-- prettier
-- typescript
-- typescript-eslint
-- vite
-- vitest
+- @eslint/js — ESLint の JavaScript 推奨ルール
+- @types/node — Node.js の TypeScript 型定義
+- @types/react — React の TypeScript 型定義
+- @types/react-dom — React DOM の TypeScript 型定義
+- @types/react-router-dom — React Router DOM の TypeScript 型定義
+- @vitejs/plugin-react — Vite 向け React プラグイン
+- eslint — JavaScript / TypeScript の静的解析
+- eslint-config-prettier — Prettier と競合する ESLint ルールを無効化
+- eslint-import-resolver-typescript — TypeScript パスの import 解決
+- eslint-plugin-import — import/export 構文のチェック
+- eslint-plugin-jsx-a11y — JSX のアクセシビリティチェック
+- eslint-plugin-react — React 向け ESLint ルール
+- eslint-plugin-react-hooks — React Hooks のルールチェック
+- eslint-plugin-react-refresh — React Fast Refresh のルールチェック
+- eslint-plugin-unused-imports — 未使用 import の検出・削除
+- globals — グローバル変数の定義セット
+- happy-dom — テスト用の軽量 DOM 実装
+- prettier — コードフォーマッター
+- typescript — TypeScript コンパイラ
+- typescript-eslint — TypeScript 向け ESLint プラグイン・パーサー
+- vite — 高速ビルドツール
+- vitest — Vite ベースのテストフレームワーク
 
 ### Dev Container でインストールされる主な拡張機能
 
-- `dbaeumer.vscode-eslint`
-- `esbenp.prettier-vscode`
+- dbaeumer.vscode-eslint — ESLint の静的解析
+- esbenp.prettier-vscode — コードフォーマット（Prettier）
 
 ## ディレクトリ構成
 

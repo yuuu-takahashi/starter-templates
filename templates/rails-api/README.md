@@ -11,28 +11,28 @@
 
 （開発依存）
 
-- prettier
+- prettier — コードフォーマッター
 
 ### 主な Gem
 
-- bootsnap
-- brakeman
-- debug
-- dotenv-rails
-- factory_bot_rails
-- faker
-- mysql2
-- puma
-- rails
-- rspec-rails
-- rswag
-- rubocop-rails-omakase
-- tzinfo-data
+- bootsnap — 起動時間の高速化
+- brakeman — セキュリティ脆弱性スキャナー
+- debug — Ruby デバッガー
+- dotenv-rails — 環境変数を .env から読み込む（Rails）
+- factory_bot_rails — テスト用フィクスチャファクトリー（Rails）
+- faker — テスト用ダミーデータ生成
+- mysql2 — MySQL クライアント
+- puma — マルチスレッド Web サーバー
+- rails — Ruby on Rails フレームワーク
+- rspec-rails — Rails 向けテストフレームワーク
+- rswag — RSpec から Swagger ドキュメントを生成
+- rubocop-rails-omakase — Rails 公式の RuboCop プリセット
+- tzinfo-data — タイムゾーンデータ（Windows 向け）
 
 ### Dev Container でインストールされる主な拡張機能
 
-- `Shopify.ruby-extensions-pack`
-- `esbenp.prettier-vscode`
+- Shopify.ruby-extensions-pack — Ruby 開発ツール一式（Ruby LSP など）
+- esbenp.prettier-vscode — コードフォーマット（Prettier）
 
 ## ディレクトリ構成
 

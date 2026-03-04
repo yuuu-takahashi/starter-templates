@@ -11,32 +11,32 @@
 
 （開発依存）
 
-- prettier
+- prettier — コードフォーマッター
 
 ### 主な Gem
 
-- dotenv
-- erb_lint
-- factory_bot
-- faker
-- htmlbeautifier
-- mysql2
-- puma
-- rack-test
-- rackup
-- rake
-- rspec
-- rubocop
-- ruby-lsp
-- sequel
-- sinatra
-- sinatra-contrib
+- dotenv — 環境変数を .env から読み込む
+- erb_lint — ERB テンプレートの静的解析
+- factory_bot — テスト用フィクスチャファクトリー
+- faker — テスト用ダミーデータ生成
+- htmlbeautifier — ERB テンプレートのフォーマット
+- mysql2 — MySQL クライアント
+- puma — マルチスレッド Web サーバー
+- rack-test — Rack アプリのテストヘルパー
+- rackup — Rack アプリの起動ツール
+- rake — Ruby のタスクランナー
+- rspec — Ruby のテストフレームワーク
+- rubocop — Ruby の静的解析・フォーマッター
+- ruby-lsp — Ruby 言語サーバー
+- sequel — ORM / データベースツールキット
+- sinatra — 軽量 Web フレームワーク
+- sinatra-contrib — Sinatra 拡張機能コレクション
 
 ### Dev Container でインストールされる主な拡張機能
 
-- `Shopify.ruby-extensions-pack`
-- `aliariff.vscode-erb-beautify`
-- `esbenp.prettier-vscode`
+- Shopify.ruby-extensions-pack — Ruby 開発ツール一式（Ruby LSP など）
+- aliariff.vscode-erb-beautify — ERB テンプレートのフォーマット
+- esbenp.prettier-vscode — コードフォーマット（Prettier）
 
 ## ディレクトリ構成
 

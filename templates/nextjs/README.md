@@ -11,30 +11,30 @@
 
 （本番依存）
 
-- next
-- react
-- react-dom
+- next — React フルスタックフレームワーク
+- react — UI ライブラリ
+- react-dom — React の DOM レンダラー
 
 （開発依存）
 
-- @eslint/eslintrc
-- @testing-library/jest-dom
-- @types/node
-- @types/react
-- @types/react-dom
-- @vitejs/plugin-react
-- @vitest/coverage-v8
-- eslint
-- eslint-config-next
-- prettier
-- ts-node
-- typescript
-- vitest
+- @eslint/eslintrc — ESLint の設定ユーティリティ
+- @testing-library/jest-dom — DOM のカスタムマッチャー
+- @types/node — Node.js の TypeScript 型定義
+- @types/react — React の TypeScript 型定義
+- @types/react-dom — React DOM の TypeScript 型定義
+- @vitejs/plugin-react — Vite 向け React プラグイン
+- @vitest/coverage-v8 — V8 ベースのカバレッジプロバイダー
+- eslint — JavaScript / TypeScript の静的解析
+- eslint-config-next — Next.js 推奨 ESLint 設定
+- prettier — コードフォーマッター
+- ts-node — TypeScript を直接実行
+- typescript — TypeScript コンパイラ
+- vitest — Vite ベースのテストフレームワーク
 
 ### Dev Container でインストールされる主な拡張機能
 
-- `dbaeumer.vscode-eslint`
-- `esbenp.prettier-vscode`
+- dbaeumer.vscode-eslint — ESLint の静的解析
+- esbenp.prettier-vscode — コードフォーマット（Prettier）
 
 ## ディレクトリ構成
 

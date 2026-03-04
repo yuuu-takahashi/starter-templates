@@ -11,16 +11,16 @@
 
 （開発依存）
 
-- @eslint/js
-- eslint
-- eslint-config-prettier
-- globals
-- prettier
+- @eslint/js — ESLint の JavaScript 推奨ルール
+- eslint — JavaScript / TypeScript の静的解析
+- eslint-config-prettier — Prettier と競合する ESLint ルールを無効化
+- globals — グローバル変数の定義セット
+- prettier — コードフォーマッター
 
 ### Dev Container でインストールされる主な拡張機能
 
-- `dbaeumer.vscode-eslint`
-- `esbenp.prettier-vscode`
+- dbaeumer.vscode-eslint — ESLint の静的解析
+- esbenp.prettier-vscode — コードフォーマット（Prettier）
 
 ## ディレクトリ構成
 
