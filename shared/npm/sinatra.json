@@ -5,8 +5,9 @@
   "devDependencies": {
     "prettier": "^3.4.2"
   },
-  "scripts": {},
+  "scripts": {
+    "format": "prettier --write ."
+  },
   "author": "",
   "license": "ISC"
 }
-
