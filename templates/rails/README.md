@@ -5,6 +5,110 @@
 このリポジトリは Ruby on Rails のテンプレートプロジェクトです。
 このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。VS Code・Cursor のどちらでも利用できます。
 
+## 主なライブラリ・Gem・拡張機能
+
+### 主な npm パッケージ
+
+（本番依存）
+
+- @babel/core
+- @babel/plugin-transform-runtime
+- @babel/preset-env
+- @babel/preset-react
+- @babel/runtime
+- @types/babel__core
+- @types/webpack
+- babel-loader
+- babel-plugin-macros
+- babel-plugin-transform-react-remove-prop-types
+- compression-webpack-plugin
+- css-loader
+- css-minimizer-webpack-plugin
+- mini-css-extract-plugin
+- prop-types
+- react
+- react-dom
+- react-on-rails
+- shakapacker
+- style-loader
+- terser-webpack-plugin
+- webpack
+- webpack-assets-manifest
+- webpack-cli
+- webpack-merge
+
+（開発依存）
+
+- @babel/plugin-proposal-class-properties
+- @babel/plugin-proposal-object-rest-spread
+- @babel/preset-typescript
+- @eslint/js
+- @pmmmwh/react-refresh-webpack-plugin
+- @types/node
+- @types/react
+- @types/react-dom
+- @typescript-eslint/eslint-plugin
+- @typescript-eslint/parser
+- eslint
+- eslint-config-prettier
+- eslint-plugin-react
+- eslint-plugin-react-hooks
+- globals
+- prettier
+- react-refresh
+- ts-loader
+- ts-node
+- typescript
+- webpack-dev-server
+
+### 主な Gem
+
+- bcrypt
+- bootsnap
+- brakeman
+- capybara
+- debug
+- dotenv-rails
+- erb_lint
+- factory_bot_rails
+- faker
+- htmlbeautifier
+- importmap-rails
+- jbuilder
+- mysql2
+- prettier
+- puma
+- rails
+- react_on_rails
+- rspec-rails
+- rubocop
+- rubocop-rails-omakase
+- rubocop-rspec
+- ruby-lsp
+- selenium-webdriver
+- shakapacker
+- sprockets-rails
+- stimulus-rails
+- turbo-rails
+- tzinfo-data
+- view_component
+- web-console
+
+### Dev Container でインストールされる主な拡張機能
+
+- `DavidAnson.vscode-markdownlint`
+- `Gruntfuggly.todo-tree`
+- `Shopify.ruby-extensions-pack`
+- `aliariff.vscode-erb-beautify`
+- `dbaeumer.vscode-eslint`
+- `donjayamanne.githistory`
+- `eamodio.gitlens`
+- `esbenp.prettier-vscode`
+- `github.vscode-github-actions`
+- `mhutchie.git-graph`
+- `streetsidesoftware.code-spell-checker`
+- `yzhang.markdown-all-in-one`
+
 ## ディレクトリ構成
 
 ```bash

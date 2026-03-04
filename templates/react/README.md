@@ -5,6 +5,46 @@
 このリポジトリは React + Webpack のテンプレートプロジェクトです。
 このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。VS Code・Cursor のどちらでも利用できます。
 
+## 主なライブラリ・Gem・拡張機能
+
+### 主な npm パッケージ
+
+（本番依存）
+
+- react
+- react-dom
+- react-router
+
+（開発依存）
+
+- @eslint/js
+- @types/node
+- @types/react
+- @types/react-dom
+- @types/react-router-dom
+- @vitejs/plugin-react
+- eslint
+- eslint-config-prettier
+- eslint-import-resolver-typescript
+- eslint-plugin-import
+- eslint-plugin-jsx-a11y
+- eslint-plugin-react
+- eslint-plugin-react-hooks
+- eslint-plugin-react-refresh
+- eslint-plugin-unused-imports
+- globals
+- happy-dom
+- prettier
+- typescript
+- typescript-eslint
+- vite
+- vitest
+
+### Dev Container でインストールされる主な拡張機能
+
+- `dbaeumer.vscode-eslint`
+- `esbenp.prettier-vscode`
+
 ## ディレクトリ構成
 
 ```bash

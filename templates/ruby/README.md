@@ -5,6 +5,18 @@
 このリポジトリはRubyのテンプレートプロジェクトです。
 このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。VS Code・Cursor のどちらでも利用できます。
 
+## 主なライブラリ・Gem・拡張機能
+
+### 主な Gem
+
+- rubocop
+- ruby-lsp
+
+### Dev Container でインストールされる主な拡張機能
+
+- `Shopify.ruby-extensions-pack`
+- `esbenp.prettier-vscode`
+
 ## 開発環境構築
 
 ### 必要なツール

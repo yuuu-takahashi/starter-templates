@@ -5,6 +5,35 @@
 このリポジトリは Ruby on Rails（API）のテンプレートプロジェクトです。
 このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。VS Code・Cursor のどちらでも利用できます。
 
+## 主なライブラリ・Gem・拡張機能
+
+### 主な npm パッケージ
+
+（開発依存）
+
+- prettier
+
+### 主な Gem
+
+- bootsnap
+- brakeman
+- debug
+- dotenv-rails
+- factory_bot_rails
+- faker
+- mysql2
+- puma
+- rails
+- rspec-rails
+- rswag
+- rubocop-rails-omakase
+- tzinfo-data
+
+### Dev Container でインストールされる主な拡張機能
+
+- `Shopify.ruby-extensions-pack`
+- `esbenp.prettier-vscode`
+
 ## ディレクトリ構成
 
 ```bash

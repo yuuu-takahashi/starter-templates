@@ -5,6 +5,39 @@
 このリポジトリはSinatraのテンプレートプロジェクトです。
 このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。VS Code・Cursor のどちらでも利用できます。
 
+## 主なライブラリ・Gem・拡張機能
+
+### 主な npm パッケージ
+
+（開発依存）
+
+- prettier
+
+### 主な Gem
+
+- dotenv
+- erb_lint
+- factory_bot
+- faker
+- htmlbeautifier
+- mysql2
+- puma
+- rack-test
+- rackup
+- rake
+- rspec
+- rubocop
+- ruby-lsp
+- sequel
+- sinatra
+- sinatra-contrib
+
+### Dev Container でインストールされる主な拡張機能
+
+- `Shopify.ruby-extensions-pack`
+- `aliariff.vscode-erb-beautify`
+- `esbenp.prettier-vscode`
+
 ## ディレクトリ構成
 
 ```bash

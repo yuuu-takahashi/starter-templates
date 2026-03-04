@@ -5,6 +5,37 @@
 このリポジトリは Next.js のテンプレートプロジェクトです。
 このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。VS Code・Cursor のどちらでも利用できます。
 
+## 主なライブラリ・Gem・拡張機能
+
+### 主な npm パッケージ
+
+（本番依存）
+
+- next
+- react
+- react-dom
+
+（開発依存）
+
+- @eslint/eslintrc
+- @testing-library/jest-dom
+- @types/node
+- @types/react
+- @types/react-dom
+- @vitejs/plugin-react
+- @vitest/coverage-v8
+- eslint
+- eslint-config-next
+- prettier
+- ts-node
+- typescript
+- vitest
+
+### Dev Container でインストールされる主な拡張機能
+
+- `dbaeumer.vscode-eslint`
+- `esbenp.prettier-vscode`
+
 ## ディレクトリ構成
 
 ```bash
