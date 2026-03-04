@@ -9,7 +9,7 @@
  * Run: yarn generate:devcontainer
  */
 
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync, mkdirSync } from "fs";
 import { join } from "path";
 
 const ROOT: string = process.cwd();
@@ -26,6 +26,7 @@ const DEFAULTS = JSON.parse(
     node: string[];
     ruby: string[];
     erb: string[];
+    csharp: string[];
     tooling: string[];
   };
   settings: {
@@ -39,6 +40,7 @@ const BASE_EXTENSIONS = DEFAULTS.extensions.base;
 const NODE_EXTENSIONS = DEFAULTS.extensions.node;
 const RUBY_EXTENSIONS = DEFAULTS.extensions.ruby;
 const ERB_EXTENSIONS = DEFAULTS.extensions.erb;
+const CSHARP_EXTENSIONS = DEFAULTS.extensions.csharp;
 const TOOLING_EXTENSIONS = DEFAULTS.extensions.tooling;
 
 type VscodeSettings = Record<string, unknown>;
@@ -77,9 +79,10 @@ interface Stack {
   config: DevcontainerConfig;
 }
 
-// Node/Ruby Dockerfiles: read from shared/docker/ (single source of truth)
+// Node/Ruby/Dotnet Dockerfiles: read from shared/docker/ (single source of truth)
 const NODE_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.node");
 const RUBY_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.ruby");
+const DOTNET_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.dotnet");
 
 const STACKS: Stack[] = [
   {
@@ -220,6 +223,23 @@ const STACKS: Stack[] = [
       },
     },
   },
+  {
+    dir: "templates/csharp",
+    config: {
+      name: "template-csharp",
+      build: { dockerfile: "Dockerfile", context: ".." },
+      workspaceFolder: "/workspace",
+      mounts: [
+        "source=${localWorkspaceFolder},target=/workspace,type=bind",
+      ],
+      customizations: {
+        vscode: {
+          extensions: [...BASE_EXTENSIONS, ...CSHARP_EXTENSIONS],
+          settings: { ...BASE_SETTINGS },
+        },
+      },
+    },
+  },
 ];
 
 // ── Shared docker-compose for Ruby+DB stacks ──────────────────────────────────
@@ -278,6 +298,16 @@ const rubyDockerfileContent = readFileSync(RUBY_DOCKERFILE_SRC, "utf8");
 for (const dir of ["templates/sinatra", "templates/rails-api"]) {
   const outPath = join(ROOT, dir, ".devcontainer", "Dockerfile");
   writeFileSync(outPath, DOCKERFILE_HEADER + rubyDockerfileContent, "utf8");
+  console.log("Generated:", outPath);
+}
+
+// C# template: copy shared/docker/Dockerfile.dotnet
+const dotnetDockerfileContent = readFileSync(DOTNET_DOCKERFILE_SRC, "utf8");
+for (const dir of ["templates/csharp"]) {
+  const outDir = join(ROOT, dir, ".devcontainer");
+  mkdirSync(outDir, { recursive: true });
+  const outPath = join(outDir, "Dockerfile");
+  writeFileSync(outPath, DOCKERFILE_HEADER + dotnetDockerfileContent, "utf8");
   console.log("Generated:", outPath);
 }
 

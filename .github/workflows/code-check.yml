@@ -28,6 +28,7 @@ jobs:
       rails: ${{ steps.filter.outputs.rails }}
       rails_api: ${{ steps.filter.outputs.rails_api }}
       sinatra: ${{ steps.filter.outputs.sinatra }}
+      csharp: ${{ steps.filter.outputs.csharp }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -46,6 +47,8 @@ jobs:
               - 'templates/rails-api/**'
             sinatra:
               - 'templates/sinatra/**'
+            csharp:
+              - 'templates/csharp/**'
   generate_check:
     runs-on: ubuntu-latest
     steps:
@@ -205,3 +208,20 @@ jobs:
       - name: htmlbeautifier
         run: find app/views -name "*.erb" -exec bundle exec htmlbeautifier {} \;
         working-directory: templates/sinatra
+  csharp:
+    needs: changes
+    if: needs.changes.outputs.csharp == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: templates/csharp
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version-file: global.json
+      - name: Restore
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore

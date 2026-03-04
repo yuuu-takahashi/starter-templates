@@ -12,6 +12,10 @@
     "erb": [
       "aliariff.vscode-erb-beautify"
     ],
+    "csharp": [
+      "ms-dotnettools.csharp",
+      "ms-dotnettools.csdevkit"
+    ],
     "tooling": [
       "eamodio.gitlens",
       "Gruntfuggly.todo-tree",

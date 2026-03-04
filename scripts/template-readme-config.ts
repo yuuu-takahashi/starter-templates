@@ -37,7 +37,7 @@ export type TemplateReadmeDevGuide = {
 };
 
 /** Dev Container の拡張機能セット（shared/devcontainer/defaults.json の extensions キー） */
-export type ExtensionSetKey = "base" | "node" | "ruby" | "erb" | "tooling";
+export type ExtensionSetKey = "base" | "node" | "ruby" | "erb" | "csharp" | "tooling";
 
 export type TemplateReadmeConfig = {
   id: string;
@@ -180,6 +180,25 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     ],
     devGuide: [
       { title: "コードの静的解析と修正", commands: "bundle exec rubocop -A" },
+    ],
+  },
+  {
+    id: "csharp",
+    title: "template-csharp",
+    description: "このリポジトリは ASP.NET Core Minimal API（C#）のテンプレートプロジェクトです。",
+    repoSlug: "template-csharp",
+    extensionSets: ["base", "csharp"],
+    treeExclude: "bin|obj",
+    setupSteps: [
+      cloneStep("csharp"),
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
+      { label: "パッケージの復元", commands: ["dotnet restore"] },
+      { label: "開発サーバー起動", commands: ["dotnet run"] },
+    ],
+    previewUrl: "http://localhost:5000",
+    devGuide: [
+      { title: "テストの実行", commands: "dotnet test" },
+      { title: "ビルド", commands: "dotnet build" },
     ],
   },
   {

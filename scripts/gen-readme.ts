@@ -150,6 +150,8 @@ const GEM_DESCRIPTIONS: Record<string, string> = {
 const EXTENSION_DESCRIPTIONS: Record<string, string> = {
   "esbenp.prettier-vscode": "コードフォーマット（Prettier）",
   "dbaeumer.vscode-eslint": "ESLint の静的解析",
+  "ms-dotnettools.csharp": "C# 言語サポート（IntelliSense・リファクタ等）",
+  "ms-dotnettools.csdevkit": "C# Dev Kit（Solution Explorer・テスト・NuGet 等）",
   "Shopify.ruby-extensions-pack": "Ruby 開発ツール一式（Ruby LSP など）",
   "aliariff.vscode-erb-beautify": "ERB テンプレートのフォーマット",
   "eamodio.gitlens": "Git 履歴・差分の強力な可視化",
