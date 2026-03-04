@@ -28,6 +28,7 @@ const DEFAULTS = JSON.parse(
     erb: string[];
     csharp: string[];
     go: string[];
+    rust: string[];
     tooling: string[];
   };
   settings: {
@@ -43,6 +44,7 @@ const RUBY_EXTENSIONS = DEFAULTS.extensions.ruby;
 const ERB_EXTENSIONS = DEFAULTS.extensions.erb;
 const CSHARP_EXTENSIONS = DEFAULTS.extensions.csharp;
 const GO_EXTENSIONS = DEFAULTS.extensions.go;
+const RUST_EXTENSIONS = DEFAULTS.extensions.rust;
 const TOOLING_EXTENSIONS = DEFAULTS.extensions.tooling;
 
 type VscodeSettings = Record<string, unknown>;
@@ -86,6 +88,7 @@ const NODE_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.node");
 const RUBY_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.ruby");
 const DOTNET_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.dotnet");
 const GO_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.go");
+const RUST_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.rust");
 
 const STACKS: Stack[] = [
   {
@@ -260,6 +263,23 @@ const STACKS: Stack[] = [
       },
     },
   },
+  {
+    dir: "templates/rust",
+    config: {
+      name: "template-rust",
+      build: { dockerfile: "Dockerfile", context: ".." },
+      workspaceFolder: "/workspace",
+      mounts: [
+        "source=${localWorkspaceFolder},target=/workspace,type=bind",
+      ],
+      customizations: {
+        vscode: {
+          extensions: [...BASE_EXTENSIONS, ...RUST_EXTENSIONS],
+          settings: { ...BASE_SETTINGS },
+        },
+      },
+    },
+  },
 ];
 
 // ── Shared docker-compose ──────────────────────────────────────────────────────
@@ -313,6 +333,16 @@ for (const dir of ["templates/go"]) {
   mkdirSync(outDir, { recursive: true });
   const outPath = join(outDir, "Dockerfile");
   writeFileSync(outPath, DOCKERFILE_HEADER + goDockerfileContent, "utf8");
+  console.log("Generated:", outPath);
+}
+
+// Rust template: copy shared/docker/Dockerfile.rust
+const rustDockerfileContent = readFileSync(RUST_DOCKERFILE_SRC, "utf8");
+for (const dir of ["templates/rust"]) {
+  const outDir = join(ROOT, dir, ".devcontainer");
+  mkdirSync(outDir, { recursive: true });
+  const outPath = join(outDir, "Dockerfile");
+  writeFileSync(outPath, DOCKERFILE_HEADER + rustDockerfileContent, "utf8");
   console.log("Generated:", outPath);
 }
 

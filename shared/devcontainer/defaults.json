@@ -19,6 +19,9 @@
     "go": [
       "golang.go"
     ],
+    "rust": [
+      "rust-lang.rust-analyzer"
+    ],
     "tooling": [
       "eamodio.gitlens",
       "Gruntfuggly.todo-tree",

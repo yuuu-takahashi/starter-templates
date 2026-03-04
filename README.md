@@ -118,7 +118,7 @@ starter-templates/
 | `yarn generate:ci` | `generate-root-workflow.ts` | ルートの CI ワークフローを生成 |
 | `yarn generate:devcontainer` | `generate-devcontainer.ts` | Dev Container 設定を生成 |
 | `yarn generate:configs` | `generate-configs.ts` | 設定ファイル全般を生成（エントリポイント） |
-| `yarn generate:deps` | `generate-deps.ts` | package.json / Gemfile / C# .csproj / Go (shared/go → templates/go) を生成 |
+| `yarn generate:deps` | `generate-deps.ts` | package.json / Gemfile / C# .csproj / Go / Rust (shared/* → templates/*) を生成 |
 
 `generate-configs.ts` は以下のモジュールを呼び出します：
 

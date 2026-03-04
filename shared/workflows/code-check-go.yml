@@ -23,13 +23,12 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: "templates/go/.go-version"
+          go-version-file: ".go-version"
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v6
         with:
           version: latest
-          working-directory: templates/go
 
       - name: Build
         run: go build ./...

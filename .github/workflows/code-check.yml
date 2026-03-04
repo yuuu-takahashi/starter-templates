@@ -30,6 +30,7 @@ jobs:
       sinatra: ${{ steps.filter.outputs.sinatra }}
       csharp: ${{ steps.filter.outputs.csharp }}
       go: ${{ steps.filter.outputs.go }}
+      rust: ${{ steps.filter.outputs.rust }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -52,6 +53,8 @@ jobs:
               - 'templates/csharp/**'
             go:
               - 'templates/go/**'
+            rust:
+              - 'templates/rust/**'
   generate_check:
     runs-on: ubuntu-latest
     steps:
@@ -226,8 +229,10 @@ jobs:
           global-json-file: templates/csharp/global.json
       - name: Restore
         run: dotnet restore
+        working-directory: templates/csharp
       - name: Build
         run: dotnet build --no-restore
+        working-directory: templates/csharp
   go:
     needs: changes
     if: needs.changes.outputs.go == 'true'
@@ -245,6 +250,34 @@ jobs:
         uses: golangci/golangci-lint-action@v6
         with:
           version: latest
-          working-directory: templates/go
       - name: Build
         run: go build ./...
+        working-directory: templates/go
+  rust:
+    needs: changes
+    if: needs.changes.outputs.rust == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: templates/rust
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: templates/rust/target
+          key: ${{ runner.os }}-cargo-rust-${{ hashFiles('templates/rust/Cargo.lock', 'templates/rust/Cargo.toml') }}
+          restore-keys: ${{ runner.os }}-cargo-rust-
+      - name: Check format
+        run: cargo fmt --all -- --check
+        working-directory: templates/rust
+      - name: Clippy
+        run: cargo clippy --all-targets -- -D warnings
+        working-directory: templates/rust
+      - name: Build
+        run: cargo build
+        working-directory: templates/rust

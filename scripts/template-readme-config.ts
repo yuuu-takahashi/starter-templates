@@ -37,7 +37,7 @@ export type TemplateReadmeDevGuide = {
 };
 
 /** Dev Container の拡張機能セット（shared/devcontainer/defaults.json の extensions キー） */
-export type ExtensionSetKey = "base" | "node" | "ruby" | "erb" | "csharp" | "go" | "tooling";
+export type ExtensionSetKey = "base" | "node" | "ruby" | "erb" | "csharp" | "go" | "rust" | "tooling";
 
 export type TemplateReadmeConfig = {
   id: string;
@@ -215,6 +215,23 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     devGuide: [
       { title: "ビルド", commands: "go build ./..." },
       { title: "リンター（golangci-lint）", commands: "golangci-lint run" },
+    ],
+  },
+  {
+    id: "rust",
+    title: "template-rust",
+    description: "このリポジトリは Rust のテンプレートプロジェクトです。",
+    repoSlug: "template-rust",
+    extensionSets: ["base", "rust"],
+    treeExclude: "target",
+    setupSteps: [
+      cloneStep("rust"),
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
+    ],
+    devGuide: [
+      { title: "ビルド", commands: "cargo build" },
+      { title: "フォーマットチェック", commands: "cargo fmt --all -- --check" },
+      { title: "リンター（Clippy）", commands: "cargo clippy --all-targets -- -D warnings" },
     ],
   },
   {

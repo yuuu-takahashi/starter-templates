@@ -30,6 +30,7 @@ const STACKS: Stack[] = [
   { id: "sinatra", dir: "templates/sinatra", pathFilter: "templates/sinatra/**" },
   { id: "csharp", dir: "templates/csharp", pathFilter: "templates/csharp/**" },
   { id: "go", dir: "templates/go", pathFilter: "templates/go/**" },
+  { id: "rust", dir: "templates/rust", pathFilter: "templates/rust/**" },
 ];
 
 interface WorkflowStep {
@@ -60,6 +61,34 @@ const readWorkflow = (dir: string): Workflow => {
   const raw = readFileSync(path, "utf8");
   return YAML.parse(raw) as Workflow;
 };
+
+/** 単体用ワークフロー（相対パス）をモノレポ用に変換。path / working-directory / go-version-file / global-json-file / key の hashFiles を dir でプレフィックス */
+const transformStepsForMonorepo = (steps: WorkflowStep[], dir: string): WorkflowStep[] => {
+  const result: WorkflowStep[] = [];
+  for (const step of steps) {
+    if (step.uses && step.uses.includes("checkout")) continue;
+    const s = { ...step, with: step.with ? { ...step.with } : undefined };
+    if (s.with) {
+      if (s.with.path && !String(s.with.path).startsWith("templates/")) {
+        s.with.path = `${dir}/${s.with.path}`;
+      }
+      if (s.with["working-directory"]) s.with["working-directory"] = dir;
+      if (s.with["go-version-file"]) s.with["go-version-file"] = `${dir}/${s.with["go-version-file"]}`;
+      if (s.with["global-json-file"]) s.with["global-json-file"] = `${dir}/${s.with["global-json-file"]}`;
+      if (typeof s.with.key === "string" && s.with.key.includes("hashFiles")) {
+        s.with.key = s.with.key
+          .replace(/hashFiles\('([^']*)',\s*'([^']*)'\)/g, (_, a, b) => `hashFiles('${dir}/${a}', '${dir}/${b}')`)
+          .replace(/hashFiles\('([^']*)'\)/g, (_, a) => `hashFiles('${dir}/${a}')`);
+      }
+    }
+    if (s.run && !s["working-directory"]) s["working-directory"] = dir;
+    result.push(s);
+  }
+  result.unshift({ uses: "actions/checkout@v4" });
+  return result;
+};
+
+const MONOREPO_PREFIX_STACKS = ["csharp", "go", "rust"];
 
 const transformNodeOnlySteps = (steps: WorkflowStep[], dir: string): WorkflowStep[] => {
   const result: WorkflowStep[] = [];
@@ -169,7 +198,10 @@ const buildRootWorkflow = (): Record<string, WorkflowJob> => {
     const jobIds = Object.keys(workflowJobs);
 
     if (jobIds.length === 1 && workflowJobs[jobIds[0]].steps) {
-      const steps = transformNodeOnlySteps(workflowJobs[jobIds[0]].steps ?? [], stack.dir);
+      const rawSteps = workflowJobs[jobIds[0]].steps ?? [];
+      const steps = MONOREPO_PREFIX_STACKS.includes(stack.id)
+        ? transformStepsForMonorepo(rawSteps, stack.dir)
+        : transformNodeOnlySteps(rawSteps, stack.dir);
       jobs[stack.id] = {
         needs: "changes",
         if: `needs.changes.outputs.${stack.id} == 'true'`,

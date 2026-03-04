@@ -16,6 +16,7 @@ const STATIC_ANALYSIS_STACKS: string[] = [
   "templates/sinatra",
   "templates/csharp",
   "templates/go",
+  "templates/rust",
 ];
 
 export function run(): void {
@@ -47,17 +48,12 @@ export function run(): void {
     "templates/rails": "code-check-ruby-erb.yml",
     "templates/csharp": "code-check-dotnet.yml",
     "templates/go": "code-check-go.yml",
+    "templates/rust": "code-check-rust.yml",
   };
 
   for (const [dir, srcName] of Object.entries(CODE_CHECK_SOURCE)) {
     const srcPath = join(WORKFLOWS_DIR, srcName);
-    let content = GEN_HEADER.replace("<name>", srcName) + readFileSync(srcPath, "utf8");
-    if (dir === "templates/csharp") {
-      content = content.replace(
-        /global-json-file: "global\.json"/,
-        'global-json-file: "templates/csharp/global.json"',
-      );
-    }
+    const content = GEN_HEADER.replace("<name>", srcName) + readFileSync(srcPath, "utf8");
     const outDir = join(ROOT, dir, ".github", "workflows");
     mkdirSync(outDir, { recursive: true });
     const outPath = join(outDir, "code-check.yml");
@@ -77,13 +73,7 @@ export function run(): void {
 
   for (const [dir, srcName] of Object.entries(TEST_SOURCE)) {
     const srcPath = join(WORKFLOWS_DIR, srcName);
-    let content = GEN_HEADER.replace("<name>", srcName) + readFileSync(srcPath, "utf8");
-    if (dir === "templates/csharp") {
-      content = content.replace(
-        /global-json-file: "global\.json"/,
-        'global-json-file: "templates/csharp/global.json"',
-      );
-    }
+    const content = GEN_HEADER.replace("<name>", srcName) + readFileSync(srcPath, "utf8");
     const outDir = join(ROOT, dir, ".github", "workflows");
     mkdirSync(outDir, { recursive: true });
     const outPath = join(outDir, "test.yml");

@@ -22,6 +22,7 @@ export const SHARED_CONFIG_STACKS: string[] = [
   "templates/sinatra",
   "templates/csharp",
   "templates/go",
+  "templates/rust",
 ];
 
 export const SHARED_EDITORCONFIG = join(ROOT, "shared", "editorconfig", ".editorconfig");
