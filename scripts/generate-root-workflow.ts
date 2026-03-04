@@ -10,7 +10,10 @@ import { join } from "path";
 import YAML from "yaml";
 
 const ROOT: string = join(process.cwd());
-const VERSIONS = JSON.parse(readFileSync(join(ROOT, "shared", "versions.json"), "utf8")) as { node: string };
+const VERSIONS = JSON.parse(readFileSync(join(ROOT, "shared", "versions.json"), "utf8")) as {
+  node: string;
+  ruby: string;
+};
 
 interface Stack {
   id: string;
@@ -92,8 +95,15 @@ const mergeFormatAndLintSteps = (
     uses: "actions/setup-node@v4",
     with: {
       "node-version": VERSIONS.node,
-      cache: "yarn",
-      "cache-dependency-path": `${dir}/yarn.lock`,
+    },
+  });
+  const lockPath = `${dir}/yarn.lock`;
+  steps.push({
+    uses: "actions/cache@v4",
+    with: {
+      path: `${dir}/node_modules`,
+      key: "${{ runner.os }}-yarn-" + dir + "-${{ hashFiles('" + lockPath + "') }}",
+      "restore-keys": "${{ runner.os }}-yarn-" + dir + "-",
     },
   });
   steps.push({
@@ -103,6 +113,7 @@ const mergeFormatAndLintSteps = (
   steps.push({
     uses: "ruby/setup-ruby@v1",
     with: {
+      "ruby-version": VERSIONS.ruby,
       "working-directory": dir,
       "bundler-cache": true,
     },

@@ -130,12 +130,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22.13.0
-          cache: yarn
-          cache-dependency-path: templates/rails/yarn.lock
+      - uses: actions/cache@v4
+        with:
+          path: templates/rails/node_modules
+          key: ${{ runner.os }}-yarn-templates/rails-${{ hashFiles('templates/rails/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-templates/rails-
       - name: yarn format & lint
         run: cd templates/rails && yarn install && yarn format
       - uses: ruby/setup-ruby@v1
         with:
+          ruby-version: 3.3.6
           working-directory: templates/rails
           bundler-cache: true
       - name: rubocop
@@ -156,12 +160,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22.13.0
-          cache: yarn
-          cache-dependency-path: templates/rails-api/yarn.lock
+      - uses: actions/cache@v4
+        with:
+          path: templates/rails-api/node_modules
+          key: ${{ runner.os }}-yarn-templates/rails-api-${{ hashFiles('templates/rails-api/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-templates/rails-api-
       - name: yarn format & lint
         run: cd templates/rails-api && yarn install && yarn format
       - uses: ruby/setup-ruby@v1
         with:
+          ruby-version: 3.3.6
           working-directory: templates/rails-api
           bundler-cache: true
       - name: rubocop
@@ -176,12 +184,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22.13.0
-          cache: yarn
-          cache-dependency-path: templates/sinatra/yarn.lock
+      - uses: actions/cache@v4
+        with:
+          path: templates/sinatra/node_modules
+          key: ${{ runner.os }}-yarn-templates/sinatra-${{ hashFiles('templates/sinatra/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-templates/sinatra-
       - name: yarn format & lint
         run: cd templates/sinatra && yarn install && yarn format
       - uses: ruby/setup-ruby@v1
         with:
+          ruby-version: 3.3.6
           working-directory: templates/sinatra
           bundler-cache: true
       - name: rubocop
