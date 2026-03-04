@@ -19,10 +19,6 @@ const ROOT: string = process.cwd();
 
 const VERSIONS = JSON.parse(readFileSync(join(ROOT, "shared", "versions.json"), "utf8")) as { node: string; ruby: string };
 
-function applyVersions(content: string): string {
-  return content.replace(/\{\{NODE_VERSION\}\}/g, VERSIONS.node);
-}
-
 function deepMerge<T extends Record<string, unknown>>(a: T, b: Record<string, unknown>): T {
   const r = { ...a } as Record<string, unknown>;
   for (const k of Object.keys(b)) {
@@ -108,6 +104,15 @@ for (const dir of SHARED_CONFIG_STACKS) {
   for (const dir of RUBY_VERSION_DIRS) {
     const outPath = join(ROOT, dir, ".ruby-version");
     writeFileSync(outPath, VERSIONS.ruby + "\n", "utf8");
+    console.log("Generated:", outPath);
+  }
+
+  // ── .node-version（shared/versions.json から生成）──────────────────────────────
+
+  const NODE_VERSION_DIRS = ["templates/nextjs", "templates/nodejs", "templates/react", "templates/rails", "templates/rails-api", "templates/sinatra"];
+  for (const dir of NODE_VERSION_DIRS) {
+    const outPath = join(ROOT, dir, ".node-version");
+    writeFileSync(outPath, VERSIONS.node + "\n", "utf8");
     console.log("Generated:", outPath);
   }
 
@@ -225,7 +230,7 @@ for (const dir of SHARED_CONFIG_STACKS) {
 
   for (const [dir, srcName] of Object.entries(CODE_CHECK_SOURCE)) {
     const srcPath = join(WORKFLOWS_DIR, srcName);
-    const content = applyVersions(GEN_HEADER.replace("<name>", srcName) + readFileSync(srcPath, "utf8"));
+    const content = GEN_HEADER.replace("<name>", srcName) + readFileSync(srcPath, "utf8");
     const outDir = join(ROOT, dir, ".github", "workflows");
     mkdirSync(outDir, { recursive: true });
     const outPath = join(outDir, "code-check.yml");
@@ -242,7 +247,7 @@ for (const dir of SHARED_CONFIG_STACKS) {
 
   for (const [dir, srcName] of Object.entries(TEST_SOURCE)) {
     const srcPath = join(WORKFLOWS_DIR, srcName);
-    const content = applyVersions(GEN_HEADER.replace("<name>", srcName) + readFileSync(srcPath, "utf8"));
+    const content = GEN_HEADER.replace("<name>", srcName) + readFileSync(srcPath, "utf8");
     const outDir = join(ROOT, dir, ".github", "workflows");
     mkdirSync(outDir, { recursive: true });
     const outPath = join(outDir, "test.yml");
