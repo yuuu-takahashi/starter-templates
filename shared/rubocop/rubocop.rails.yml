@@ -1,5 +1,3 @@
-# Rails テンプレート用の追加設定（.rubocop_base.yml とマージして出力される）
-
 require:
   - rubocop-rails
   - rubocop-rspec

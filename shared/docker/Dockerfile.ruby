@@ -1,6 +1,3 @@
-# Ruby 用ベース Dockerfile (context = テンプレートルート).
-# generate-devcontainer が sinatra/rails-api の .devcontainer/Dockerfile にコピーする。
-
 FROM ruby:3.3
 
 WORKDIR /workspace
