@@ -15,7 +15,7 @@ export const VERSIONS = JSON.parse(
 export const SHARED_CONFIG_STACKS: string[] = [
   "templates/nextjs",
   "templates/nodejs",
-  "templates/react",
+  "templates/reactjs",
   "templates/rails",
   "templates/rails-api",
   "templates/ruby",

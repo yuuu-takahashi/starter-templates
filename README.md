@@ -10,7 +10,7 @@
 |------------|------|
 | [templates/nodejs](templates/nodejs) | Node.js |
 | [templates/nextjs](templates/nextjs) | Next.js（App Router） |
-| [templates/react](templates/react) | React + Vite |
+| [templates/reactjs](templates/reactjs) | React + Vite |
 | [templates/rails](templates/rails) | Ruby on Rails |
 | [templates/rails-api](templates/rails-api) | Rails API |
 | [templates/ruby](templates/ruby) | Ruby |
@@ -71,7 +71,7 @@ starter-templates/
 │   ├── nodejs/
 │   ├── rails/
 │   ├── rails-api/
-│   ├── react/
+│   ├── reactjs/
 │   ├── ruby/
 │   └── sinatra/
 └── languages/        言語別の補助設定（Ruby など）

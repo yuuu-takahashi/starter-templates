@@ -24,7 +24,7 @@ jobs:
     outputs:
       nextjs: ${{ steps.filter.outputs.nextjs }}
       nodejs: ${{ steps.filter.outputs.nodejs }}
-      react: ${{ steps.filter.outputs.react }}
+      reactjs: ${{ steps.filter.outputs.reactjs }}
       rails: ${{ steps.filter.outputs.rails }}
       rails_api: ${{ steps.filter.outputs.rails_api }}
       sinatra: ${{ steps.filter.outputs.sinatra }}
@@ -39,8 +39,8 @@ jobs:
               - 'templates/nextjs/**'
             nodejs:
               - 'templates/nodejs/**'
-            react:
-              - 'templates/react/**'
+            reactjs:
+              - 'templates/reactjs/**'
             rails:
               - 'templates/rails/**'
             rails_api:
@@ -104,20 +104,20 @@ jobs:
         run: yarn format
       - name: lint
         run: yarn lint
-  react:
+  reactjs:
     needs: changes
-    if: needs.changes.outputs.react == 'true'
+    if: needs.changes.outputs.reactjs == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: templates/react
+        working-directory: templates/reactjs
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22.13.0
           cache: yarn
-          cache-dependency-path: templates/react/yarn.lock
+          cache-dependency-path: templates/reactjs/yarn.lock
       - name: Install dependencies
         run: yarn install
       - name: format
@@ -220,7 +220,7 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version-file: global.json
+          global-json-file: templates/csharp/global.json
       - name: Restore
         run: dotnet restore
       - name: Build

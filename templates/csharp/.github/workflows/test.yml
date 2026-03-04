@@ -24,10 +24,10 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version-file: 'global.json'
+          global-json-file: "templates/csharp/global.json"
 
       - name: Restore
         run: dotnet restore
 
       - name: Test
-        run: dotnet test --no-restore --verbosity normal
+        run: dotnet test --verbosity normal
