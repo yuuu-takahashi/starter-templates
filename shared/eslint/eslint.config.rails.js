@@ -38,7 +38,7 @@ export default [
       "app/assets/config/manifest.js",
       "app/views/pwa/service-worker.js",
       "config/webpack/webpackConfig.ts",
-      "eslint.config.ts",
+      "eslint.config.js",
     ],
   },
   ...[pluginJs.configs.recommended],

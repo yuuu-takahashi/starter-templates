@@ -8,7 +8,7 @@ export default [
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "module",
-      globals: { ...globals.node } as Record<string, boolean>,
+      globals: { ...globals.node },
     },
   },
   eslintConfigPrettier,
