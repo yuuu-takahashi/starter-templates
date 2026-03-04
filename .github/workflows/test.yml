@@ -21,7 +21,7 @@ jobs:
       pull-requests: read
     outputs:
       nextjs: ${{ steps.filter.outputs.nextjs }}
-      react: ${{ steps.filter.outputs.react }}
+      reactjs: ${{ steps.filter.outputs.reactjs }}
       rails: ${{ steps.filter.outputs.rails }}
       rails_api: ${{ steps.filter.outputs.rails_api }}
       sinatra: ${{ steps.filter.outputs.sinatra }}
@@ -33,8 +33,8 @@ jobs:
           filters: |
             nextjs:
               - 'templates/nextjs/**'
-            react:
-              - 'templates/react/**'
+            reactjs:
+              - 'templates/reactjs/**'
             rails:
               - 'templates/rails/**'
             rails_api:
@@ -60,9 +60,9 @@ jobs:
         run: yarn test
         working-directory: templates/nextjs
 
-  react:
+  reactjs:
     needs: changes
-    if: needs.changes.outputs.react == 'true'
+    if: needs.changes.outputs.reactjs == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -70,13 +70,13 @@ jobs:
         with:
           node-version: "22.x"
           cache: "yarn"
-          cache-dependency-path: "templates/react/yarn.lock"
+          cache-dependency-path: "templates/reactjs/yarn.lock"
       - name: Install dependencies
         run: yarn install
-        working-directory: templates/react
+        working-directory: templates/reactjs
       - name: test
         run: yarn test
-        working-directory: templates/react
+        working-directory: templates/reactjs
 
   rails:
     needs: changes

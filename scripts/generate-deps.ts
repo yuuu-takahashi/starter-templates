@@ -15,7 +15,7 @@ const ROOT = process.cwd();
 const SHARED_NPM = join(ROOT, "shared", "npm");
 const SHARED_GEMFILE = join(ROOT, "shared", "gemfile");
 
-const NPM_STACKS = ["nextjs", "nodejs", "react", "rails", "rails-api", "sinatra", "ruby"] as const;
+const NPM_STACKS = ["nextjs", "nodejs", "reactjs", "rails", "rails-api", "sinatra", "ruby"] as const;
 const GEMFILE_STACKS = ["rails", "rails-api", "sinatra", "ruby"] as const;
 
 const GEMFILE_HEADER =

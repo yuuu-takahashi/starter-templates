@@ -10,10 +10,11 @@ import { ROOT } from "./lib/utils.js";
 const STATIC_ANALYSIS_STACKS: string[] = [
   "templates/nextjs",
   "templates/nodejs",
-  "templates/react",
+  "templates/reactjs",
   "templates/rails",
   "templates/rails-api",
   "templates/sinatra",
+  "templates/csharp",
 ];
 
 export function run(): void {
@@ -39,15 +40,22 @@ export function run(): void {
   const CODE_CHECK_SOURCE: Record<string, string> = {
     "templates/nextjs": "code-check-node.yml",
     "templates/nodejs": "code-check-node.yml",
-    "templates/react": "code-check-node.yml",
+    "templates/reactjs": "code-check-node.yml",
     "templates/rails-api": "code-check-ruby.yml",
     "templates/sinatra": "code-check-ruby-erb.yml",
     "templates/rails": "code-check-ruby-erb.yml",
+    "templates/csharp": "code-check-dotnet.yml",
   };
 
   for (const [dir, srcName] of Object.entries(CODE_CHECK_SOURCE)) {
     const srcPath = join(WORKFLOWS_DIR, srcName);
-    const content = GEN_HEADER.replace("<name>", srcName) + readFileSync(srcPath, "utf8");
+    let content = GEN_HEADER.replace("<name>", srcName) + readFileSync(srcPath, "utf8");
+    if (dir === "templates/csharp") {
+      content = content.replace(
+        /global-json-file: "global\.json"/,
+        'global-json-file: "templates/csharp/global.json"',
+      );
+    }
     const outDir = join(ROOT, dir, ".github", "workflows");
     mkdirSync(outDir, { recursive: true });
     const outPath = join(outDir, "code-check.yml");
@@ -58,15 +66,22 @@ export function run(): void {
   // ── test.yml ───────────────────────────────────────────────────────────────
 
   const TEST_SOURCE: Record<string, string> = {
-    "templates/react": "test-node.yml",
+    "templates/reactjs": "test-node.yml",
     "templates/sinatra": "test-sinatra.yml",
     "templates/rails": "test-rails.yml",
     "templates/rails-api": "test-rails-api.yml",
+    "templates/csharp": "test-dotnet.yml",
   };
 
   for (const [dir, srcName] of Object.entries(TEST_SOURCE)) {
     const srcPath = join(WORKFLOWS_DIR, srcName);
-    const content = GEN_HEADER.replace("<name>", srcName) + readFileSync(srcPath, "utf8");
+    let content = GEN_HEADER.replace("<name>", srcName) + readFileSync(srcPath, "utf8");
+    if (dir === "templates/csharp") {
+      content = content.replace(
+        /global-json-file: "global\.json"/,
+        'global-json-file: "templates/csharp/global.json"',
+      );
+    }
     const outDir = join(ROOT, dir, ".github", "workflows");
     mkdirSync(outDir, { recursive: true });
     const outPath = join(outDir, "test.yml");

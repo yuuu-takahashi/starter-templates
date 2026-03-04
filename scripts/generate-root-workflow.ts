@@ -24,10 +24,11 @@ interface Stack {
 const STACKS: Stack[] = [
   { id: "nextjs", dir: "templates/nextjs", pathFilter: "templates/nextjs/**" },
   { id: "nodejs", dir: "templates/nodejs", pathFilter: "templates/nodejs/**" },
-  { id: "react", dir: "templates/react", pathFilter: "templates/react/**" },
+  { id: "reactjs", dir: "templates/reactjs", pathFilter: "templates/reactjs/**" },
   { id: "rails", dir: "templates/rails", pathFilter: "templates/rails/**" },
   { id: "rails_api", dir: "templates/rails-api", pathFilter: "templates/rails-api/**" },
   { id: "sinatra", dir: "templates/sinatra", pathFilter: "templates/sinatra/**" },
+  { id: "csharp", dir: "templates/csharp", pathFilter: "templates/csharp/**" },
 ];
 
 interface WorkflowStep {

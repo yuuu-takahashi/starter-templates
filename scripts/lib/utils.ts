@@ -15,11 +15,12 @@ export const VERSIONS = JSON.parse(
 export const SHARED_CONFIG_STACKS: string[] = [
   "templates/nextjs",
   "templates/nodejs",
-  "templates/react",
+  "templates/reactjs",
   "templates/rails",
   "templates/rails-api",
   "templates/ruby",
   "templates/sinatra",
+  "templates/csharp",
 ];
 
 export const SHARED_EDITORCONFIG = join(ROOT, "shared", "editorconfig", ".editorconfig");

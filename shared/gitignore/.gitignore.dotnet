@@ -1,0 +1,47 @@
+# Build
+[Dd]ebug/
+[Rr]elease/
+bin/
+obj/
+bld/
+[Bb]in/
+[Oo]bj/
+out/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# NuGet
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+project.lock.json
+project.fragment.lock.json
+
+# Test / coverage
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
+coverage*.json
+coverage*.xml
+
+# Rider / ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+# User-specific
+.env
+.env.*
+!.env.example
+
+# Misc
+.DS_Store
+*.pem
+*.log

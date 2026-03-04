@@ -27,7 +27,7 @@ export async function run(): Promise<void> {
   console.log("Generated:", join(ROOT, "templates/nodejs", "eslint.config.js"));
 
   const ESLINT_SOURCE: Array<{ dir: string; source: string }> = [
-    { dir: "templates/react", source: "eslint.config.react.js" },
+    { dir: "templates/reactjs", source: "eslint.config.react.js" },
     { dir: "templates/nextjs", source: "eslint.config.nextjs.js" },
     { dir: "templates/rails", source: "eslint.config.rails.js" },
     { dir: "templates/rails-api", source: "eslint.config.rails.js" },
@@ -73,15 +73,15 @@ export async function run(): Promise<void> {
 
   // ── tsconfig（.ts ソースから .json を生成）─────────────────────────────────
 
-  const reactRoot = await import(pathToFileURL(join(SHARED_TSCONFIG, "react", "tsconfig.root.ts")).href);
-  const reactApp = await import(pathToFileURL(join(SHARED_TSCONFIG, "react", "tsconfig.app.ts")).href);
-  const reactNode = await import(pathToFileURL(join(SHARED_TSCONFIG, "react", "tsconfig.node.ts")).href);
-  writeFileSync(join(ROOT, "templates/react", "tsconfig.json"), JSON.stringify(reactRoot.default, null, 2), "utf8");
-  console.log("Generated:", join(ROOT, "templates/react", "tsconfig.json"));
-  writeFileSync(join(ROOT, "templates/react", "tsconfig.app.json"), JSON.stringify(reactApp.default, null, 2), "utf8");
-  console.log("Generated:", join(ROOT, "templates/react", "tsconfig.app.json"));
-  writeFileSync(join(ROOT, "templates/react", "tsconfig.node.json"), JSON.stringify(reactNode.default, null, 2), "utf8");
-  console.log("Generated:", join(ROOT, "templates/react", "tsconfig.node.json"));
+  const reactRoot = await import(pathToFileURL(join(SHARED_TSCONFIG, "reactjs", "tsconfig.root.ts")).href);
+  const reactApp = await import(pathToFileURL(join(SHARED_TSCONFIG, "reactjs", "tsconfig.app.ts")).href);
+  const reactNode = await import(pathToFileURL(join(SHARED_TSCONFIG, "reactjs", "tsconfig.node.ts")).href);
+  writeFileSync(join(ROOT, "templates/reactjs", "tsconfig.json"), JSON.stringify(reactRoot.default, null, 2), "utf8");
+  console.log("Generated:", join(ROOT, "templates/reactjs", "tsconfig.json"));
+  writeFileSync(join(ROOT, "templates/reactjs", "tsconfig.app.json"), JSON.stringify(reactApp.default, null, 2), "utf8");
+  console.log("Generated:", join(ROOT, "templates/reactjs", "tsconfig.app.json"));
+  writeFileSync(join(ROOT, "templates/reactjs", "tsconfig.node.json"), JSON.stringify(reactNode.default, null, 2), "utf8");
+  console.log("Generated:", join(ROOT, "templates/reactjs", "tsconfig.node.json"));
 
   const nextjsTs = await import(pathToFileURL(join(SHARED_TSCONFIG, "nextjs", "tsconfig.ts")).href);
   writeFileSync(join(ROOT, "templates/nextjs", "tsconfig.json"), JSON.stringify(nextjsTs.default, null, 2), "utf8");
