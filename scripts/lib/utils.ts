@@ -18,7 +18,6 @@ export const SHARED_CONFIG_STACKS: string[] = [
   "templates/reactjs",
   "templates/rails",
   "templates/rails-api",
-  "templates/ruby",
   "templates/sinatra",
   "templates/csharp",
   "templates/go",

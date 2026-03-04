@@ -14,6 +14,8 @@
 | `prettier/` | `.prettierrc.ts`（TypeScript で記述し JSON に変換） | `templates/*/.prettierrc.json` | `gen-tool-configs.ts` |
 | `tsconfig/` | `tsconfig*.ts`（TypeScript で記述し JSON に変換） | `templates/*/tsconfig*.json` | `gen-tool-configs.ts` |
 | `vitest/` | `vitest.config.*.ts`, `vitest.setup.ts` など | `templates/nextjs/vitest*.ts` など | `gen-tool-configs.ts` |
+| `nextjs/` | `next.config.ts` | `templates/nextjs/next.config.ts` | `gen-tool-configs.ts` |
+| `reactjs/` | `vite.config.ts` | `templates/reactjs/vite.config.ts` | `gen-tool-configs.ts` |
 | `rspec/` | `rspec.common`（共通の rspec オプション） | `templates/*/.rspec`（`--require` 行と結合） | `gen-ruby-configs.ts` |
 | `rubocop/` | `rubocop.base.yml`, `rubocop.<stack>.yml` | `templates/*/.rubocop.yml`（マージして生成） | `gen-ruby-configs.ts` |
 | `workflows/` | `code-check-*.yml`, `test-*.yml`, `static-analysis.yml`, `dependabot.yml` | `templates/*/.github/workflows/`, `templates/*/.github/dependabot.yml` | `gen-workflows.ts` |
@@ -21,8 +23,10 @@
 | `npm/` | `<stack>.json`（package.json のソース） | `templates/*/package.json` | `generate-deps.ts` |
 | `gemfile/` | `Gemfile.<stack>` | `templates/*/Gemfile` | `generate-deps.ts` |
 | `dotnet/` | `*.csproj`（C# プロジェクトの正本） | `templates/csharp/*.csproj` | `generate-deps.ts` |
+| `go/` | `go.mod`, `.golangci.yml`, `main.go` | `templates/go/` | `generate-deps.ts` |
+| `rust/` | `Cargo.toml`, `rust-toolchain.toml`, `src/main.rs` | `templates/rust/` | `generate-deps.ts` |
 | `devcontainer/` | `defaults.json`, `devcontainer.json.ts` など | `templates/*/.devcontainer/devcontainer.json` | `generate-devcontainer.ts` |
-| `docker/` | `Dockerfile.<stack>` | `templates/*/.devcontainer/Dockerfile` | `generate-devcontainer.ts` |
+| `docker/` | `Dockerfile.<stack>`, `dockerignore.rails`, `dockerignore.rails-api` | `templates/*/.devcontainer/Dockerfile`, `templates/rails/.dockerignore`, `templates/rails-api/.dockerignore` | `generate-devcontainer.ts`, `gen-common-files.ts` |
 
 ## バージョン管理
 

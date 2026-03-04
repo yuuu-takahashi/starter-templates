@@ -211,25 +211,6 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: "templates/ruby",
-    config: {
-      name: "Ruby",
-      build: { dockerfile: "Dockerfile", context: ".." },
-      workspaceFolder: "/workspace",
-      mounts: [
-        "source=${localWorkspaceFolder},target=/workspace,type=bind",
-        "source=${localWorkspaceFolderBasename}_node_modules,target=/workspace/node_modules,type=volume",
-        "source=${localWorkspaceFolderBasename}_bundle,target=/workspace/vendor/bundle,type=volume",
-      ],
-      customizations: {
-        vscode: {
-          extensions: [...BASE_EXTENSIONS, ...RUBY_EXTENSIONS],
-          settings: { ...BASE_SETTINGS, ...RUBY_SETTINGS },
-        },
-      },
-    },
-  },
-  {
     dir: "templates/csharp",
     config: {
       name: "template-csharp",

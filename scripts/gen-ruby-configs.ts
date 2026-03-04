@@ -40,7 +40,6 @@ export function run(): void {
   const RUBOCOP_OUT: Array<{ dir: string; content: string }> = [
     { dir: "templates/rails", content: YAML.stringify(rubocopRailsMerged) },
     { dir: "templates/sinatra", content: YAML.stringify(rubocopSinatraMerged) },
-    { dir: "templates/ruby", content: YAML.stringify(rubocopBase) },
     { dir: "templates/rails-api", content: rubocopRailsApi },
   ];
   for (const { dir, content } of RUBOCOP_OUT) {

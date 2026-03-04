@@ -1,7 +1,22 @@
 package main
 
-import "fmt"
+import (
+	"log"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
-	fmt.Println("Hello, World!")
+	r := gin.Default()
+
+	r.GET("/", func(c *gin.Context) {
+		c.String(http.StatusOK, "Hello, World!")
+	})
+
+	addr := ":8080"
+	log.Printf("Listening on http://localhost%s", addr)
+	if err := r.Run(addr); err != nil {
+		log.Fatal(err)
+	}
 }

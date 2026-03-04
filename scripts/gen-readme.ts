@@ -228,6 +228,13 @@ function buildStackSection(
     }
   }
 
+  if (c.stackLibs && c.stackLibs.length > 0) {
+    parts.push("### 主なライブラリ");
+    parts.push("");
+    c.stackLibs.forEach((line) => parts.push(line.startsWith("-") ? line : `- ${line}`));
+    parts.push("");
+  }
+
   if (c.extensionSets && c.extensionSets.length > 0) {
     const extIds = new Set<string>();
     for (const set of c.extensionSets) {

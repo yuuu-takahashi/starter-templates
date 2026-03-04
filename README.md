@@ -20,7 +20,6 @@
 | [templates/reactjs](templates/reactjs) | React + Vite |
 | [templates/rails](templates/rails) | Ruby on Rails |
 | [templates/rails-api](templates/rails-api) | Rails API |
-| [templates/ruby](templates/ruby) | Ruby |
 | [templates/sinatra](templates/sinatra) | Sinatra |
 
 ## ファイルの正本について
@@ -79,7 +78,6 @@ starter-templates/
 │   ├── rails/
 │   ├── rails-api/
 │   ├── reactjs/
-│   ├── ruby/
 │   └── sinatra/
 ├── starters/         個人開発用テンプレート（すぐ使える・手動管理）
 └── languages/        言語別の補助設定（Ruby など）

@@ -7,6 +7,10 @@
 
 ## 主なライブラリ・Gem・拡張機能
 
+### 主なライブラリ
+
+- gin — 軽量 Web フレームワーク（Sinatra 的）
+
 ### Dev Container でインストールされる主な拡張機能
 
 - esbenp.prettier-vscode — コードフォーマット（Prettier）
@@ -36,6 +40,14 @@ tree -I 'bin|vendor'
    ```
 
 2. VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動
+
+3. 開発サーバー起動
+
+   ```bash
+   go run .
+   ```
+
+ブラウザで <http://localhost:8080> を開き、表示確認
 
 ## 開発作業ガイド
 

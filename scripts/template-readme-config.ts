@@ -51,6 +51,8 @@ export type TemplateReadmeConfig = {
   gemfileStack?: string;
   /** shared/devcontainer/defaults.json の拡張機能セットを「主な拡張機能」に記載 */
   extensionSets?: ExtensionSetKey[];
+  /** 「主なライブラリ」に記載する項目（Go: Gin, Rust: Axum など） */
+  stackLibs?: string[];
   setupSteps: TemplateReadmeStep[];
   previewUrl?: string;
   devGuide: TemplateReadmeDevGuide[];
@@ -168,21 +170,6 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     ],
   },
   {
-    id: "ruby",
-    title: "template-ruby",
-    description: "このリポジトリはRubyのテンプレートプロジェクトです。",
-    repoSlug: "template-ruby",
-    gemfileStack: "ruby",
-    extensionSets: ["base", "ruby"],
-    setupSteps: [
-      cloneStep("ruby"),
-      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
-    ],
-    devGuide: [
-      { title: "コードの静的解析と修正", commands: "bundle exec rubocop -A" },
-    ],
-  },
-  {
     id: "csharp",
     title: "template-csharp",
     description: "このリポジトリは ASP.NET Core Minimal API（C#）のテンプレートプロジェクトです。",
@@ -207,11 +194,14 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     description: "このリポジトリは Go のテンプレートプロジェクトです。",
     repoSlug: "template-go",
     extensionSets: ["base", "go"],
+    stackLibs: ["gin — 軽量 Web フレームワーク（Sinatra 的）"],
     treeExclude: "bin|vendor",
     setupSteps: [
       cloneStep("go"),
       { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
+      { label: "開発サーバー起動", commands: ["go run ."] },
     ],
+    previewUrl: "http://localhost:8080",
     devGuide: [
       { title: "ビルド", commands: "go build ./..." },
       { title: "リンター（golangci-lint）", commands: "golangci-lint run" },
@@ -223,11 +213,14 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     description: "このリポジトリは Rust のテンプレートプロジェクトです。",
     repoSlug: "template-rust",
     extensionSets: ["base", "rust"],
+    stackLibs: ["axum — 軽量 Web フレームワーク（Sinatra 的）"],
     treeExclude: "target",
     setupSteps: [
       cloneStep("rust"),
       { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
+      { label: "開発サーバー起動", commands: ["cargo run"] },
     ],
+    previewUrl: "http://localhost:8080",
     devGuide: [
       { title: "ビルド", commands: "cargo build" },
       { title: "フォーマットチェック", commands: "cargo fmt --all -- --check" },
