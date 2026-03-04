@@ -1,7 +1,3 @@
-# Used by sinatra and rails-api (identical configuration).
-# Generated files: templates/sinatra/.devcontainer/docker-compose.yml, templates/rails-api/.devcontainer/docker-compose.yml
-# Run: yarn generate:devcontainer
-
 services:
   web:
     build:
