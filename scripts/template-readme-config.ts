@@ -199,6 +199,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     setupSteps: [
       cloneStep("go"),
       { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
+      { label: "依存関係の取得（go.sum の生成）", commands: ["go mod tidy"] },
       { label: "開発サーバー起動", commands: ["go run ."] },
     ],
     previewUrl: "http://localhost:8080",

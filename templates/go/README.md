@@ -41,7 +41,13 @@ tree -I 'bin|vendor'
 
 2. VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動
 
-3. 開発サーバー起動
+3. 依存関係の取得（go.sum の生成）
+
+   ```bash
+   go mod tidy
+   ```
+
+4. 開発サーバー起動
 
    ```bash
    go run .
