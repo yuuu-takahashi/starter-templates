@@ -27,6 +27,7 @@ const DEFAULTS = JSON.parse(
     ruby: string[];
     erb: string[];
     csharp: string[];
+    go: string[];
     tooling: string[];
   };
   settings: {
@@ -41,6 +42,7 @@ const NODE_EXTENSIONS = DEFAULTS.extensions.node;
 const RUBY_EXTENSIONS = DEFAULTS.extensions.ruby;
 const ERB_EXTENSIONS = DEFAULTS.extensions.erb;
 const CSHARP_EXTENSIONS = DEFAULTS.extensions.csharp;
+const GO_EXTENSIONS = DEFAULTS.extensions.go;
 const TOOLING_EXTENSIONS = DEFAULTS.extensions.tooling;
 
 type VscodeSettings = Record<string, unknown>;
@@ -79,10 +81,11 @@ interface Stack {
   config: DevcontainerConfig;
 }
 
-// Node/Ruby/Dotnet Dockerfiles: read from shared/docker/ (single source of truth)
+// Node/Ruby/Dotnet/Go Dockerfiles: read from shared/docker/ (single source of truth)
 const NODE_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.node");
 const RUBY_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.ruby");
 const DOTNET_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.dotnet");
+const GO_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.go");
 
 const STACKS: Stack[] = [
   {
@@ -240,6 +243,23 @@ const STACKS: Stack[] = [
       },
     },
   },
+  {
+    dir: "templates/go",
+    config: {
+      name: "template-go",
+      build: { dockerfile: "Dockerfile", context: ".." },
+      workspaceFolder: "/workspace",
+      mounts: [
+        "source=${localWorkspaceFolder},target=/workspace,type=bind",
+      ],
+      customizations: {
+        vscode: {
+          extensions: [...BASE_EXTENSIONS, ...GO_EXTENSIONS],
+          settings: { ...BASE_SETTINGS },
+        },
+      },
+    },
+  },
 ];
 
 // ── Shared docker-compose ──────────────────────────────────────────────────────
@@ -283,6 +303,16 @@ for (const dir of ["templates/csharp"]) {
   mkdirSync(outDir, { recursive: true });
   const outPath = join(outDir, "Dockerfile");
   writeFileSync(outPath, DOCKERFILE_HEADER + dotnetDockerfileContent, "utf8");
+  console.log("Generated:", outPath);
+}
+
+// Go template: copy shared/docker/Dockerfile.go
+const goDockerfileContent = readFileSync(GO_DOCKERFILE_SRC, "utf8");
+for (const dir of ["templates/go"]) {
+  const outDir = join(ROOT, dir, ".devcontainer");
+  mkdirSync(outDir, { recursive: true });
+  const outPath = join(outDir, "Dockerfile");
+  writeFileSync(outPath, DOCKERFILE_HEADER + goDockerfileContent, "utf8");
   console.log("Generated:", outPath);
 }
 

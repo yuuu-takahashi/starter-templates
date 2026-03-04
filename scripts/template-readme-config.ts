@@ -37,7 +37,7 @@ export type TemplateReadmeDevGuide = {
 };
 
 /** Dev Container の拡張機能セット（shared/devcontainer/defaults.json の extensions キー） */
-export type ExtensionSetKey = "base" | "node" | "ruby" | "erb" | "csharp" | "tooling";
+export type ExtensionSetKey = "base" | "node" | "ruby" | "erb" | "csharp" | "go" | "tooling";
 
 export type TemplateReadmeConfig = {
   id: string;
@@ -199,6 +199,22 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     devGuide: [
       { title: "テストの実行", commands: "dotnet test" },
       { title: "ビルド", commands: "dotnet build" },
+    ],
+  },
+  {
+    id: "go",
+    title: "template-go",
+    description: "このリポジトリは Go のテンプレートプロジェクトです。",
+    repoSlug: "template-go",
+    extensionSets: ["base", "go"],
+    treeExclude: "bin|vendor",
+    setupSteps: [
+      cloneStep("go"),
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
+    ],
+    devGuide: [
+      { title: "ビルド", commands: "go build ./..." },
+      { title: "リンター（golangci-lint）", commands: "golangci-lint run" },
     ],
   },
   {

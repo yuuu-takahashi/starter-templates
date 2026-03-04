@@ -7,7 +7,7 @@
     "generate:devcontainer": "tsx scripts/generate-devcontainer.ts",
     "generate:configs": "tsx scripts/generate-configs.ts",
     "generate:deps": "tsx scripts/generate-deps.ts",
-    "generate:all": "yarn generate:ci && yarn generate:devcontainer && yarn generate:configs && yarn generate:deps"
+    "generate:all": "yarn generate:configs && yarn generate:deps && yarn generate:ci && yarn generate:devcontainer"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

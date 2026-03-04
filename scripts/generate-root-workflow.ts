@@ -29,6 +29,7 @@ const STACKS: Stack[] = [
   { id: "rails_api", dir: "templates/rails-api", pathFilter: "templates/rails-api/**" },
   { id: "sinatra", dir: "templates/sinatra", pathFilter: "templates/sinatra/**" },
   { id: "csharp", dir: "templates/csharp", pathFilter: "templates/csharp/**" },
+  { id: "go", dir: "templates/go", pathFilter: "templates/go/**" },
 ];
 
 interface WorkflowStep {

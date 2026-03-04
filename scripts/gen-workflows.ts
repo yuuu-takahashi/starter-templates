@@ -15,6 +15,7 @@ const STATIC_ANALYSIS_STACKS: string[] = [
   "templates/rails-api",
   "templates/sinatra",
   "templates/csharp",
+  "templates/go",
 ];
 
 export function run(): void {
@@ -45,6 +46,7 @@ export function run(): void {
     "templates/sinatra": "code-check-ruby-erb.yml",
     "templates/rails": "code-check-ruby-erb.yml",
     "templates/csharp": "code-check-dotnet.yml",
+    "templates/go": "code-check-go.yml",
   };
 
   for (const [dir, srcName] of Object.entries(CODE_CHECK_SOURCE)) {

@@ -29,6 +29,7 @@ jobs:
       rails_api: ${{ steps.filter.outputs.rails_api }}
       sinatra: ${{ steps.filter.outputs.sinatra }}
       csharp: ${{ steps.filter.outputs.csharp }}
+      go: ${{ steps.filter.outputs.go }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -49,6 +50,8 @@ jobs:
               - 'templates/sinatra/**'
             csharp:
               - 'templates/csharp/**'
+            go:
+              - 'templates/go/**'
   generate_check:
     runs-on: ubuntu-latest
     steps:
@@ -225,3 +228,23 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore
+  go:
+    needs: changes
+    if: needs.changes.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: templates/go
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: templates/go/.go-version
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
+          working-directory: templates/go
+      - name: Build
+        run: go build ./...

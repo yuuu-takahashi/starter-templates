@@ -16,6 +16,9 @@
       "ms-dotnettools.csharp",
       "ms-dotnettools.csdevkit"
     ],
+    "go": [
+      "golang.go"
+    ],
     "tooling": [
       "eamodio.gitlens",
       "Gruntfuggly.todo-tree",

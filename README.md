@@ -114,15 +114,15 @@ starter-templates/
 
 | コマンド | スクリプト | 役割 |
 |---------|-----------|------|
-| `yarn generate:all` | — | 以下をすべて順番に実行 |
+| `yarn generate:all` | — | configs → deps → ci → devcontainer の順で実行（テンプレートの workflow を生成してからルート CI を組み立てる） |
 | `yarn generate:ci` | `generate-root-workflow.ts` | ルートの CI ワークフローを生成 |
 | `yarn generate:devcontainer` | `generate-devcontainer.ts` | Dev Container 設定を生成 |
 | `yarn generate:configs` | `generate-configs.ts` | 設定ファイル全般を生成（エントリポイント） |
-| `yarn generate:deps` | `generate-deps.ts` | package.json と Gemfile を生成 |
+| `yarn generate:deps` | `generate-deps.ts` | package.json / Gemfile / C# .csproj / Go (shared/go → templates/go) を生成 |
 
 `generate-configs.ts` は以下のモジュールを呼び出します：
 
-- `gen-common-files.ts` — .editorconfig / .gitignore / .node-version / .ruby-version
+- `gen-common-files.ts` — .editorconfig / .gitignore / .node-version / .ruby-version / .go-version
 - `gen-tool-configs.ts` — ESLint / Prettier / tsconfig / Vitest
 - `gen-ruby-configs.ts` — .rubocop.yml / .rspec
 - `gen-workflows.ts` — GitHub Actions ワークフロー / dependabot / .env.*
