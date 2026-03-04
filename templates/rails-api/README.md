@@ -3,7 +3,7 @@
 # template-rails-api
 
 このリポジトリは Ruby on Rails（API）のテンプレートプロジェクトです。
-このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。
+このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。VS Code・Cursor のどちらでも利用できます。
 
 ## ディレクトリ構成
 
@@ -15,17 +15,17 @@ tree -I 'vendor|node_modules|tmp'
 
 ### 必要なツール
 
-- [VS Code](https://code.visualstudio.com/)
+- [VS Code](https://code.visualstudio.com/) または [Cursor](https://www.cursor.com/)
 - [Docker](https://www.docker.com/ja-jp/)
-- VS Codeの[Dev Containers拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+- VS Code の場合: [Dev Containers拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
 ### 開発環境の準備
 
-1. リポジトリをクローン
+1. リポジトリをクローンし、テンプレートディレクトリに移動
 
    ```bash
-   git clone git@github.com:yuuu-takahashi/template-rails-api.git
-   cd template-rails-api
+   git clone git@github.com:yuuu-takahashi/starter-templates.git
+   cd starter-templates/templates/rails-api
    ```
 
 2. 環境変数の設定
@@ -34,7 +34,7 @@ tree -I 'vendor|node_modules|tmp'
    cp .env.example .env.development
    ```
 
-3. VS Codeの左下「><」アイコンをクリックし、「Remote-Containers: Reopen in Container」を選択し、起動
+3. VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動
 
 4. データベース準備
 
@@ -52,9 +52,22 @@ tree -I 'vendor|node_modules|tmp'
 
 ## 開発作業ガイド
 
+- テストの実行
+
+```bash
+bundle exec rspec
+```
+
 - APIドキュメント生成
 
 ```bash
 bundle exec rake rswag:specs:swaggerize
+```
+
+- コードの静的解析と修正
+
+```bash
+yarn format
+bundle exec rubocop -A
 ```
 

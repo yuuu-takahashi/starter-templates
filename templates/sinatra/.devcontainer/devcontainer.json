@@ -31,6 +31,33 @@
         },
         "vscode-erb-beautify.useBundler": true
       }
+    },
+    "cursor": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "Shopify.ruby-extensions-pack",
+        "aliariff.vscode-erb-beautify"
+      ],
+      "settings": {
+        "editor.tabSize": 2,
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll": "explicit"
+        },
+        "[ruby]": {
+          "editor.defaultFormatter": "Shopify.ruby-lsp"
+        },
+        "ruby.lint": {
+          "rubocop": true
+        },
+        "[erb]": {
+          "editor.defaultFormatter": "aliariff.vscode-erb-beautify"
+        },
+        "vscode-erb-beautify.useBundler": true
+      }
     }
   }
 }

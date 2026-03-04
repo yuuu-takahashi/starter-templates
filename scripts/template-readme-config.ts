@@ -7,7 +7,7 @@
 // ── 共通文面（全テンプレートで同じ文言）────────────────────────────────────────
 
 const SHARED_README_DEV_CONTAINER_NOTE =
-  "このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。";
+  "このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。VS Code・Cursor のどちらでも利用できます。";
 
 const SHARED_README_SECTION_DIRECTORY = "## ディレクトリ構成";
 const SHARED_README_SECTION_SETUP = "## 開発環境構築";
@@ -16,9 +16,9 @@ const SHARED_README_SECTION_PREPARE = "### 開発環境の準備";
 const SHARED_README_SECTION_DEV_GUIDE = "## 開発作業ガイド";
 
 const SHARED_README_REQUIRED_TOOLS_LIST = [
-  "- [VS Code](https://code.visualstudio.com/)",
+  "- [VS Code](https://code.visualstudio.com/) または [Cursor](https://www.cursor.com/)",
   "- [Docker](https://www.docker.com/ja-jp/)",
-  "- VS Codeの[Dev Containers拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)",
+  "- VS Code の場合: [Dev Containers拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)",
 ];
 
 const SHARED_README_PREVIEW_LINE = (url: string) =>
@@ -48,6 +48,14 @@ export type TemplateReadmeConfig = {
   extraSections?: string;
 };
 
+const cloneStep = (templateId: string): TemplateReadmeStep => ({
+  label: "リポジトリをクローンし、テンプレートディレクトリに移動",
+  commands: [
+    "git clone git@github.com:yuuu-takahashi/starter-templates.git",
+    `cd starter-templates/templates/${templateId}`,
+  ],
+});
+
 export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
   {
     id: "nodejs",
@@ -56,11 +64,10 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     repoSlug: "template-nodejs",
     treeExclude: "node_modules",
     setupSteps: [
-      { label: "リポジトリをクローン", commands: ["git clone git@github.com:yuuu-takahashi/template-nodejs.git", "cd template-nodejs"] },
-      { label: "VS Codeの左下「><」アイコンをクリックし、「Remote-Containers: Reopen in Container」を選択し、起動", commands: [] },
+      cloneStep("nodejs"),
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
     ],
     devGuide: [
-      { title: "テストの実行", commands: "yarn test" },
       { title: "コードの静的解析と修正", commands: "yarn format\nyarn lint" },
     ],
   },
@@ -71,14 +78,15 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     repoSlug: "template-nextjs",
     treeExclude: "vendor|node_modules",
     setupSteps: [
-      { label: "リポジトリをクローン", commands: ["git clone git@github.com:yuuu-takahashi/template-nextjs.git", "cd template-nextjs"] },
-      { label: "VS Codeの左下「><」アイコンをクリックし、「Remote-Containers: Reopen in Container」を選択し、起動", commands: [] },
+      cloneStep("nextjs"),
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
       { label: "パッケージをインストール", commands: ["yarn"] },
       { label: "開発サーバー起動", commands: ["yarn dev"] },
     ],
     previewUrl: "http://localhost:3000",
     devGuide: [
       { title: "テストの実行", commands: "yarn test" },
+      { title: "カバレッジレポートの生成", commands: "yarn test:coverage" },
       { title: "コードの静的解析と修正", commands: "yarn format\nyarn lint" },
     ],
   },
@@ -89,8 +97,8 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     repoSlug: "template-react",
     treeExclude: "vendor|node_modules",
     setupSteps: [
-      { label: "リポジトリをクローン", commands: ["git clone git@github.com:yuuu-takahashi/template-react.git", "cd template-react"] },
-      { label: "VS Codeの左下「><」アイコンをクリックし、「Remote-Containers: Reopen in Container」を選択し、起動", commands: [] },
+      cloneStep("react"),
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
       { label: "パッケージをインストール", commands: ["yarn"] },
       { label: "開発サーバー起動", commands: ["yarn dev"] },
     ],
@@ -107,8 +115,8 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     repoSlug: "template-rails",
     treeExclude: "vendor|node_modules|tmp",
     setupSteps: [
-      { label: "リポジトリをクローン", commands: ["git clone git@github.com:yuuu-takahashi/template-rails.git", "cd template-rails"] },
-      { label: "VS Codeの左下「><」アイコンをクリックし、「Remote-Containers: Reopen in Container」を選択し、起動", commands: [] },
+      cloneStep("rails"),
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
       { label: "データベース準備", commands: ["bin/rails db:prepare"] },
       { label: "開発サーバー起動", commands: ["bin/dev"] },
     ],
@@ -125,15 +133,17 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     repoSlug: "template-rails-api",
     treeExclude: "vendor|node_modules|tmp",
     setupSteps: [
-      { label: "リポジトリをクローン", commands: ["git clone git@github.com:yuuu-takahashi/template-rails-api.git", "cd template-rails-api"] },
+      cloneStep("rails-api"),
       { label: "環境変数の設定", commands: ["cp .env.example .env.development"] },
-      { label: "VS Codeの左下「><」アイコンをクリックし、「Remote-Containers: Reopen in Container」を選択し、起動", commands: [] },
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
       { label: "データベース準備", commands: ["bin/rails db:prepare"] },
       { label: "開発サーバー起動", commands: ["bin/rails s"] },
     ],
     previewUrl: "http://localhost:3000/api-docs/index.html",
     devGuide: [
+      { title: "テストの実行", commands: "bundle exec rspec" },
       { title: "APIドキュメント生成", commands: "bundle exec rake rswag:specs:swaggerize" },
+      { title: "コードの静的解析と修正", commands: "yarn format\nbundle exec rubocop -A" },
     ],
   },
   {
@@ -142,10 +152,12 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     description: "このリポジトリはRubyのテンプレートプロジェクトです。",
     repoSlug: "template-ruby",
     setupSteps: [
-      { label: "リポジトリをクローン", commands: ["git clone git@github.com:yuuu-takahashi/template-ruby.git", "cd template-ruby"] },
-      { label: "VS Codeの左下「><」アイコンをクリックし、「Remote-Containers: Reopen in Container」を選択し、起動", commands: [] },
+      cloneStep("ruby"),
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
     ],
-    devGuide: [],
+    devGuide: [
+      { title: "コードの静的解析と修正", commands: "bundle exec rubocop -A" },
+    ],
   },
   {
     id: "sinatra",
@@ -154,9 +166,9 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     repoSlug: "template-sinatra",
     treeExclude: "vendor|node_modules",
     setupSteps: [
-      { label: "リポジトリをクローン", commands: ["git clone git@github.com:yuuu-takahashi/template-sinatra.git", "cd template-sinatra"] },
+      cloneStep("sinatra"),
       { label: "環境変数の設定", commands: ["cp .env.example .env.development"] },
-      { label: "VS Codeの左下「><」アイコンをクリックし、「Remote-Containers: Reopen in Container」を選択し、起動", commands: [] },
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
       { label: "データベース準備", commands: ["bundle exec rake db:setup", "bundle exec rake db:seed"] },
       { label: "開発サーバー起動", commands: ["bundle exec ruby index.rb"] },
     ],

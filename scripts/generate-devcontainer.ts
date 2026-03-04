@@ -68,6 +68,7 @@ interface DevcontainerConfig {
   mounts?: string[];
   customizations: {
     vscode: VscodeCustomization;
+    cursor: VscodeCustomization;
   };
 }
 
@@ -282,7 +283,14 @@ for (const dir of ["templates/sinatra", "templates/rails-api"]) {
 
 for (const { dir, config } of STACKS) {
   const outPath = join(ROOT, dir, ".devcontainer", "devcontainer.json");
-  writeFileSync(outPath, JSON_HEADER + JSON.stringify(config, null, 2) + "\n", "utf8");
+  const configWithCursor = {
+    ...config,
+    customizations: {
+      vscode: config.customizations.vscode,
+      cursor: config.customizations.vscode,
+    },
+  };
+  writeFileSync(outPath, JSON_HEADER + JSON.stringify(configWithCursor, null, 2) + "\n", "utf8");
   console.log("Generated:", outPath);
 }
 

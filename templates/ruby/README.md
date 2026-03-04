@@ -3,24 +3,32 @@
 # template-ruby
 
 このリポジトリはRubyのテンプレートプロジェクトです。
-このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。
+このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。VS Code・Cursor のどちらでも利用できます。
 
 ## 開発環境構築
 
 ### 必要なツール
 
-- [VS Code](https://code.visualstudio.com/)
+- [VS Code](https://code.visualstudio.com/) または [Cursor](https://www.cursor.com/)
 - [Docker](https://www.docker.com/ja-jp/)
-- VS Codeの[Dev Containers拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+- VS Code の場合: [Dev Containers拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
 ### 開発環境の準備
 
-1. リポジトリをクローン
+1. リポジトリをクローンし、テンプレートディレクトリに移動
 
    ```bash
-   git clone git@github.com:yuuu-takahashi/template-ruby.git
-   cd template-ruby
+   git clone git@github.com:yuuu-takahashi/starter-templates.git
+   cd starter-templates/templates/ruby
    ```
 
-2. VS Codeの左下「><」アイコンをクリックし、「Remote-Containers: Reopen in Container」を選択し、起動
+2. VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動
+
+## 開発作業ガイド
+
+- コードの静的解析と修正
+
+```bash
+bundle exec rubocop -A
+```
 
