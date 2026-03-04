@@ -69,7 +69,7 @@ RSpec.describe User do
 
         expect(MySQLClient).not_to have_received(:with_table)
 
-        enumerator.each { |_| }
+        enumerator.to_a
         expect(MySQLClient).to have_received(:with_table).once
       end
     end
