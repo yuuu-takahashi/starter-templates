@@ -23,8 +23,8 @@
 | `npm/` | `<stack>.json`（package.json のソース） | `templates/*/package.json` | `generate-deps.ts` |
 | `gemfile/` | `Gemfile.<stack>` | `templates/*/Gemfile` | `generate-deps.ts` |
 | `dotnet/` | `*.csproj`（C# プロジェクトの正本） | `templates/csharp/*.csproj` | `generate-deps.ts` |
-| `go/` | `go.mod`, `.golangci.yml`, `main.go` | `templates/go/` | `generate-deps.ts` |
-| `rust/` | `Cargo.toml`, `rust-toolchain.toml`, `src/main.rs` | `templates/rust/` | `generate-deps.ts` |
+| `golangci/` | `.golangci.yml`（Go のリンター設定のみ） | `templates/go/.golangci.yml` | `generate-deps.ts` |
+| `rust-toolchain/` | `rust-toolchain.toml`（Rust ツールチェーン設定のみ） | `templates/rust/rust-toolchain.toml` | `generate-deps.ts` |
 | `devcontainer/` | `defaults.json`, `devcontainer.json.ts` など | `templates/*/.devcontainer/devcontainer.json` | `generate-devcontainer.ts` |
 | `docker/` | `Dockerfile.<stack>`, `dockerignore.rails`, `dockerignore.rails-api` | `templates/*/.devcontainer/Dockerfile`, `templates/rails/.dockerignore`, `templates/rails-api/.dockerignore` | `generate-devcontainer.ts`, `gen-common-files.ts` |
 
