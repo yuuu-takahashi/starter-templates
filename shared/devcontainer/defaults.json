@@ -22,6 +22,9 @@
     "rust": [
       "rust-lang.rust-analyzer"
     ],
+    "php": [
+      "bmewburn.vscode-intelephense-client"
+    ],
     "tooling": [
       "eamodio.gitlens",
       "Gruntfuggly.todo-tree",

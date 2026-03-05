@@ -13,6 +13,7 @@ const STATIC_ANALYSIS_STACKS: string[] = [
   "templates/reactjs",
   "templates/rails",
   "templates/rails-api",
+  "templates/laravel",
   "templates/sinatra",
   "templates/csharp",
   "templates/go",
@@ -46,6 +47,7 @@ export function run(): void {
     "templates/rails-api": "code-check-ruby.yml",
     "templates/sinatra": "code-check-ruby-erb.yml",
     "templates/rails": "code-check-ruby-erb.yml",
+    "templates/laravel": "code-check-laravel.yml",
     "templates/csharp": "code-check-dotnet.yml",
     "templates/go": "code-check-go.yml",
     "templates/rust": "code-check-rust.yml",
@@ -68,6 +70,7 @@ export function run(): void {
     "templates/sinatra": "test-sinatra.yml",
     "templates/rails": "test-rails.yml",
     "templates/rails-api": "test-rails-api.yml",
+    "templates/laravel": "test-laravel.yml",
     "templates/csharp": "test-dotnet.yml",
   };
 

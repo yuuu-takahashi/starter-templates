@@ -9,7 +9,7 @@ export const ROOT: string = process.cwd();
 
 export const VERSIONS = JSON.parse(
   readFileSync(join(ROOT, "shared", "versions.json"), "utf8")
-) as { node: string; ruby: string; go?: string };
+) as { node: string; ruby: string; php?: string; go?: string };
 
 // 横断的な共通設定を配るテンプレート一覧（Prettier / EditorConfig 対象）
 export const SHARED_CONFIG_STACKS: string[] = [
@@ -18,6 +18,7 @@ export const SHARED_CONFIG_STACKS: string[] = [
   "templates/reactjs",
   "templates/rails",
   "templates/rails-api",
+  "templates/laravel",
   "templates/sinatra",
   "templates/csharp",
   "templates/go",

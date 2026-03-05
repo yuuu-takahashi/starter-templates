@@ -17,6 +17,7 @@ export function run(): void {
   // templates/go, templates/rust は generate-deps で中身が作られるが .gitignore 等はここで書くので先にディレクトリを作成
   mkdirSync(join(ROOT, "templates", "go"), { recursive: true });
   mkdirSync(join(ROOT, "templates", "rust"), { recursive: true });
+  mkdirSync(join(ROOT, "templates", "laravel"), { recursive: true });
 
   // ── .editorconfig（shared からコピー）──────────────────────────────────────────
 
@@ -34,6 +35,7 @@ export function run(): void {
   const DOCKERIGNORE_SOURCE: Record<string, string> = {
     "templates/rails": "dockerignore.rails",
     "templates/rails-api": "dockerignore.rails-api",
+    "templates/laravel": "dockerignore.laravel",
   };
   for (const [dir, srcName] of Object.entries(DOCKERIGNORE_SOURCE)) {
     const srcPath = join(DOCKER_DIR, srcName);
@@ -51,6 +53,7 @@ export function run(): void {
     "templates/reactjs": ".gitignore.node",
     "templates/rails": ".gitignore.rails",
     "templates/rails-api": ".gitignore.rails",
+    "templates/laravel": ".gitignore.laravel",
     "templates/sinatra": ".gitignore.ruby",
     "templates/csharp": ".gitignore.dotnet",
     "templates/go": ".gitignore.go",
@@ -81,6 +84,14 @@ export function run(): void {
   for (const dir of NODE_VERSION_DIRS) {
     const outPath = join(ROOT, dir, ".node-version");
     writeFileSync(outPath, VERSIONS.node + "\n", "utf8");
+    console.log("Generated:", outPath);
+  }
+
+  // ── .php-version（shared/versions.json から生成）────────────────────────────────
+
+  if (VERSIONS.php) {
+    const outPath = join(ROOT, "templates/laravel", ".php-version");
+    writeFileSync(outPath, VERSIONS.php + "\n", "utf8");
     console.log("Generated:", outPath);
   }
 

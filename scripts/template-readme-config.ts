@@ -37,7 +37,7 @@ export type TemplateReadmeDevGuide = {
 };
 
 /** Dev Container の拡張機能セット（shared/devcontainer/defaults.json の extensions キー） */
-export type ExtensionSetKey = "base" | "node" | "ruby" | "erb" | "csharp" | "go" | "rust" | "tooling";
+export type ExtensionSetKey = "base" | "node" | "ruby" | "erb" | "php" | "csharp" | "go" | "rust" | "tooling";
 
 export type TemplateReadmeConfig = {
   id: string;
@@ -144,6 +144,27 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     devGuide: [
       { title: "テストの実行", commands: "bundle exec rspec" },
       { title: "コードの静的解析と修正", commands: "yarn format\nyarn lint\nbundle exec rubocop -A\nbundle exec erb_lint app/views/**/*.erb\nfind app/views -name \"*.erb\" -exec bundle exec htmlbeautifier {} \\;" },
+    ],
+  },
+  {
+    id: "laravel",
+    title: "template-laravel",
+    description: "このリポジトリは Laravel（PHP）のテンプレートプロジェクトです。",
+    repoSlug: "template-laravel",
+    extensionSets: ["base", "php", "tooling"],
+    treeExclude: "vendor|node_modules|storage",
+    setupSteps: [
+      cloneStep("laravel"),
+      { label: "環境変数の設定", commands: ["cp .env.example .env", "php artisan key:generate"] },
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
+      { label: "依存関係のインストール", commands: ["composer install"] },
+      { label: "データベース準備（SQLite）", commands: ["touch database/database.sqlite", "php artisan migrate"] },
+      { label: "開発サーバー起動", commands: ["php artisan serve"] },
+    ],
+    previewUrl: "http://localhost:8000",
+    devGuide: [
+      { title: "テストの実行", commands: "php artisan test" },
+      { title: "コードスタイル（Laravel Pint）", commands: "./vendor/bin/pint" },
     ],
   },
   {

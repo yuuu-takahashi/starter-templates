@@ -27,6 +27,7 @@ const STACKS: Stack[] = [
   { id: "reactjs", dir: "templates/reactjs", pathFilter: "templates/reactjs/**" },
   { id: "rails", dir: "templates/rails", pathFilter: "templates/rails/**" },
   { id: "rails_api", dir: "templates/rails-api", pathFilter: "templates/rails-api/**" },
+  { id: "laravel", dir: "templates/laravel", pathFilter: "templates/laravel/**" },
   { id: "sinatra", dir: "templates/sinatra", pathFilter: "templates/sinatra/**" },
   { id: "csharp", dir: "templates/csharp", pathFilter: "templates/csharp/**" },
   { id: "go", dir: "templates/go", pathFilter: "templates/go/**" },
@@ -88,7 +89,7 @@ const transformStepsForMonorepo = (steps: WorkflowStep[], dir: string): Workflow
   return result;
 };
 
-const MONOREPO_PREFIX_STACKS = ["csharp", "go", "rust"];
+const MONOREPO_PREFIX_STACKS = ["csharp", "go", "rust", "laravel"];
 
 const transformNodeOnlySteps = (steps: WorkflowStep[], dir: string): WorkflowStep[] => {
   const result: WorkflowStep[] = [];

@@ -20,6 +20,7 @@
 | [templates/reactjs](templates/reactjs) | React + Vite |
 | [templates/rails](templates/rails) | Ruby on Rails |
 | [templates/rails-api](templates/rails-api) | Rails API |
+| [templates/laravel](templates/laravel) | Laravel（PHP） |
 | [templates/sinatra](templates/sinatra) | Sinatra |
 
 ## ファイルの正本について
@@ -77,6 +78,7 @@ starter-templates/
 │   ├── nodejs/
 │   ├── rails/
 │   ├── rails-api/
+│   ├── laravel/
 │   ├── reactjs/
 │   └── sinatra/
 ├── starters/         個人開発用テンプレート（すぐ使える・手動管理）
