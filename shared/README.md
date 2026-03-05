@@ -18,11 +18,12 @@
 | `reactjs/` | `vite.config.ts` | `templates/reactjs/vite.config.ts` | `gen-tool-configs.ts` |
 | `rspec/` | `rspec.common`（共通の rspec オプション） | `templates/*/.rspec`（`--require` 行と結合） | `gen-ruby-configs.ts` |
 | `rubocop/` | `rubocop.base.yml`, `rubocop.<stack>.yml` | `templates/*/.rubocop.yml`（マージして生成） | `gen-ruby-configs.ts` |
+| `laravel/` | `pint.json`（Laravel Pint）, `phpunit.xml`（PHPUnit） | `templates/laravel/pint.json`, `templates/laravel/phpunit.xml` | `gen-laravel-configs.ts` |
 | `workflows/` | `code-check-*.yml`, `test-*.yml`, `static-analysis.yml`, `dependabot.yml` | `templates/*/.github/workflows/`, `templates/*/.github/dependabot.yml` | `gen-workflows.ts` |
 | `env/` | `*.env.head`, `db.env` | `templates/*/.env.example`, `.env.test`, `.env.development` | `gen-workflows.ts` |
 | `npm/` | `<stack>.json`（package.json のソース） | `templates/*/package.json` | `generate-deps.ts` |
 | `gemfile/` | `Gemfile.<stack>` | `templates/*/Gemfile` | `generate-deps.ts` |
-| `dotnet/` | `*.csproj`（C# プロジェクトの正本） | `templates/csharp/*.csproj` | `generate-deps.ts` |
+| `dotnet/` | `*.csproj`, `global.json`, `TemplateCsharp.sln`（C# の正本） | `templates/csharp/*.csproj`, `global.json`, `TemplateCsharp.sln` | `generate-deps.ts`（SDK バージョンは `versions.json` の `dotnet`） |
 | `golangci/` | `.golangci.yml`（Go のリンター設定のみ） | `templates/go/.golangci.yml` | `generate-deps.ts` |
 | `rust-toolchain/` | `rust-toolchain.toml`（Rust ツールチェーン設定のみ） | `templates/rust/rust-toolchain.toml` | `generate-deps.ts` |
 | `devcontainer/` | `defaults.json`, `devcontainer.json.ts` など | `templates/*/.devcontainer/devcontainer.json` | `generate-devcontainer.ts` |

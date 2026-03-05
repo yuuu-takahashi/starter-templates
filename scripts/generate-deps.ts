@@ -1,10 +1,12 @@
 #!/usr/bin/env tsx
 /**
- * Generates package.json, Gemfile, C# .csproj, and shared config into templates.
+ * Generates package.json, Gemfile, C# .csproj, global.json, .sln, and shared config into templates.
  *
  * - package.json: shared/npm/<stack>.json → templates/<stack>/package.json
  * - Gemfile:      shared/gemfile/Gemfile.<stack> → templates/<stack>/Gemfile
  * - .csproj:      shared/dotnet/*.csproj → templates/csharp/
+ * - global.json:  shared/dotnet/global.json → templates/csharp/（SDK バージョンは shared/versions.json）
+ * - .sln:         shared/dotnet/TemplateCsharp.sln → templates/csharp/
  * - Go:           shared/golangci/.golangci.yml → templates/go/.golangci.yml（設定のみ）
  * - Rust:         shared/rust-toolchain/rust-toolchain.toml → templates/rust/（設定のみ）
  *
@@ -15,6 +17,9 @@ import { readFileSync, writeFileSync, mkdirSync } from "fs";
 import { join } from "path";
 
 const ROOT = process.cwd();
+const VERSIONS = JSON.parse(
+  readFileSync(join(ROOT, "shared", "versions.json"), "utf8")
+) as { node?: string; ruby?: string; php?: string; dotnet?: string; go?: string };
 const SHARED_NPM = join(ROOT, "shared", "npm");
 const SHARED_GEMFILE = join(ROOT, "shared", "gemfile");
 const SHARED_DOTNET = join(ROOT, "shared", "dotnet");
@@ -66,6 +71,18 @@ function run(): void {
     writeFileSync(outPath, DOTNET_CSHARP_HEADER + content, "utf8");
     console.log("Generated:", outPath);
   }
+
+  // C#: shared/dotnet/global.json → templates/csharp/（SDK バージョンは versions.json の dotnet で上書き）
+  const globalJsonSrc = readFileSync(join(SHARED_DOTNET, "global.json"), "utf8");
+  const globalJson = JSON.parse(globalJsonSrc) as { sdk: { version: string; rollForward?: string } };
+  if (VERSIONS.dotnet) globalJson.sdk.version = VERSIONS.dotnet;
+  writeFileSync(join(ROOT, "templates/csharp/global.json"), JSON.stringify(globalJson, null, 2) + "\n", "utf8");
+  console.log("Generated:", join(ROOT, "templates/csharp/global.json"));
+
+  // C#: shared/dotnet/TemplateCsharp.sln → templates/csharp/（.sln はコメント非対応のためヘッダなし）
+  const slnContent = readFileSync(join(SHARED_DOTNET, "TemplateCsharp.sln"), "utf8");
+  writeFileSync(join(ROOT, "templates/csharp/TemplateCsharp.sln"), slnContent, "utf8");
+  console.log("Generated:", join(ROOT, "templates/csharp/TemplateCsharp.sln"));
 
   // Go: shared/golangci/ の設定のみ templates/go/ にコピー
   mkdirSync(join(ROOT, "templates/go"), { recursive: true });

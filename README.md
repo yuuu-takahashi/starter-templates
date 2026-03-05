@@ -69,6 +69,7 @@ starter-templates/
 │   ├── prettier/     .prettierrc のソース
 │   ├── rspec/        .rspec の共通設定
 │   ├── rubocop/      .rubocop.yml のソース
+│   ├── laravel/      Laravel Pint・PHPUnit のソース
 │   ├── tsconfig/     tsconfig.json のソース
 │   ├── versions.json Node.js / Ruby バージョンの正本
 │   ├── vitest/       vitest.config.ts のソース
@@ -93,6 +94,9 @@ starter-templates/
 |---------|---------------|-------------|
 | `templates/*/package.json` | `shared/npm/<stack>.json` | `generate-deps.ts` |
 | `templates/*/Gemfile` | `shared/gemfile/Gemfile.<stack>` | `generate-deps.ts` |
+| `templates/csharp/*.csproj` | `shared/dotnet/*.csproj` | `generate-deps.ts` |
+| `templates/csharp/global.json` | `shared/dotnet/global.json`（SDK 版は `shared/versions.json` の `dotnet`） | `generate-deps.ts` |
+| `templates/csharp/TemplateCsharp.sln` | `shared/dotnet/TemplateCsharp.sln` | `generate-deps.ts` |
 | `templates/*/.editorconfig` | `shared/editorconfig/.editorconfig` | `gen-common-files.ts` |
 | `templates/*/.gitignore` | `shared/gitignore/.gitignore.*` | `gen-common-files.ts` |
 | `templates/*/.node-version` | `shared/versions.json` | `gen-common-files.ts` |
@@ -103,6 +107,8 @@ starter-templates/
 | `templates/*/vitest*.ts` | `shared/vitest/` | `gen-tool-configs.ts` |
 | `templates/*/.rspec` | `shared/rspec/rspec.common` | `gen-ruby-configs.ts` |
 | `templates/*/.rubocop.yml` | `shared/rubocop/rubocop.*.yml` | `gen-ruby-configs.ts` |
+| `templates/laravel/pint.json` | `shared/laravel/pint.json` | `gen-laravel-configs.ts` |
+| `templates/laravel/phpunit.xml` | `shared/laravel/phpunit.xml` | `gen-laravel-configs.ts` |
 | `templates/*/.github/workflows/*.yml` | `shared/workflows/*.yml` | `gen-workflows.ts` |
 | `templates/*/.github/dependabot.yml` | `shared/workflows/dependabot.yml` | `gen-workflows.ts` |
 | `templates/*/.env.*` | `shared/env/` | `gen-workflows.ts` |
@@ -125,6 +131,7 @@ starter-templates/
 - `gen-common-files.ts` — .editorconfig / .gitignore / .node-version / .ruby-version / .go-version
 - `gen-tool-configs.ts` — ESLint / Prettier / tsconfig / Vitest
 - `gen-ruby-configs.ts` — .rubocop.yml / .rspec
+- `gen-laravel-configs.ts` — pint.json / phpunit.xml（Laravel）
 - `gen-workflows.ts` — GitHub Actions ワークフロー / dependabot / .env.*
 - `gen-readme.ts` — README.md
 
@@ -135,6 +142,7 @@ starter-templates/
 - **バージョン（Node.js / Ruby）を変更する場合**: `shared/versions.json` を編集 → `yarn generate:configs`（必要に応じて `shared/docker/` も更新し `yarn generate:devcontainer`）
 - **Gemfile を更新する場合**: `shared/gemfile/Gemfile.<stack>` を編集 → `yarn generate:deps`
 - **Prettier / tsconfig などのツール設定を変更する場合**: `shared/prettier/`, `shared/tsconfig/`, `shared/vitest/` 内の該当ファイルを編集 → `yarn generate:configs`
+- **Laravel Pint / PHPUnit を変更する場合**: `shared/laravel/pint.json`, `shared/laravel/phpunit.xml` を編集 → `yarn generate:configs`
 - **README を更新する場合**: `scripts/template-readme-config.ts` を編集 → `yarn generate:configs`
 
 ### 新テンプレート追加手順
