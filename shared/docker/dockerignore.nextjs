@@ -1,0 +1,15 @@
+.git
+.github
+.env
+.env.*
+!.env.example
+node_modules
+.next
+out
+dist
+.cache
+.parcel-cache
+coverage
+*.log
+.dockerignore
+Dockerfile*

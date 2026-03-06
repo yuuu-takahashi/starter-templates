@@ -87,6 +87,11 @@ export const TEST_SOURCE: Readonly<Record<string, string>> = Object.fromEntries(
 /** .gitignore の元ファイル名（shared/gitignore/ 内） */
 export const GITIGNORE_SOURCE: Readonly<Record<string, string>> = Object.fromEntries(STACK_DEFINITIONS.map((s) => [s.dir, s.gitignore]));
 
+/** .dockerignore の元ファイル名（shared/docker/ 内）。フレームワーク数だけ用意し、テンプレートごとに1ファイル */
+export const DOCKERIGNORE_SOURCE: Readonly<Record<string, string>> = Object.fromEntries(
+  STACK_DEFINITIONS.map((s) => [s.dir, `dockerignore.${slug(s.dir)}`])
+);
+
 /** .devcontainer/Dockerfile のコピー元（shared/docker/ 内）。null は docker-compose のみ */
 export const DEVCONTAINER_DOCKERFILE_MAP: Readonly<Record<string, string | null>> = Object.fromEntries(
   STACK_DEFINITIONS.map((s) => [s.dir, s.devcontainerDockerfile])

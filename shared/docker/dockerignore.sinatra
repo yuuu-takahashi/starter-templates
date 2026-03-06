@@ -1,0 +1,15 @@
+.git
+.github
+.env
+.env.*
+!.env.example
+.bundle
+vendor
+log
+tmp
+node_modules
+coverage
+*.log
+.dockerignore
+Dockerfile*
+.devcontainer
