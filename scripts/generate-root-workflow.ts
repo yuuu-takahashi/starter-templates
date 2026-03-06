@@ -54,11 +54,15 @@ const transformStepsForMonorepo = (steps: WorkflowStep[], dir: string): Workflow
     if (step.uses && step.uses.includes("checkout")) continue;
     const s = { ...step, with: step.with ? { ...step.with } : undefined };
     if (s.with) {
-      if (s.with.path && !String(s.with.path).startsWith("templates/")) {
-        s.with.path = `${dir}/${s.with.path}`;
+      if (s.with.path) {
+        const p = String(s.with.path);
+        if (!p.startsWith("/") && !p.startsWith("~") && !p.startsWith("templates/")) {
+          s.with.path = `${dir}/${s.with.path}`;
+        }
       }
       if (s.with["working-directory"]) s.with["working-directory"] = dir;
       if (s.with["go-version-file"]) s.with["go-version-file"] = `${dir}/${s.with["go-version-file"]}`;
+      if (s.with["python-version-file"]) s.with["python-version-file"] = `${dir}/${s.with["python-version-file"]}`;
       if (s.with["global-json-file"]) s.with["global-json-file"] = `${dir}/${s.with["global-json-file"]}`;
       if (typeof s.with.key === "string" && s.with.key.includes("hashFiles")) {
         s.with.key = s.with.key
@@ -73,7 +77,7 @@ const transformStepsForMonorepo = (steps: WorkflowStep[], dir: string): Workflow
   return result;
 };
 
-const MONOREPO_PREFIX_STACKS = ["csharp", "go", "rust", "laravel"];
+const MONOREPO_PREFIX_STACKS = ["csharp", "go", "rust", "laravel", "django"];
 
 const transformNodeOnlySteps = (steps: WorkflowStep[], dir: string): WorkflowStep[] => {
   const result: WorkflowStep[] = [];

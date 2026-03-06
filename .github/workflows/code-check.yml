@@ -283,6 +283,7 @@ jobs:
         uses: golangci/golangci-lint-action@v6
         with:
           version: latest
+          working-directory: templates/go
       - name: Build
         run: go build ./...
         working-directory: templates/go
@@ -326,12 +327,12 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version-file: .python-version
+          python-version-file: templates/django/.python-version
       - name: Cache pip
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements*.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('templates/django/requirements*.txt') }}
           restore-keys: ${{ runner.os }}-pip-
       - name: Install dependencies
         run: |
@@ -339,11 +340,14 @@ jobs:
           . .venv/bin/activate
           pip install -r requirements.txt
           pip install ruff black
+        working-directory: templates/django
       - name: Ruff
         run: |
           . .venv/bin/activate
           ruff check .
+        working-directory: templates/django
       - name: Black
         run: |
           . .venv/bin/activate
           black --check .
+        working-directory: templates/django
