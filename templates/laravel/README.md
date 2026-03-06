@@ -11,7 +11,7 @@
 
 - DavidAnson.vscode-markdownlint — Markdown の構文チェック
 - Gruntfuggly.todo-tree — TODO / FIXME コメントの一覧表示
-- bmewburn.vscode-intelephense-client
+- bmewburn.vscode-intelephense-client — PHP の IntelliSense・補完（Intelephense）
 - donjayamanne.githistory — Git ログの可視化
 - eamodio.gitlens — Git 履歴・差分の強力な可視化
 - esbenp.prettier-vscode — コードフォーマット（Prettier）
@@ -43,29 +43,16 @@ tree -I 'vendor|node_modules|storage'
    cd starter-templates/templates/laravel
    ```
 
-2. 環境変数の設定
+2. VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動（環境変数設定・依存関係インストールは postCreateCommand で自動実行）
 
-   ```bash
-   cp .env.example .env
-   php artisan key:generate
-   ```
-
-3. VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動
-
-4. 依存関係のインストール
-
-   ```bash
-   composer install
-   ```
-
-5. データベース準備（SQLite）
+3. データベース準備（SQLite）
 
    ```bash
    touch database/database.sqlite
    php artisan migrate
    ```
 
-6. 開発サーバー起動
+4. 開発サーバー起動
 
    ```bash
    php artisan serve
