@@ -36,7 +36,7 @@ function slug(dir: string): string {
   return dir.replace(/^templates\//, "");
 }
 
-const STACK_DEFINITIONS: readonly StackDefinition[] = [
+export const STACK_DEFINITIONS: readonly StackDefinition[] = [
   { dir: "templates/nextjs", id: "nextjs", runtime: "node", codeCheckWorkflow: "code-check-node.yml", testWorkflow: "test-node.yml", gitignore: ".gitignore.node", devcontainerDockerfile: "Dockerfile.node", hasNpm: true, hasGemfile: false, monorepoPrefix: false },
   { dir: "templates/nodejs", id: "nodejs", runtime: "node", codeCheckWorkflow: "code-check-node.yml", testWorkflow: "test-node.yml", gitignore: ".gitignore.node", devcontainerDockerfile: "Dockerfile.node", hasNpm: true, hasGemfile: false, monorepoPrefix: false },
   { dir: "templates/reactjs", id: "reactjs", runtime: "node", codeCheckWorkflow: "code-check-node.yml", testWorkflow: "test-node.yml", gitignore: ".gitignore.node", devcontainerDockerfile: "Dockerfile.node", hasNpm: true, hasGemfile: false, monorepoPrefix: false },
