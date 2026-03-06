@@ -25,6 +25,7 @@
 | [templates/csharp](templates/csharp) | ASP.NET Core Minimal API（C#） |
 | [templates/go](templates/go) | Go（Gin） |
 | [templates/rust](templates/rust) | Rust（Axum） |
+| [templates/django](templates/django) | Django（Python） |
 
 ## ファイルの正本について
 
@@ -89,7 +90,8 @@ starter-templates/
 │   ├── sinatra/
 │   ├── csharp/
 │   ├── go/
-│   └── rust/
+│   ├── rust/
+│   └── django/
 └── starters/         個人開発用テンプレート（すぐ使える・手動管理）
 ```
 
