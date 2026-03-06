@@ -275,6 +275,9 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version-file: templates/go/.go-version
+      - name: Tidy
+        run: go mod tidy
+        working-directory: templates/go
       - name: Test
         run: go test ./...
         working-directory: templates/go
