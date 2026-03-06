@@ -2,11 +2,8 @@ require 'dotenv'
 
 APP_ROOT = File.expand_path('..', __dir__)
 
-env_file = File.join(APP_ROOT, ".env.#{ENV.fetch('APP_ENV', 'development')}")
+# 単一 .env を読み込む（.env.example をコピーして .env を作成する運用）
+env_file = File.join(APP_ROOT, '.env')
 if File.exist?(env_file)
-  Dotenv.overload(env_file)
-  puts 'Env file loaded'
-else
-  # Dev/CI: rely on environment (e.g. docker-compose or GitHub Actions env)
-  puts 'Using process environment'
+  Dotenv.load(env_file)
 end

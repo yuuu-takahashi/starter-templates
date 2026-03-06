@@ -39,6 +39,10 @@ jobs:
           . .venv/bin/activate
           pip install -r requirements.txt
 
+      - name: Prepare environment
+        run: |
+          cp .env.example .env
+
       - name: Run tests
         run: |
           . .venv/bin/activate

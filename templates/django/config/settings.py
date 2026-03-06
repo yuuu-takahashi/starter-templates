@@ -4,14 +4,22 @@ Django settings for config project.
 
 from pathlib import Path
 
+import environ
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "django-insecure-change-me-in-production"
+env = environ.Env(
+    DEBUG=(bool, True),
+    ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1", "[::1]"]),
+)
+environ.Env.read_env(BASE_DIR / ".env")
 
-DEBUG = True
+SECRET_KEY = env("SECRET_KEY")
+
+DEBUG = env("DEBUG")
 
 # 開発時は任意の Host を許可（Cursor ポート転送などで Host が変わる場合に対応）
-ALLOWED_HOSTS = ["*"] if DEBUG else ["localhost", "127.0.0.1", "[::1]"]
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS") if not DEBUG else ["*"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -53,15 +61,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+DATABASES = {"default": env.db("DATABASE_URL", default=f"sqlite:///{BASE_DIR}/db.sqlite3")}
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},

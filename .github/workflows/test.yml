@@ -172,6 +172,11 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: password
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    env:
+      DATABASE_HOST: db
+      DATABASE_USER: root
+      DATABASE_PASSWORD: password
+      DATABASE_NAME: template-sinatra_test
     steps:
       - uses: actions/checkout@v4
       - name: Cache Ruby gems
