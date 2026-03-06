@@ -9,9 +9,11 @@
 # Ignore bundler config.
 /.bundle
 
-# Ignore all environment files (except templates).
-/.env.development
-!/.env*.erb
+# Environment (dotenv-rails: ignore .env, commit .env.example and .env.test for CI)
+.env
+.env.*
+!.env.example
+!.env.test
 
 # Ignore all logfiles and tempfiles.
 /log/*

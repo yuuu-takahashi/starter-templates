@@ -16,6 +16,19 @@
       "ms-dotnettools.csharp",
       "ms-dotnettools.csdevkit"
     ],
+    "go": [
+      "golang.go"
+    ],
+    "rust": [
+      "rust-lang.rust-analyzer"
+    ],
+    "python": [
+      "ms-python.python",
+      "ms-python.vscode-pylance"
+    ],
+    "php": [
+      "bmewburn.vscode-intelephense-client"
+    ],
     "tooling": [
       "eamodio.gitlens",
       "Gruntfuggly.todo-tree",

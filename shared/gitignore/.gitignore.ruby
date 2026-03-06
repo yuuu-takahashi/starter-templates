@@ -10,8 +10,10 @@
 /test/version_tmp/
 /tmp/
 
-# Used by dotenv library to load environment variables.
-# .env
+# Environment (dotenv: ignore .env, commit .env.example)
+.env
+.env.*
+!.env.example
 
 # Ignore Byebug command history file.
 .byebug_history
@@ -56,4 +58,3 @@ build-iPhoneSimulator/
 # .rubocop-https?--*
 /node_modules
 /.ruby-lsp
-.env.development

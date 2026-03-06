@@ -1,0 +1,16 @@
+.git
+.github
+.env
+.env.*
+!.env.example
+.venv
+__pycache__
+*.pyc
+*.pyo
+db.sqlite3
+staticfiles
+.coverage
+htmlcov
+*.log
+.dockerignore
+Dockerfile*

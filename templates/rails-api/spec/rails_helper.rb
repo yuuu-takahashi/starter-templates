@@ -1,4 +1,13 @@
 ENV['RAILS_ENV'] = 'test'
+
+# テスト用の環境変数。未設定時のみセット。CI（GitHub Actions は ENV['CI'] を設定）では host=db、ローカルでは localhost。
+require 'dotenv'
+env_file = File.expand_path('../.env.test', __dir__)
+Dotenv.overload(env_file) if File.exist?(env_file)
+ENV['DATABASE_HOST']     ||= ENV['CI'] == 'true' ? 'db' : 'localhost'
+ENV['DATABASE_USER']     ||= 'root'
+ENV['DATABASE_PASSWORD'] ||= 'password'
+
 require_relative '../config/environment'
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'

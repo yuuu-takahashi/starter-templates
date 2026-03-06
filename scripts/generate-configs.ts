@@ -4,7 +4,7 @@
  * 方針: まず .ts で生成し、ツールが求める場合のみ .json を生成する。
  *
  * .ts で出力: eslint.config.ts, vitest.config.ts 等
- * .ts ソースから .json を生成: .prettierrc.json（shared/prettier/.prettierrc.ts）, tsconfig（shared/tsconfig/ 内の .ts）
+ * .ts ソースから .json を生成: .prettierrc.json（shared/lint-format/prettier/.prettierrc.ts）, tsconfig（shared/tsconfig/ 内の .ts）
  *
  * Run: yarn generate:configs
  */

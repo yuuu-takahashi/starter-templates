@@ -27,8 +27,12 @@ jobs:
       reactjs: ${{ steps.filter.outputs.reactjs }}
       rails: ${{ steps.filter.outputs.rails }}
       rails_api: ${{ steps.filter.outputs.rails_api }}
+      laravel: ${{ steps.filter.outputs.laravel }}
       sinatra: ${{ steps.filter.outputs.sinatra }}
       csharp: ${{ steps.filter.outputs.csharp }}
+      go: ${{ steps.filter.outputs.go }}
+      rust: ${{ steps.filter.outputs.rust }}
+      django: ${{ steps.filter.outputs.django }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -45,10 +49,18 @@ jobs:
               - 'templates/rails/**'
             rails_api:
               - 'templates/rails-api/**'
+            laravel:
+              - 'templates/laravel/**'
             sinatra:
               - 'templates/sinatra/**'
             csharp:
               - 'templates/csharp/**'
+            go:
+              - 'templates/go/**'
+            rust:
+              - 'templates/rust/**'
+            django:
+              - 'templates/django/**'
   generate_check:
     runs-on: ubuntu-latest
     steps:
@@ -178,6 +190,33 @@ jobs:
       - name: rubocop
         run: bundle exec rubocop -A
         working-directory: templates/rails-api
+  laravel:
+    needs: changes
+    if: needs.changes.outputs.laravel == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: templates/laravel
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: mbstring, zip, exif, pcntl, bcmath, gd
+          coverage: none
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: templates/laravel/.composer-cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('templates/laravel/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install dependencies
+        run: COMPOSER_CACHE_DIR=.composer-cache composer install --prefer-dist --no-progress
+        working-directory: templates/laravel
+      - name: Laravel Pint (format & lint)
+        run: ./vendor/bin/pint --test
+        working-directory: templates/laravel
   sinatra:
     needs: changes
     if: needs.changes.outputs.sinatra == 'true'
@@ -223,5 +262,98 @@ jobs:
           global-json-file: templates/csharp/global.json
       - name: Restore
         run: dotnet restore
+        working-directory: templates/csharp
       - name: Build
         run: dotnet build --no-restore
+        working-directory: templates/csharp
+  go:
+    needs: changes
+    if: needs.changes.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: templates/go
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: templates/go/.go-version
+      - name: Download Go modules
+        run: go mod download
+        working-directory: templates/go
+      - name: Tidy Go modules
+        run: go mod tidy
+        working-directory: templates/go
+      - name: golangci-lint
+        run: |
+          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+          "$(go env GOPATH)/bin/golangci-lint" run
+        working-directory: templates/go
+      - name: Build
+        run: go build ./...
+        working-directory: templates/go
+  rust:
+    needs: changes
+    if: needs.changes.outputs.rust == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: templates/rust
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: templates/rust/target
+          key: ${{ runner.os }}-cargo-rust-${{ hashFiles('templates/rust/Cargo.lock', 'templates/rust/Cargo.toml') }}
+          restore-keys: ${{ runner.os }}-cargo-rust-
+      - name: Check format
+        run: cargo fmt --all -- --check
+        working-directory: templates/rust
+      - name: Clippy
+        run: cargo clippy --all-targets -- -D warnings
+        working-directory: templates/rust
+      - name: Build
+        run: cargo build
+        working-directory: templates/rust
+  django:
+    needs: changes
+    if: needs.changes.outputs.django == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: templates/django
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: templates/django/.python-version
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('templates/django/requirements*.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+      - name: Install dependencies
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          pip install -r requirements.txt
+          pip install ruff black
+        working-directory: templates/django
+      - name: Ruff
+        run: |
+          . .venv/bin/activate
+          ruff check .
+        working-directory: templates/django
+      - name: Black
+        run: |
+          . .venv/bin/activate
+          black --check .
+        working-directory: templates/django

@@ -1,0 +1,10 @@
+FROM golang:1.22-bookworm
+
+WORKDIR /workspace
+
+RUN apt-get update -qq && apt-get install --no-install-recommends -y curl openssh-client tree
+
+# golangci-lint（バージョン固定で再ビルド時も同じバージョンが入る）
+ARG GOLANGCI_LINT_VERSION=v1.55.2
+RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin ${GOLANGCI_LINT_VERSION}
+ENV PATH="/go/bin:${PATH}"

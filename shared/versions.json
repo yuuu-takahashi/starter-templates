@@ -1,5 +1,9 @@
 {
   "node": "22.13.0",
   "ruby": "3.3.6",
-  "dotnet": "8.0.x"
+  "php": "8.3",
+  "python": "3.12",
+  "dotnet": "8.0.x",
+  "go": "1.22",
+  "rust": "stable"
 }

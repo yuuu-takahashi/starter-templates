@@ -2,10 +2,8 @@ require 'dotenv'
 
 APP_ROOT = File.expand_path('..', __dir__)
 
-env_file = File.join(APP_ROOT, ".env.#{ENV.fetch('APP_ENV', nil)}")
-
-raise "Error: Env file not found at #{env_file}" unless File.exist?(env_file)
-
-puts 'Env file found'
-
-Dotenv.overload(env_file)
+# 単一 .env を読み込む（.env.example をコピーして .env を作成する運用）
+env_file = File.join(APP_ROOT, '.env')
+if File.exist?(env_file)
+  Dotenv.load(env_file)
+end

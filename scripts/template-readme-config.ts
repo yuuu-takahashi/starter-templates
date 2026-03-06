@@ -37,7 +37,7 @@ export type TemplateReadmeDevGuide = {
 };
 
 /** Dev Container の拡張機能セット（shared/devcontainer/defaults.json の extensions キー） */
-export type ExtensionSetKey = "base" | "node" | "ruby" | "erb" | "csharp" | "tooling";
+export type ExtensionSetKey = "base" | "node" | "ruby" | "erb" | "php" | "python" | "csharp" | "go" | "rust" | "tooling";
 
 export type TemplateReadmeConfig = {
   id: string;
@@ -51,6 +51,8 @@ export type TemplateReadmeConfig = {
   gemfileStack?: string;
   /** shared/devcontainer/defaults.json の拡張機能セットを「主な拡張機能」に記載 */
   extensionSets?: ExtensionSetKey[];
+  /** 「主なライブラリ」に記載する項目（Go: Gin, Rust: Axum など） */
+  stackLibs?: string[];
   setupSteps: TemplateReadmeStep[];
   previewUrl?: string;
   devGuide: TemplateReadmeDevGuide[];
@@ -106,7 +108,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
   {
     id: "reactjs",
     title: "template-reactjs",
-    description: "このリポジトリは React + Webpack のテンプレートプロジェクトです。",
+    description: "このリポジトリは React + Vite のテンプレートプロジェクトです。",
     repoSlug: "template-reactjs",
     npmStack: "reactjs",
     extensionSets: ["base", "node"],
@@ -145,6 +147,27 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     ],
   },
   {
+    id: "laravel",
+    title: "template-laravel",
+    description: "このリポジトリは Laravel（PHP）のテンプレートプロジェクトです。",
+    repoSlug: "template-laravel",
+    extensionSets: ["base", "php", "tooling"],
+    treeExclude: "vendor|node_modules|storage",
+    setupSteps: [
+      cloneStep("laravel"),
+      { label: "環境変数の設定", commands: ["cp .env.example .env", "php artisan key:generate"] },
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
+      { label: "依存関係のインストール", commands: ["composer install"] },
+      { label: "データベース準備（SQLite）", commands: ["touch database/database.sqlite", "php artisan migrate"] },
+      { label: "開発サーバー起動", commands: ["php artisan serve"] },
+    ],
+    previewUrl: "http://localhost:8000",
+    devGuide: [
+      { title: "テストの実行", commands: "php artisan test" },
+      { title: "コードスタイル（Laravel Pint）", commands: "./vendor/bin/pint" },
+    ],
+  },
+  {
     id: "rails-api",
     title: "template-rails-api",
     description: "このリポジトリは Ruby on Rails（API）のテンプレートプロジェクトです。",
@@ -155,8 +178,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     treeExclude: "vendor|node_modules|tmp",
     setupSteps: [
       cloneStep("rails-api"),
-      { label: "環境変数の設定", commands: ["cp .env.example .env.development"] },
-      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動（環境変数は docker-compose で設定済み）", commands: [] },
       { label: "データベース準備", commands: ["bin/rails db:prepare"] },
       { label: "開発サーバー起動", commands: ["bin/rails s"] },
     ],
@@ -165,21 +187,6 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
       { title: "テストの実行", commands: "bundle exec rspec" },
       { title: "APIドキュメント生成", commands: "bundle exec rake rswag:specs:swaggerize" },
       { title: "コードの静的解析と修正", commands: "yarn format\nbundle exec rubocop -A" },
-    ],
-  },
-  {
-    id: "ruby",
-    title: "template-ruby",
-    description: "このリポジトリはRubyのテンプレートプロジェクトです。",
-    repoSlug: "template-ruby",
-    gemfileStack: "ruby",
-    extensionSets: ["base", "ruby"],
-    setupSteps: [
-      cloneStep("ruby"),
-      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
-    ],
-    devGuide: [
-      { title: "コードの静的解析と修正", commands: "bundle exec rubocop -A" },
     ],
   },
   {
@@ -202,6 +209,69 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     ],
   },
   {
+    id: "go",
+    title: "template-go",
+    description: "このリポジトリは Go のテンプレートプロジェクトです。",
+    repoSlug: "template-go",
+    extensionSets: ["base", "go"],
+    stackLibs: ["gin — 軽量 Web フレームワーク（Sinatra 的）"],
+    treeExclude: "bin|vendor",
+    setupSteps: [
+      cloneStep("go"),
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
+      { label: "依存関係の取得（go.sum の生成）", commands: ["go mod tidy"] },
+      { label: "開発サーバー起動", commands: ["go run ."] },
+    ],
+    previewUrl: "http://localhost:8080",
+    devGuide: [
+      { title: "ビルド", commands: "go build ./..." },
+      { title: "リンター（golangci-lint）", commands: "golangci-lint run" },
+    ],
+  },
+  {
+    id: "rust",
+    title: "template-rust",
+    description: "このリポジトリは Rust のテンプレートプロジェクトです。",
+    repoSlug: "template-rust",
+    extensionSets: ["base", "rust"],
+    stackLibs: ["axum — 軽量 Web フレームワーク（Sinatra 的）"],
+    treeExclude: "target",
+    setupSteps: [
+      cloneStep("rust"),
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
+      { label: "開発サーバー起動", commands: ["cargo run"] },
+    ],
+    previewUrl: "http://localhost:8080",
+    devGuide: [
+      { title: "ビルド", commands: "cargo build" },
+      { title: "フォーマットチェック", commands: "cargo fmt --all -- --check" },
+      { title: "リンター（Clippy）", commands: "cargo clippy --all-targets -- -D warnings" },
+    ],
+  },
+  {
+    id: "django",
+    title: "template-django",
+    description: "このリポジトリは Django（Python）のテンプレートプロジェクトです。",
+    repoSlug: "template-django",
+    extensionSets: ["base", "python"],
+    stackLibs: ["Django — Python Web フレームワーク"],
+    treeExclude: "__pycache__|.venv|*.pyc",
+    setupSteps: [
+      cloneStep("django"),
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
+      { label: "仮想環境と依存関係のインストール（postCreateCommand で自動実行される場合あり）", commands: ["python -m venv .venv", ". .venv/bin/activate && pip install -r requirements.txt"] },
+      { label: "マイグレーション（任意）", commands: [". .venv/bin/activate && python manage.py migrate"] },
+      { label: "開発サーバー起動", commands: [". .venv/bin/activate && python manage.py runserver"] },
+    ],
+    previewUrl: "http://localhost:8000",
+    devGuide: [
+      { title: "マイグレーションの作成", commands: ". .venv/bin/activate && python manage.py makemigrations" },
+      { title: "マイグレーションの実行", commands: ". .venv/bin/activate && python manage.py migrate" },
+      { title: "テストの実行", commands: ". .venv/bin/activate && python manage.py test" },
+      { title: "コードの静的解析（Ruff / Black）", commands: ". .venv/bin/activate && ruff check . && black --check ." },
+    ],
+  },
+  {
     id: "sinatra",
     title: "template-sinatra",
     description: "このリポジトリはSinatraのテンプレートプロジェクトです。",
@@ -212,8 +282,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     treeExclude: "vendor|node_modules",
     setupSteps: [
       cloneStep("sinatra"),
-      { label: "環境変数の設定", commands: ["cp .env.example .env.development"] },
-      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動（環境変数は docker-compose で設定済み）", commands: [] },
       { label: "データベース準備", commands: ["bundle exec rake db:setup", "bundle exec rake db:seed"] },
       { label: "開発サーバー起動", commands: ["bundle exec ruby index.rb"] },
     ],

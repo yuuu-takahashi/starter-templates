@@ -1,0 +1,14 @@
+# Build
+/target/
+**/*.rs.bk
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+.env
+.env.*
+!.env.example
+*.log

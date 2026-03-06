@@ -1,0 +1,14 @@
+FROM php:8.3-cli
+
+WORKDIR /workspace
+
+RUN apt-get update -qq && apt-get install -y --no-install-recommends \
+    git \
+    unzip \
+    libzip-dev \
+    libpng-dev \
+    libonig-dev \
+    && docker-php-ext-install zip pdo_mysql mbstring exif pcntl bcmath gd \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

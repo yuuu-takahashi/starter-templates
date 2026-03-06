@@ -12,7 +12,7 @@ import {
   type TemplateReadmeConfig,
   type ExtensionSetKey,
 } from "./template-readme-config.js";
-import { ROOT } from "./lib/utils.js";
+import { ROOT, SHARED_NPM, SHARED_GEMFILE } from "./lib/utils.js";
 
 // ── 説明マップ ─────────────────────────────────────────────────────────────────
 
@@ -152,6 +152,8 @@ const EXTENSION_DESCRIPTIONS: Record<string, string> = {
   "dbaeumer.vscode-eslint": "ESLint の静的解析",
   "ms-dotnettools.csharp": "C# 言語サポート（IntelliSense・リファクタ等）",
   "ms-dotnettools.csdevkit": "C# Dev Kit（Solution Explorer・テスト・NuGet 等）",
+  "golang.go": "Go 言語サポート（gopls・IntelliSense・テスト・デバッグ等）",
+  "rust-lang.rust-analyzer": "Rust 言語サポート（補完・ナビゲーション・型チェック等）",
   "Shopify.ruby-extensions-pack": "Ruby 開発ツール一式（Ruby LSP など）",
   "aliariff.vscode-erb-beautify": "ERB テンプレートのフォーマット",
   "eamodio.gitlens": "Git 履歴・差分の強力な可視化",
@@ -162,6 +164,8 @@ const EXTENSION_DESCRIPTIONS: Record<string, string> = {
   "github.vscode-github-actions": "GitHub Actions のサポート",
   "yzhang.markdown-all-in-one": "Markdown 編集支援",
   "DavidAnson.vscode-markdownlint": "Markdown の構文チェック",
+  "ms-python.python": "Python 言語サポート（IntelliSense・デバッグ・テスト等）",
+  "ms-python.vscode-pylance": "Python の型チェック・補完（Pylance）",
 };
 
 function withDesc(name: string, map: Record<string, string>): string {
@@ -175,8 +179,6 @@ function buildStackSection(
   c: TemplateReadmeConfig,
   devcontainerDefaults: { extensions: Record<ExtensionSetKey, string[]> }
 ): string | undefined {
-  const SHARED_NPM = join(ROOT, "shared", "npm");
-  const SHARED_GEMFILE = join(ROOT, "shared", "gemfile");
   const parts: string[] = [];
 
   if (c.npmStack) {
@@ -224,6 +226,13 @@ function buildStackSection(
     } catch {
       // ファイルが無い場合はスキップ
     }
+  }
+
+  if (c.stackLibs && c.stackLibs.length > 0) {
+    parts.push("### 主なライブラリ");
+    parts.push("");
+    c.stackLibs.forEach((line) => parts.push(line.startsWith("-") ? line : `- ${line}`));
+    parts.push("");
   }
 
   if (c.extensionSets && c.extensionSets.length > 0) {

@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "starter-templates",
   "private": true,
   "type": "module",
   "scripts": {
@@ -7,12 +7,22 @@
     "generate:devcontainer": "tsx scripts/generate-devcontainer.ts",
     "generate:configs": "tsx scripts/generate-configs.ts",
     "generate:deps": "tsx scripts/generate-deps.ts",
-    "generate:all": "yarn generate:ci && yarn generate:devcontainer && yarn generate:configs && yarn generate:deps"
+    "generate:all": "yarn generate:configs && yarn generate:deps && yarn generate:ci && yarn generate:devcontainer",
+    "test": "vitest run",
+    "lint": "eslint scripts/",
+    "lint:fix": "eslint scripts/ --fix",
+    "format": "prettier --write \"scripts/**/*.ts\""
   },
   "devDependencies": {
+    "@eslint/js": "^9",
     "@types/node": "^22.0.0",
+    "eslint": "^9",
+    "eslint-config-prettier": "^10",
+    "prettier": "^3.4.2",
     "tsx": "^4.0.0",
     "typescript": "^5.0.0",
+    "typescript-eslint": "^8",
+    "vitest": "^3.0.0",
     "yaml": "^2.6.1"
   }
 }

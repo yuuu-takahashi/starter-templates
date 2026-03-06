@@ -11,8 +11,8 @@
 
 import { readFileSync, writeFileSync, mkdirSync } from "fs";
 import { join } from "path";
-
-const ROOT: string = process.cwd();
+import { DEVCONTAINER_DOCKERFILE_MAP } from "./lib/stacks.js";
+import { ROOT } from "./lib/utils.js";
 
 // ── Shared devcontainer defaults (extensions + settings) ───────────────────────
 // 共通定義: shared/devcontainer/defaults.json を編集すること。
@@ -26,7 +26,11 @@ const DEFAULTS = JSON.parse(
     node: string[];
     ruby: string[];
     erb: string[];
+    php: string[];
+    python: string[];
     csharp: string[];
+    go: string[];
+    rust: string[];
     tooling: string[];
   };
   settings: {
@@ -41,6 +45,10 @@ const NODE_EXTENSIONS = DEFAULTS.extensions.node;
 const RUBY_EXTENSIONS = DEFAULTS.extensions.ruby;
 const ERB_EXTENSIONS = DEFAULTS.extensions.erb;
 const CSHARP_EXTENSIONS = DEFAULTS.extensions.csharp;
+const GO_EXTENSIONS = DEFAULTS.extensions.go;
+const RUST_EXTENSIONS = DEFAULTS.extensions.rust;
+const PHP_EXTENSIONS = DEFAULTS.extensions.php;
+const PYTHON_EXTENSIONS = DEFAULTS.extensions.python;
 const TOOLING_EXTENSIONS = DEFAULTS.extensions.tooling;
 
 type VscodeSettings = Record<string, unknown>;
@@ -68,6 +76,9 @@ interface DevcontainerConfig {
   service?: string;
   workspaceFolder: string;
   mounts?: string[];
+  forwardPorts?: number[];
+  portsAttributes?: Record<string, { label: string; onAutoForward: string }>;
+  postCreateCommand?: string | string[];
   customizations: {
     vscode: VscodeCustomization;
     cursor: VscodeCustomization;
@@ -79,10 +90,14 @@ interface Stack {
   config: DevcontainerConfig;
 }
 
-// Node/Ruby/Dotnet Dockerfiles: read from shared/docker/ (single source of truth)
+// Dockerfile paths in shared/docker/ (single source of truth)
 const NODE_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.node");
 const RUBY_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.ruby");
 const DOTNET_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.dotnet");
+const GO_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.go");
+const RUST_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.rust");
+const PHP_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.php");
+const PYTHON_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.python");
 
 const STACKS: Stack[] = [
   {
@@ -205,25 +220,6 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: "templates/ruby",
-    config: {
-      name: "Ruby",
-      build: { dockerfile: "Dockerfile", context: ".." },
-      workspaceFolder: "/workspace",
-      mounts: [
-        "source=${localWorkspaceFolder},target=/workspace,type=bind",
-        "source=${localWorkspaceFolderBasename}_node_modules,target=/workspace/node_modules,type=volume",
-        "source=${localWorkspaceFolderBasename}_bundle,target=/workspace/vendor/bundle,type=volume",
-      ],
-      customizations: {
-        vscode: {
-          extensions: [...BASE_EXTENSIONS, ...RUBY_EXTENSIONS],
-          settings: { ...BASE_SETTINGS, ...RUBY_SETTINGS },
-        },
-      },
-    },
-  },
-  {
     dir: "templates/csharp",
     config: {
       name: "template-csharp",
@@ -235,6 +231,87 @@ const STACKS: Stack[] = [
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...CSHARP_EXTENSIONS],
+          settings: { ...BASE_SETTINGS },
+        },
+      },
+    },
+  },
+  {
+    dir: "templates/go",
+    config: {
+      name: "template-go",
+      build: { dockerfile: "Dockerfile", context: ".." },
+      workspaceFolder: "/workspace",
+      mounts: [
+        "source=${localWorkspaceFolder},target=/workspace,type=bind",
+      ],
+      customizations: {
+        vscode: {
+          extensions: [...BASE_EXTENSIONS, ...GO_EXTENSIONS],
+          settings: { ...BASE_SETTINGS },
+        },
+      },
+    },
+  },
+  {
+    dir: "templates/rust",
+    config: {
+      name: "template-rust",
+      build: { dockerfile: "Dockerfile", context: ".." },
+      workspaceFolder: "/workspace",
+      mounts: [
+        "source=${localWorkspaceFolder},target=/workspace,type=bind",
+      ],
+      customizations: {
+        vscode: {
+          extensions: [...BASE_EXTENSIONS, ...RUST_EXTENSIONS],
+          settings: { ...BASE_SETTINGS },
+        },
+      },
+    },
+  },
+  {
+    dir: "templates/laravel",
+    config: {
+      name: "template-laravel",
+      build: { dockerfile: "Dockerfile", context: ".." },
+      workspaceFolder: "/workspace",
+      mounts: [
+        "source=${localWorkspaceFolder},target=/workspace,type=bind",
+      ],
+      postCreateCommand: [
+        "bash -c '[ -f .env ] || cp .env.example .env'",
+        "php artisan key:generate --force",
+        "composer install --no-interaction",
+      ],
+      customizations: {
+        vscode: {
+          extensions: [...BASE_EXTENSIONS, ...PHP_EXTENSIONS, ...TOOLING_EXTENSIONS],
+          settings: { ...BASE_SETTINGS },
+        },
+      },
+    },
+  },
+  {
+    dir: "templates/django",
+    config: {
+      name: "template-django",
+      build: { dockerfile: "Dockerfile", context: ".." },
+      workspaceFolder: "/workspace",
+      mounts: [
+        "source=${localWorkspaceFolder},target=/workspace,type=bind",
+      ],
+      forwardPorts: [8000],
+      portsAttributes: {
+        "8000": { label: "Django", onAutoForward: "openPreview" },
+      },
+      postCreateCommand: [
+        "python -m venv .venv",
+        ". .venv/bin/activate && pip install -r requirements.txt",
+      ],
+      customizations: {
+        vscode: {
+          extensions: [...BASE_EXTENSIONS, ...PYTHON_EXTENSIONS],
           settings: { ...BASE_SETTINGS },
         },
       },
@@ -256,33 +333,29 @@ const YAML_HEADER_RUBY_DB: string =
   "# Generated by scripts/generate-devcontainer.ts — edit shared/docker/docker-compose.ruby-db.yml instead.\n";
 const YAML_HEADER_RAILS: string =
   "# Generated by scripts/generate-devcontainer.ts — edit shared/docker/docker-compose.rails.yml instead.\n";
-const DOCKERFILE_HEADER: string =
-  "# Generated by scripts/generate-devcontainer.ts — edit shared/docker/Dockerfile.node or shared/docker/Dockerfile.ruby and re-run.\n\n";
 
-// Node templates: copy shared/docker/Dockerfile.node so each template works standalone
-const NODE_TEMPLATE_DIRS = ["templates/nextjs", "templates/nodejs", "templates/reactjs"];
-const nodeDockerfileContent = readFileSync(NODE_DOCKERFILE_SRC, "utf8");
-for (const dir of NODE_TEMPLATE_DIRS) {
-  const outPath = join(ROOT, dir, ".devcontainer", "Dockerfile");
-  writeFileSync(outPath, DOCKERFILE_HEADER + nodeDockerfileContent, "utf8");
-  console.log("Generated:", outPath);
+const DOCKERFILE_SRCS: Record<string, string> = {
+  "Dockerfile.node": NODE_DOCKERFILE_SRC,
+  "Dockerfile.ruby": RUBY_DOCKERFILE_SRC,
+  "Dockerfile.dotnet": DOTNET_DOCKERFILE_SRC,
+  "Dockerfile.go": GO_DOCKERFILE_SRC,
+  "Dockerfile.rust": RUST_DOCKERFILE_SRC,
+  "Dockerfile.php": PHP_DOCKERFILE_SRC,
+  "Dockerfile.python": PYTHON_DOCKERFILE_SRC,
+};
+
+function dockerfileHeader(srcFile: string): string {
+  return `# Generated by scripts/generate-devcontainer.ts — edit shared/docker/${srcFile} and re-run.\n\n`;
 }
 
-// Ruby+DB templates: copy shared/docker/Dockerfile.ruby so folder works standalone
-const rubyDockerfileContent = readFileSync(RUBY_DOCKERFILE_SRC, "utf8");
-for (const dir of ["templates/sinatra", "templates/rails-api"]) {
-  const outPath = join(ROOT, dir, ".devcontainer", "Dockerfile");
-  writeFileSync(outPath, DOCKERFILE_HEADER + rubyDockerfileContent, "utf8");
-  console.log("Generated:", outPath);
-}
-
-// C# template: copy shared/docker/Dockerfile.dotnet
-const dotnetDockerfileContent = readFileSync(DOTNET_DOCKERFILE_SRC, "utf8");
-for (const dir of ["templates/csharp"]) {
+// Copy Dockerfiles to each template that needs one (null = uses docker-compose)
+for (const [dir, dockerfileName] of Object.entries(DEVCONTAINER_DOCKERFILE_MAP)) {
+  if (dockerfileName === null) continue;
   const outDir = join(ROOT, dir, ".devcontainer");
   mkdirSync(outDir, { recursive: true });
   const outPath = join(outDir, "Dockerfile");
-  writeFileSync(outPath, DOCKERFILE_HEADER + dotnetDockerfileContent, "utf8");
+  const content = readFileSync(DOCKERFILE_SRCS[dockerfileName], "utf8");
+  writeFileSync(outPath, dockerfileHeader(dockerfileName) + content, "utf8");
   console.log("Generated:", outPath);
 }
 
