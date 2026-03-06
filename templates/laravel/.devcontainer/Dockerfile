@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && docker-php-ext-install zip pdo_mysql mbstring exif pcntl bcmath gd \
   && rm -rf /var/lib/apt/lists/*
 
-# Node.js 20 and common dev tools + iptables/ipset (reference: anthropics/claude-code)
+# Common dev tools + iptables/ipset (reference: anthropics/claude-code)
 RUN apt-get update && apt-get install -y --no-install-recommends \
   openssh-client \
   tree \
@@ -38,13 +38,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   jq \
   nano \
   vim \
+  && curl -fsSL https://deb.nodesource.com/setup_23.x | bash - \
+  && apt-get install -y nodejs \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install Node.js 23.13.0 (exact version for markdownlint / CI / pre-commit)
-RUN NODE_VERSION=23.13.0 && \
-  ARCH=$(dpkg --print-architecture) && \
-  case "$ARCH" in amd64) NODE_ARCH=x64;; arm64) NODE_ARCH=arm64;; *) NODE_ARCH=x64;; esac && \
-  curl -sL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${NODE_ARCH}.tar.xz" | tar xJ -C /usr/local --strip-components=1
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN npm install -g yarn
