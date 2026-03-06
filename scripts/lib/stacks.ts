@@ -51,6 +51,12 @@ export const RUBY_VERSION_DIRS: readonly string[] = [
 /** .python-version を配布するテンプレート */
 export const PYTHON_VERSION_DIRS: readonly string[] = ["templates/django"];
 
+/** .php-version を配布するテンプレート */
+export const PHP_VERSION_DIRS: readonly string[] = ["templates/laravel"];
+
+/** .go-version を配布するテンプレート */
+export const GO_VERSION_DIRS: readonly string[] = ["templates/go"];
+
 /** code-check.yml の元ワークフロー名（shared/workflows/ 内のファイル名） */
 export const CODE_CHECK_SOURCE: Readonly<Record<string, string>> = {
   "templates/nextjs": "code-check-node.yml",
@@ -78,6 +84,13 @@ export const TEST_SOURCE: Readonly<Record<string, string>> = {
   "templates/go": "test-go.yml",
   "templates/rust": "test-rust.yml",
   "templates/django": "test-django.yml",
+};
+
+/** .dockerignore の元ファイル名（shared/docker/ 内） */
+export const DOCKERIGNORE_SOURCE: Readonly<Record<string, string>> = {
+  "templates/rails": "dockerignore.rails",
+  "templates/rails-api": "dockerignore.rails-api",
+  "templates/laravel": "dockerignore.laravel",
 };
 
 /** .gitignore の元ファイル名（shared/gitignore/ 内） */
@@ -109,6 +122,9 @@ export const DEVCONTAINER_DOCKERFILE_MAP: Readonly<Record<string, string | null>
   "templates/laravel": "Dockerfile.php",
   "templates/django": "Dockerfile.python",
 };
+
+/** ルート CI でモノレポ向けパス変換（transformStepsForMonorepo）を適用するスタック */
+export const MONOREPO_PREFIX_STACKS: readonly string[] = ["csharp", "go", "rust", "laravel"];
 
 /** ルート CI（generate-root-workflow）用: id / dir / pathFilter */
 export interface RootStackEntry {

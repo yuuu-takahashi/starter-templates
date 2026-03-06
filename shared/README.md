@@ -20,7 +20,6 @@
 | `test/vitest/` | `vitest.config.*.ts`, `vitest.setup.ts` など | `templates/nextjs/vitest*.ts` など | `gen-tool-configs.ts` |
 | `test/rspec/` | `rspec.common`（共通の rspec オプション） | `templates/*/.rspec`（`--require` 行と結合） | `gen-ruby-configs.ts` |
 | `workflows/` | `code-check-*.yml`, `test-*.yml`, `static-analysis.yml`, `dependabot.yml` | `templates/*/.github/workflows/`, `templates/*/.github/dependabot.yml` | `gen-workflows.ts` |
-| `env/` | `*.env.head`, `db.env` | `templates/*/.env.example`, `.env.test`, `.env.development` | `gen-workflows.ts` |
 | `npm/` | `<stack>.json`（package.json のソース） | `templates/*/package.json` | `generate-deps.ts` |
 | `gemfile/` | `Gemfile.<stack>` | `templates/*/Gemfile` | `generate-deps.ts` |
 | `rust-toolchain/` | `rust-toolchain.toml`（Rust ツールチェーン設定のみ） | `templates/rust/rust-toolchain.toml` | `generate-deps.ts` |

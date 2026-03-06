@@ -67,7 +67,6 @@ starter-templates/
 │   ├── devcontainer/ Dev Container 設定のソース
 │   ├── docker/       Dockerfile のソース
 │   ├── editorconfig/ .editorconfig のソース
-│   ├── env/          .env.* のテンプレート
 │   ├── eslint/       eslint.config.js のソース
 │   ├── gemfile/      Gemfile のソース
 │   ├── gitignore/    .gitignore のソース
@@ -120,7 +119,6 @@ starter-templates/
 | `templates/*/.rubocop.yml` | `shared/lint-format/rubocop/rubocop.*.yml` | `gen-ruby-configs.ts` |
 | `templates/*/.github/workflows/*.yml` | `shared/workflows/*.yml` | `gen-workflows.ts` |
 | `templates/*/.github/dependabot.yml` | `shared/workflows/dependabot.yml` | `gen-workflows.ts` |
-| `templates/*/.env.*` | `shared/env/` | `gen-workflows.ts` |
 | `templates/*/README.md` | `scripts/template-readme-config.ts` | `gen-readme.ts` |
 | `templates/*/.devcontainer/` | `shared/devcontainer/`, `shared/docker/` | `generate-devcontainer.ts` |
 | `.github/workflows/code-check.yml` | `scripts/generate-root-workflow.ts` | `generate-root-workflow.ts` |
@@ -140,7 +138,7 @@ starter-templates/
 - `gen-common-files.ts` — .editorconfig / .gitignore / .node-version / .ruby-version / .go-version
 - `gen-tool-configs.ts` — ESLint / Prettier / tsconfig / Vitest
 - `gen-ruby-configs.ts` — .rubocop.yml / .rspec
-- `gen-workflows.ts` — GitHub Actions ワークフロー / dependabot / .env.*
+- `gen-workflows.ts` — GitHub Actions ワークフロー / dependabot
 - `gen-readme.ts` — README.md
 
 ### よくある変更シナリオ

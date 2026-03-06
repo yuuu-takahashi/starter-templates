@@ -1,5 +1,5 @@
 /**
- * Generates GitHub Actions workflows, dependabot.yml, and .env.* files for templates.
+ * Generates GitHub Actions workflows and dependabot.yml for templates.
  * Run via generate-configs.ts
  */
 
@@ -67,39 +67,5 @@ export function run(): void {
     const outPath = join(outDir, "dependabot.yml");
     writeFileSync(outPath, dependabotContent, "utf8");
     console.log("Generated:", outPath);
-  }
-
-  // ── .env.example / .env.test / .env.development ───────────────────────────
-
-  const SHARED_ENV = join(ROOT, "shared", "env");
-  const DB_ENV_PATH = join(SHARED_ENV, "db.env");
-  const ENV_TEMPLATES: Array<{ dir: string; variant: "rails" | "sinatra"; templateId: string }> = [
-    { dir: "templates/rails-api", variant: "rails", templateId: "template-rails-api" },
-    { dir: "templates/sinatra", variant: "sinatra", templateId: "template-sinatra" },
-  ];
-
-  const dbEnvContent = readFileSync(DB_ENV_PATH, "utf8");
-
-  type EnvKind = "example" | "test" | "development";
-  const ENV_KINDS: Array<{ kind: EnvKind; envValue: string; suffix: string }> = [
-    { kind: "example", envValue: "development", suffix: "_development" },
-    { kind: "test", envValue: "test", suffix: "_test" },
-    { kind: "development", envValue: "development", suffix: "_development" },
-  ];
-
-  for (const { dir, variant, templateId } of ENV_TEMPLATES) {
-    const headPath = join(SHARED_ENV, `${variant}.env.head`);
-    const headTemplate = readFileSync(headPath, "utf8");
-
-    for (const { kind, envValue, suffix } of ENV_KINDS) {
-      const head = headTemplate.replace(/\{\{ENV\}\}/g, envValue);
-      const db = dbEnvContent
-        .replace(/\{\{TEMPLATE_ID\}\}/g, templateId)
-        .replace(/\{\{SUFFIX\}\}/g, suffix);
-      const content = head + db;
-      const outPath = join(ROOT, dir, `.env.${kind}`);
-      writeFileSync(outPath, content, "utf8");
-      console.log("Generated:", outPath);
-    }
   }
 }

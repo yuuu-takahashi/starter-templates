@@ -8,13 +8,8 @@
 import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import YAML from "yaml";
-import { ROOT_STACKS } from "./lib/stacks.js";
-
-const ROOT: string = join(process.cwd());
-const VERSIONS = JSON.parse(readFileSync(join(ROOT, "shared", "versions.json"), "utf8")) as {
-  node: string;
-  ruby: string;
-};
+import { ROOT_STACKS, MONOREPO_PREFIX_STACKS } from "./lib/stacks.js";
+import { ROOT, VERSIONS } from "./lib/utils.js";
 
 const STACKS = ROOT_STACKS;
 

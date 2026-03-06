@@ -12,8 +12,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from "fs";
 import { join } from "path";
 import { DEVCONTAINER_DOCKERFILE_MAP } from "./lib/stacks.js";
-
-const ROOT: string = process.cwd();
+import { ROOT } from "./lib/utils.js";
 
 // ── Shared devcontainer defaults (extensions + settings) ───────────────────────
 // 共通定義: shared/devcontainer/defaults.json を編集すること。

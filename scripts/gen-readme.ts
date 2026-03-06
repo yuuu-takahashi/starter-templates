@@ -12,7 +12,7 @@ import {
   type TemplateReadmeConfig,
   type ExtensionSetKey,
 } from "./template-readme-config.js";
-import { ROOT } from "./lib/utils.js";
+import { ROOT, SHARED_NPM, SHARED_GEMFILE } from "./lib/utils.js";
 
 // ── 説明マップ ─────────────────────────────────────────────────────────────────
 
@@ -179,8 +179,6 @@ function buildStackSection(
   c: TemplateReadmeConfig,
   devcontainerDefaults: { extensions: Record<ExtensionSetKey, string[]> }
 ): string | undefined {
-  const SHARED_NPM = join(ROOT, "shared", "npm");
-  const SHARED_GEMFILE = join(ROOT, "shared", "gemfile");
   const parts: string[] = [];
 
   if (c.npmStack) {
