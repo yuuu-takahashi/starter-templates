@@ -26,7 +26,9 @@
 - factory_bot_rails — テスト用フィクスチャファクトリー（Rails）
 - faker — テスト用ダミーデータ生成
 - mysql2 — MySQL クライアント
+- nokogiri
 - puma — マルチスレッド Web サーバー
+- rack
 - rails — Ruby on Rails フレームワーク
 - rspec-rails — Rails 向けテストフレームワーク
 - rswag — RSpec から Swagger ドキュメントを生成

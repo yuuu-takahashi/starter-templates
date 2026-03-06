@@ -32,8 +32,10 @@
 - importmap-rails — Import Maps による JS 管理
 - jbuilder — JSON レスポンスを DSL で構築
 - mysql2 — MySQL クライアント
+- nokogiri
 - prettier — コードフォーマッター
 - puma — マルチスレッド Web サーバー
+- rack
 - rails — Ruby on Rails フレームワーク
 - rspec-rails — Rails 向けテストフレームワーク
 - rubocop — Ruby の静的解析・フォーマッター

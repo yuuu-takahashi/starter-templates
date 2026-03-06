@@ -75,7 +75,9 @@ interface DevcontainerConfig {
   dockerComposeFile?: string;
   service?: string;
   workspaceFolder: string;
+  remoteUser?: string;
   mounts?: string[];
+  containerEnv?: Record<string, string>;
   forwardPorts?: number[];
   portsAttributes?: Record<string, { label: string; onAutoForward: string }>;
   postCreateCommand?: string | string[];
@@ -99,6 +101,21 @@ const RUST_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.rust");
 const PHP_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.php");
 const PYTHON_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.python");
 
+// Node devcontainer options (reference: anthropics/claude-code .devcontainer)
+const NODE_MOUNTS = [
+  "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
+  "source=${localWorkspaceFolderBasename}_node_modules,target=/workspace/node_modules,type=volume",
+  "source=${localWorkspaceFolderBasename}-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
+];
+const NODE_CONTAINER_ENV = { NODE_OPTIONS: "--max-old-space-size=4096" };
+const NODE_TERMINAL_SETTINGS = {
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "terminal.integrated.profiles.linux": {
+    bash: { path: "bash", icon: "terminal-bash" },
+    zsh: { path: "zsh" },
+  },
+};
+
 const STACKS: Stack[] = [
   {
     dir: "templates/nextjs",
@@ -106,15 +123,15 @@ const STACKS: Stack[] = [
       name: "template-nextjs",
       build: { dockerfile: "Dockerfile", context: ".." },
       workspaceFolder: "/workspace",
-      mounts: [
-        "source=${localWorkspaceFolder},target=/workspace,type=bind",
-        "source=${localWorkspaceFolderBasename}_node_modules,target=/workspace/node_modules,type=volume",
-      ],
+      remoteUser: "node",
+      mounts: NODE_MOUNTS,
+      containerEnv: NODE_CONTAINER_ENV,
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...NODE_EXTENSIONS],
           settings: {
             ...BASE_SETTINGS,
+            ...NODE_TERMINAL_SETTINGS,
             "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
           },
         },
@@ -127,15 +144,15 @@ const STACKS: Stack[] = [
       name: "template-nodejs",
       build: { dockerfile: "Dockerfile", context: ".." },
       workspaceFolder: "/workspace",
-      mounts: [
-        "source=${localWorkspaceFolder},target=/workspace,type=bind",
-        "source=${localWorkspaceFolderBasename}_node_modules,target=/workspace/node_modules,type=volume",
-      ],
+      remoteUser: "node",
+      mounts: NODE_MOUNTS,
+      containerEnv: NODE_CONTAINER_ENV,
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...NODE_EXTENSIONS],
           settings: {
             ...BASE_SETTINGS,
+            ...NODE_TERMINAL_SETTINGS,
             "eslint.validate": ["javascript"],
           },
         },
@@ -148,15 +165,15 @@ const STACKS: Stack[] = [
       name: "template-reactjs",
       build: { dockerfile: "Dockerfile", context: ".." },
       workspaceFolder: "/workspace",
-      mounts: [
-        "source=${localWorkspaceFolder},target=/workspace,type=bind",
-        "source=${localWorkspaceFolderBasename}_node_modules,target=/workspace/node_modules,type=volume",
-      ],
+      remoteUser: "node",
+      mounts: NODE_MOUNTS,
+      containerEnv: NODE_CONTAINER_ENV,
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...NODE_EXTENSIONS],
           settings: {
             ...BASE_SETTINGS,
+            ...NODE_TERMINAL_SETTINGS,
             "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
           },
         },

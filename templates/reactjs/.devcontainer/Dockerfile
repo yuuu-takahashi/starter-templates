@@ -2,12 +2,75 @@
 
 FROM node:22
 
+ARG TZ
+ENV TZ="${TZ:-UTC}"
+
+# Install basic development tools (reference: anthropics/claude-code .devcontainer)
+RUN apt-get update -qq && apt-get install -y --no-install-recommends \
+  less \
+  git \
+  procps \
+  sudo \
+  fzf \
+  zsh \
+  man-db \
+  unzip \
+  gnupg2 \
+  gh \
+  jq \
+  nano \
+  vim \
+  curl \
+  openssh-client \
+  tree \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Ensure default node user has access to /usr/local/share
+RUN mkdir -p /usr/local/share/npm-global && chown -R node:node /usr/local/share
+
+ARG USERNAME=node
+
+# Persist shell history
+RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
+  && mkdir /commandhistory \
+  && touch /commandhistory/.bash_history \
+  && chown -R $USERNAME /commandhistory
+
+ENV DEVCONTAINER=true
+
+RUN mkdir -p /workspace && chown -R node:node /workspace
+
 WORKDIR /workspace
 
-RUN apt-get update -qq && apt-get install --no-install-recommends -y curl openssh-client tree
+# git-delta for better diffs
+ARG GIT_DELTA_VERSION=0.18.2
+RUN ARCH=$(dpkg --print-architecture) \
+  && wget -q "https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" \
+  && dpkg -i "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" \
+  && rm "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb"
 
+# Application dependencies (template context)
 COPY package.json yarn.lock ./
-
 RUN yarn install
 
 COPY . .
+
+RUN chown -R node:node /workspace
+
+USER node
+
+ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
+ENV PATH=$PATH:/usr/local/share/npm-global/bin
+ENV SHELL=/bin/zsh
+ENV EDITOR=nano
+ENV VISUAL=nano
+
+# zsh with powerline theme (reference: anthropics/claude-code)
+ARG ZSH_IN_DOCKER_VERSION=1.2.0
+RUN sh -c "$(wget -qO- https://github.com/deluan/zsh-in-docker/releases/download/v${ZSH_IN_DOCKER_VERSION}/zsh-in-docker.sh)" -- \
+  -p git \
+  -p fzf \
+  -a "source /usr/share/doc/fzf/examples/key-bindings.zsh" \
+  -a "source /usr/share/doc/fzf/examples/completion.zsh" \
+  -a "export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
+  -x

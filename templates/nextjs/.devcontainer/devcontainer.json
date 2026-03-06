@@ -6,10 +6,15 @@
     "context": ".."
   },
   "workspaceFolder": "/workspace",
+  "remoteUser": "node",
   "mounts": [
-    "source=${localWorkspaceFolder},target=/workspace,type=bind",
-    "source=${localWorkspaceFolderBasename}_node_modules,target=/workspace/node_modules,type=volume"
+    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
+    "source=${localWorkspaceFolderBasename}_node_modules,target=/workspace/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-bashhistory-${devcontainerId},target=/commandhistory,type=volume"
   ],
+  "containerEnv": {
+    "NODE_OPTIONS": "--max-old-space-size=4096"
+  },
   "customizations": {
     "vscode": {
       "extensions": [
@@ -24,6 +29,16 @@
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
           "source.fixAll": "explicit"
+        },
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "bash",
+            "icon": "terminal-bash"
+          },
+          "zsh": {
+            "path": "zsh"
+          }
         },
         "eslint.validate": [
           "javascript",
@@ -46,6 +61,16 @@
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
           "source.fixAll": "explicit"
+        },
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "bash",
+            "icon": "terminal-bash"
+          },
+          "zsh": {
+            "path": "zsh"
+          }
         },
         "eslint.validate": [
           "javascript",
