@@ -27,18 +27,12 @@ export const SHARED_ESLINT = join(SHARED_LINT_FORMAT, "eslint");
 export const SHARED_PRETTIER = join(SHARED_LINT_FORMAT, "prettier");
 export const SHARED_TSCONFIG = join(ROOT, "shared", "tsconfig");
 export const SHARED_VITEST = join(SHARED_TEST, "vitest");
-/** フレームワーク別設定の正本（一元管理・移行時はこの定数だけ変更） */
-export const SHARED_FRAMEWORK = join(ROOT, "shared", "framework");
 
 export const SHARED_NPM = join(ROOT, "shared", "npm");
 export const SHARED_GEMFILE = join(ROOT, "shared", "gemfile");
-export const SHARED_DOTNET = join(SHARED_FRAMEWORK, "dotnet");
 export const SHARED_GOLANGCI = join(SHARED_LINT_FORMAT, "golangci");
 export const SHARED_RUST_TOOLCHAIN = join(ROOT, "shared", "rust-toolchain");
 export const SHARED_RUBOCOP = join(SHARED_LINT_FORMAT, "rubocop");
-export const SHARED_LARAVEL = join(SHARED_FRAMEWORK, "laravel");
-export const SHARED_NEXTJS = join(SHARED_FRAMEWORK, "nextjs");
-export const SHARED_REACTJS = join(SHARED_FRAMEWORK, "reactjs");
 
 export function deepMerge<T extends Record<string, unknown>>(a: T, b: Record<string, unknown>): T {
   const r = { ...a } as Record<string, unknown>;

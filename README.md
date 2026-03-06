@@ -97,15 +97,17 @@ starter-templates/
 
 ### 正本 vs 生成ファイル
 
-`templates/` 以下のファイルはすべてスクリプトで生成されます。**直接編集しても次回生成時に上書きされます。**
+`templates/` 以下の多くはスクリプトで生成されます。**生成されるファイルは直接編集すると次回生成で上書きされます。** 一方、フレームワーク別（next.config.ts, vite.config.ts, Laravel の pint/phpunit, C# の .csproj/.sln 等）は **templates/<stack>/ 直下を正本として直接編集**します。
 
 | ファイル | 正本（編集場所） | 生成スクリプト |
 | ------- | ------------- | ----------- |
 | `templates/*/package.json` | `shared/npm/<stack>.json` | `generate-deps.ts` |
 | `templates/*/Gemfile` | `shared/gemfile/Gemfile.<stack>` | `generate-deps.ts` |
-| `templates/csharp/*.csproj` | `shared/framework/dotnet/*.csproj` | `generate-deps.ts` |
-| `templates/csharp/global.json` | `shared/framework/dotnet/global.json`（SDK 版は `shared/versions.json` の `dotnet`） | `generate-deps.ts` |
-| `templates/csharp/TemplateCsharp.sln` | `shared/framework/dotnet/TemplateCsharp.sln` | `generate-deps.ts` |
+| `templates/csharp/global.json` の sdk.version | `shared/versions.json` の `dotnet` で上書き | `generate-deps.ts` |
+| `templates/nextjs/next.config.ts` | **templates/nextjs/** を直接編集 | — |
+| `templates/reactjs/vite.config.ts` | **templates/reactjs/** を直接編集 | — |
+| `templates/laravel/pint.json`, `phpunit.xml` | **templates/laravel/** を直接編集 | — |
+| `templates/csharp/*.csproj`, `global.json`, `*.sln` | **templates/csharp/** を直接編集 | — |
 | `templates/*/.editorconfig` | `shared/lint-format/editorconfig/.editorconfig` | `gen-common-files.ts` |
 | `templates/*/.gitignore` | `shared/gitignore/.gitignore.*` | `gen-common-files.ts` |
 | `templates/*/.node-version` | `shared/versions.json` | `gen-common-files.ts` |
@@ -116,8 +118,6 @@ starter-templates/
 | `templates/*/vitest*.ts` | `shared/test/vitest/` | `gen-tool-configs.ts` |
 | `templates/*/.rspec` | `shared/test/rspec/rspec.common` | `gen-ruby-configs.ts` |
 | `templates/*/.rubocop.yml` | `shared/lint-format/rubocop/rubocop.*.yml` | `gen-ruby-configs.ts` |
-| `templates/laravel/pint.json` | `shared/framework/laravel/pint.json` | `gen-laravel-configs.ts` |
-| `templates/laravel/phpunit.xml` | `shared/framework/laravel/phpunit.xml` | `gen-laravel-configs.ts` |
 | `templates/*/.github/workflows/*.yml` | `shared/workflows/*.yml` | `gen-workflows.ts` |
 | `templates/*/.github/dependabot.yml` | `shared/workflows/dependabot.yml` | `gen-workflows.ts` |
 | `templates/*/.env.*` | `shared/env/` | `gen-workflows.ts` |
@@ -133,14 +133,13 @@ starter-templates/
 | `yarn generate:ci` | `generate-root-workflow.ts` | ルートの CI ワークフローを生成 |
 | `yarn generate:devcontainer` | `generate-devcontainer.ts` | Dev Container 設定を生成 |
 | `yarn generate:configs` | `generate-configs.ts` | 設定ファイル全般を生成（エントリポイント） |
-| `yarn generate:deps` | `generate-deps.ts` | package.json / Gemfile / C# .csproj / Go / Rust (`shared/*` → `templates/*`) を生成 |
+| `yarn generate:deps` | `generate-deps.ts` | package.json / Gemfile / Go / Rust を生成。C# は global.json の sdk 版のみ上書き |
 
 `generate-configs.ts` は以下のモジュールを呼び出します：
 
 - `gen-common-files.ts` — .editorconfig / .gitignore / .node-version / .ruby-version / .go-version
 - `gen-tool-configs.ts` — ESLint / Prettier / tsconfig / Vitest
 - `gen-ruby-configs.ts` — .rubocop.yml / .rspec
-- `gen-laravel-configs.ts` — pint.json / phpunit.xml（Laravel）
 - `gen-workflows.ts` — GitHub Actions ワークフロー / dependabot / .env.*
 - `gen-readme.ts` — README.md
 
@@ -151,7 +150,7 @@ starter-templates/
 - **バージョン（Node.js / Ruby）を変更する場合**: `shared/versions.json` を編集 → `yarn generate:configs`（必要に応じて `shared/docker/` も更新し `yarn generate:devcontainer`）
 - **Gemfile を更新する場合**: `shared/gemfile/Gemfile.<stack>` を編集 → `yarn generate:deps`
 - **Prettier / tsconfig などのツール設定を変更する場合**: `shared/lint-format/prettier/`, `shared/tsconfig/`, `shared/test/vitest/` 内の該当ファイルを編集 → `yarn generate:configs`
-- **Laravel Pint / PHPUnit を変更する場合**: `shared/framework/laravel/pint.json`, `shared/framework/laravel/phpunit.xml` を編集 → `yarn generate:configs`
+- **Next.js / React / Laravel / C# のフレームワーク設定を変更する場合**: `templates/nextjs/`, `templates/reactjs/`, `templates/laravel/`, `templates/csharp/` 内の該当ファイルを直接編集（生成されない）
 - **README を更新する場合**: `scripts/template-readme-config.ts` を編集 → `yarn generate:configs`
 
 ### 新テンプレート追加手順
