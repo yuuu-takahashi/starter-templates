@@ -1,10 +1,12 @@
-FROM node:22
+FROM node:23.13.0
 
 ARG TZ
-ENV TZ="${TZ:-UTC}"
+ENV TZ="$TZ"
 
-# Install basic development tools (reference: anthropics/claude-code .devcontainer)
-RUN apt-get update -qq && apt-get install -y --no-install-recommends \
+ARG CLAUDE_CODE_VERSION=latest
+
+# Install basic development tools and iptables/ipset (reference: anthropics/claude-code .devcontainer)
+RUN apt-get update && apt-get install -y --no-install-recommends \
   less \
   git \
   procps \
@@ -15,20 +17,23 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
   unzip \
   gnupg2 \
   gh \
+  iptables \
+  ipset \
+  iproute2 \
+  dnsutils \
+  aggregate \
   jq \
   nano \
   vim \
-  curl \
-  openssh-client \
-  tree \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Ensure default node user has access to /usr/local/share
-RUN mkdir -p /usr/local/share/npm-global && chown -R node:node /usr/local/share
+RUN mkdir -p /usr/local/share/npm-global && \
+  chown -R node:node /usr/local/share
 
 ARG USERNAME=node
 
-# Persist shell history
+# Persist bash history
 RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
   && mkdir /commandhistory \
   && touch /commandhistory/.bash_history \
@@ -36,34 +41,30 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
 
 ENV DEVCONTAINER=true
 
-RUN mkdir -p /workspace && chown -R node:node /workspace
+# Create workspace and config directories and set permissions
+RUN mkdir -p /workspace /home/node/.claude && \
+  chown -R node:node /workspace /home/node/.claude
 
 WORKDIR /workspace
 
-# git-delta for better diffs
 ARG GIT_DELTA_VERSION=0.18.2
-RUN ARCH=$(dpkg --print-architecture) \
-  && wget -q "https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" \
-  && dpkg -i "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" \
-  && rm "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb"
+RUN ARCH=$(dpkg --print-architecture) && \
+  wget -q "https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && \
+  dpkg -i "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && \
+  rm "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb"
 
-# Application dependencies (template context)
-COPY package.json yarn.lock ./
-RUN yarn install
-
-COPY . .
-
-RUN chown -R node:node /workspace
-
+# Set up non-root user
 USER node
 
+# Install global packages
 ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
 ENV PATH=$PATH:/usr/local/share/npm-global/bin
+
 ENV SHELL=/bin/zsh
 ENV EDITOR=nano
 ENV VISUAL=nano
 
-# zsh with powerline theme (reference: anthropics/claude-code)
+# Default powerline10k theme
 ARG ZSH_IN_DOCKER_VERSION=1.2.0
 RUN sh -c "$(wget -qO- https://github.com/deluan/zsh-in-docker/releases/download/v${ZSH_IN_DOCKER_VERSION}/zsh-in-docker.sh)" -- \
   -p git \
@@ -72,3 +73,22 @@ RUN sh -c "$(wget -qO- https://github.com/deluan/zsh-in-docker/releases/download
   -a "source /usr/share/doc/fzf/examples/completion.zsh" \
   -a "export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
   -x
+
+# Install Claude Code CLI
+RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
+
+# Application dependencies (template context)
+USER root
+COPY package.json yarn.lock ./
+RUN yarn install
+
+COPY . .
+
+RUN chown -R node:node /workspace
+
+# Copy and set up firewall script (build context is template root; .devcontainer/ is generated)
+COPY .devcontainer/init-firewall.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/init-firewall.sh && \
+  echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
+  chmod 0440 /etc/sudoers.d/node-firewall
+USER node

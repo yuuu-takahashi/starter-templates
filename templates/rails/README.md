@@ -56,6 +56,7 @@
 - Gruntfuggly.todo-tree — TODO / FIXME コメントの一覧表示
 - Shopify.ruby-extensions-pack — Ruby 開発ツール一式（Ruby LSP など）
 - aliariff.vscode-erb-beautify — ERB テンプレートのフォーマット
+- anthropic.claude-code
 - dbaeumer.vscode-eslint — ESLint の静的解析
 - donjayamanne.githistory — Git ログの可視化
 - eamodio.gitlens — Git 履歴・差分の強力な可視化

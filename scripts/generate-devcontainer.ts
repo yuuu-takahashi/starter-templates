@@ -62,6 +62,7 @@ const ERB_SETTINGS: VscodeSettings = DEFAULTS.settings.erb;
 interface DevcontainerBuild {
   dockerfile: string;
   context: string;
+  args?: Record<string, string>;
 }
 
 interface VscodeCustomization {
@@ -75,9 +76,13 @@ interface DevcontainerConfig {
   dockerComposeFile?: string;
   service?: string;
   workspaceFolder: string;
+  workspaceMount?: string;
   remoteUser?: string;
   mounts?: string[];
+  runArgs?: string[];
   containerEnv?: Record<string, string>;
+  postStartCommand?: string;
+  waitFor?: string;
   forwardPorts?: number[];
   portsAttributes?: Record<string, { label: string; onAutoForward: string }>;
   postCreateCommand?: string | string[];
@@ -101,13 +106,32 @@ const RUST_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.rust");
 const PHP_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.php");
 const PYTHON_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.python");
 
-// Node devcontainer options (reference: anthropics/claude-code .devcontainer)
+// Common devcontainer options (reference: anthropics/claude-code .devcontainer)
+const WORKSPACE_MOUNT =
+  "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated";
+const BUILD_ARGS_TZ: Record<string, string> = { TZ: "${localEnv:TZ:UTC}" };
+// All non-Node Dockerfiles install Node + Claude Code + firewall; need these build args
+const BUILD_ARGS_DEVCONTAINER: Record<string, string> = {
+  ...BUILD_ARGS_TZ,
+  CLAUDE_CODE_VERSION: "latest",
+};
+const RUN_ARGS_FIREWALL = ["--cap-add=NET_ADMIN", "--cap-add=NET_RAW"];
+const POST_START_FIREWALL = "sudo /usr/local/bin/init-firewall.sh";
+
+// Node-specific (firewall, zsh, git-delta, bash history)
 const NODE_MOUNTS = [
-  "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
   "source=${localWorkspaceFolderBasename}_node_modules,target=/workspace/node_modules,type=volume",
   "source=${localWorkspaceFolderBasename}-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
 ];
+const NODE_BUILD_ARGS: Record<string, string> = {
+  ...BUILD_ARGS_TZ,
+  CLAUDE_CODE_VERSION: "latest",
+  GIT_DELTA_VERSION: "0.18.2",
+  ZSH_IN_DOCKER_VERSION: "1.2.0",
+};
+const NODE_RUN_ARGS = RUN_ARGS_FIREWALL;
 const NODE_CONTAINER_ENV = { NODE_OPTIONS: "--max-old-space-size=4096" };
+const NODE_POST_START = POST_START_FIREWALL;
 const NODE_TERMINAL_SETTINGS = {
   "terminal.integrated.defaultProfile.linux": "zsh",
   "terminal.integrated.profiles.linux": {
@@ -121,11 +145,15 @@ const STACKS: Stack[] = [
     dir: "templates/nextjs",
     config: {
       name: "template-nextjs",
-      build: { dockerfile: "Dockerfile", context: ".." },
+      build: { dockerfile: "Dockerfile", context: "..", args: NODE_BUILD_ARGS },
       workspaceFolder: "/workspace",
+      workspaceMount: WORKSPACE_MOUNT,
       remoteUser: "node",
       mounts: NODE_MOUNTS,
+      runArgs: NODE_RUN_ARGS,
       containerEnv: NODE_CONTAINER_ENV,
+      postStartCommand: NODE_POST_START,
+      waitFor: "postStartCommand",
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...NODE_EXTENSIONS],
@@ -142,11 +170,15 @@ const STACKS: Stack[] = [
     dir: "templates/nodejs",
     config: {
       name: "template-nodejs",
-      build: { dockerfile: "Dockerfile", context: ".." },
+      build: { dockerfile: "Dockerfile", context: "..", args: NODE_BUILD_ARGS },
       workspaceFolder: "/workspace",
+      workspaceMount: WORKSPACE_MOUNT,
       remoteUser: "node",
       mounts: NODE_MOUNTS,
+      runArgs: NODE_RUN_ARGS,
       containerEnv: NODE_CONTAINER_ENV,
+      postStartCommand: NODE_POST_START,
+      waitFor: "postStartCommand",
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...NODE_EXTENSIONS],
@@ -163,11 +195,15 @@ const STACKS: Stack[] = [
     dir: "templates/reactjs",
     config: {
       name: "template-reactjs",
-      build: { dockerfile: "Dockerfile", context: ".." },
+      build: { dockerfile: "Dockerfile", context: "..", args: NODE_BUILD_ARGS },
       workspaceFolder: "/workspace",
+      workspaceMount: WORKSPACE_MOUNT,
       remoteUser: "node",
       mounts: NODE_MOUNTS,
+      runArgs: NODE_RUN_ARGS,
       containerEnv: NODE_CONTAINER_ENV,
+      postStartCommand: NODE_POST_START,
+      waitFor: "postStartCommand",
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...NODE_EXTENSIONS],
@@ -187,6 +223,11 @@ const STACKS: Stack[] = [
       dockerComposeFile: "./docker-compose.yml",
       service: "web",
       workspaceFolder: "/workspace",
+      workspaceMount: WORKSPACE_MOUNT,
+      remoteUser: "node",
+      runArgs: RUN_ARGS_FIREWALL,
+      postStartCommand: POST_START_FIREWALL,
+      waitFor: "postStartCommand",
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...RUBY_EXTENSIONS, ...ERB_EXTENSIONS],
@@ -202,6 +243,11 @@ const STACKS: Stack[] = [
       dockerComposeFile: "./docker-compose.yml",
       service: "web",
       workspaceFolder: "/workspace",
+      workspaceMount: WORKSPACE_MOUNT,
+      remoteUser: "node",
+      runArgs: RUN_ARGS_FIREWALL,
+      postStartCommand: POST_START_FIREWALL,
+      waitFor: "postStartCommand",
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...RUBY_EXTENSIONS],
@@ -217,6 +263,11 @@ const STACKS: Stack[] = [
       dockerComposeFile: "./docker-compose.yml",
       service: "web",
       workspaceFolder: "/workspace",
+      workspaceMount: WORKSPACE_MOUNT,
+      remoteUser: "node",
+      runArgs: RUN_ARGS_FIREWALL,
+      postStartCommand: POST_START_FIREWALL,
+      waitFor: "postStartCommand",
       customizations: {
         vscode: {
           extensions: [
@@ -240,11 +291,13 @@ const STACKS: Stack[] = [
     dir: "templates/csharp",
     config: {
       name: "template-csharp",
-      build: { dockerfile: "Dockerfile", context: ".." },
+      build: { dockerfile: "Dockerfile", context: "..", args: BUILD_ARGS_DEVCONTAINER },
       workspaceFolder: "/workspace",
-      mounts: [
-        "source=${localWorkspaceFolder},target=/workspace,type=bind",
-      ],
+      workspaceMount: WORKSPACE_MOUNT,
+      remoteUser: "node",
+      runArgs: RUN_ARGS_FIREWALL,
+      postStartCommand: POST_START_FIREWALL,
+      waitFor: "postStartCommand",
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...CSHARP_EXTENSIONS],
@@ -257,11 +310,13 @@ const STACKS: Stack[] = [
     dir: "templates/go",
     config: {
       name: "template-go",
-      build: { dockerfile: "Dockerfile", context: ".." },
+      build: { dockerfile: "Dockerfile", context: "..", args: BUILD_ARGS_DEVCONTAINER },
       workspaceFolder: "/workspace",
-      mounts: [
-        "source=${localWorkspaceFolder},target=/workspace,type=bind",
-      ],
+      workspaceMount: WORKSPACE_MOUNT,
+      remoteUser: "node",
+      runArgs: RUN_ARGS_FIREWALL,
+      postStartCommand: POST_START_FIREWALL,
+      waitFor: "postStartCommand",
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...GO_EXTENSIONS],
@@ -274,11 +329,13 @@ const STACKS: Stack[] = [
     dir: "templates/rust",
     config: {
       name: "template-rust",
-      build: { dockerfile: "Dockerfile", context: ".." },
+      build: { dockerfile: "Dockerfile", context: "..", args: BUILD_ARGS_DEVCONTAINER },
       workspaceFolder: "/workspace",
-      mounts: [
-        "source=${localWorkspaceFolder},target=/workspace,type=bind",
-      ],
+      workspaceMount: WORKSPACE_MOUNT,
+      remoteUser: "node",
+      runArgs: RUN_ARGS_FIREWALL,
+      postStartCommand: POST_START_FIREWALL,
+      waitFor: "postStartCommand",
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...RUST_EXTENSIONS],
@@ -291,11 +348,13 @@ const STACKS: Stack[] = [
     dir: "templates/laravel",
     config: {
       name: "template-laravel",
-      build: { dockerfile: "Dockerfile", context: ".." },
+      build: { dockerfile: "Dockerfile", context: "..", args: BUILD_ARGS_DEVCONTAINER },
       workspaceFolder: "/workspace",
-      mounts: [
-        "source=${localWorkspaceFolder},target=/workspace,type=bind",
-      ],
+      workspaceMount: WORKSPACE_MOUNT,
+      remoteUser: "node",
+      runArgs: RUN_ARGS_FIREWALL,
+      postStartCommand: POST_START_FIREWALL,
+      waitFor: "postStartCommand",
       postCreateCommand: [
         "bash -c '[ -f .env ] || cp .env.example .env'",
         "php artisan key:generate --force",
@@ -313,11 +372,13 @@ const STACKS: Stack[] = [
     dir: "templates/django",
     config: {
       name: "template-django",
-      build: { dockerfile: "Dockerfile", context: ".." },
+      build: { dockerfile: "Dockerfile", context: "..", args: BUILD_ARGS_DEVCONTAINER },
       workspaceFolder: "/workspace",
-      mounts: [
-        "source=${localWorkspaceFolder},target=/workspace,type=bind",
-      ],
+      workspaceMount: WORKSPACE_MOUNT,
+      remoteUser: "node",
+      runArgs: RUN_ARGS_FIREWALL,
+      postStartCommand: POST_START_FIREWALL,
+      waitFor: "postStartCommand",
       forwardPorts: [8000],
       portsAttributes: {
         "8000": { label: "Django", onAutoForward: "openPreview" },
@@ -341,6 +402,7 @@ const STACKS: Stack[] = [
 
 const RUBY_DB_COMPOSE_SRC = join(ROOT, "shared", "docker", "docker-compose.ruby-db.yml");
 const RAILS_COMPOSE_SRC = join(ROOT, "shared", "docker", "docker-compose.rails.yml");
+const INIT_FIREWALL_SRC = join(ROOT, "shared", "docker", "init-firewall.sh");
 
 // ── Generator ─────────────────────────────────────────────────────────────────
 
@@ -365,7 +427,21 @@ function dockerfileHeader(srcFile: string): string {
   return `# Generated by scripts/generate-devcontainer.ts — edit shared/docker/${srcFile} and re-run.\n\n`;
 }
 
-// Copy Dockerfiles to each template that needs one (null = uses docker-compose)
+// Copy Dockerfiles and init-firewall.sh to each template (all Dockerfiles use firewall)
+function writeInitFirewall(outDir: string): void {
+  const firewallOut = join(outDir, "init-firewall.sh");
+  const firewallContent = readFileSync(INIT_FIREWALL_SRC, "utf8");
+  const lines = firewallContent.split("\n");
+  const withHeader = [
+    lines[0],
+    "# Generated by scripts/generate-devcontainer.ts — edit shared/docker/init-firewall.sh and re-run.",
+    "",
+    ...lines.slice(1),
+  ].join("\n");
+  writeFileSync(firewallOut, withHeader, "utf8");
+  console.log("Generated:", firewallOut);
+}
+
 for (const [dir, dockerfileName] of Object.entries(DEVCONTAINER_DOCKERFILE_MAP)) {
   if (dockerfileName === null) continue;
   const outDir = join(ROOT, dir, ".devcontainer");
@@ -374,6 +450,7 @@ for (const [dir, dockerfileName] of Object.entries(DEVCONTAINER_DOCKERFILE_MAP))
   const content = readFileSync(DOCKERFILE_SRCS[dockerfileName], "utf8");
   writeFileSync(outPath, dockerfileHeader(dockerfileName) + content, "utf8");
   console.log("Generated:", outPath);
+  writeInitFirewall(outDir);
 }
 
 for (const { dir, config } of STACKS) {

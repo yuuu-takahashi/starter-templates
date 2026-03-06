@@ -3,23 +3,36 @@
   "name": "template-nextjs",
   "build": {
     "dockerfile": "Dockerfile",
-    "context": ".."
+    "context": "..",
+    "args": {
+      "TZ": "${localEnv:TZ:UTC}",
+      "CLAUDE_CODE_VERSION": "latest",
+      "GIT_DELTA_VERSION": "0.18.2",
+      "ZSH_IN_DOCKER_VERSION": "1.2.0"
+    }
   },
   "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
   "remoteUser": "node",
   "mounts": [
-    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
     "source=${localWorkspaceFolderBasename}_node_modules,target=/workspace/node_modules,type=volume",
     "source=${localWorkspaceFolderBasename}-bashhistory-${devcontainerId},target=/commandhistory,type=volume"
+  ],
+  "runArgs": [
+    "--cap-add=NET_ADMIN",
+    "--cap-add=NET_RAW"
   ],
   "containerEnv": {
     "NODE_OPTIONS": "--max-old-space-size=4096"
   },
+  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
+  "waitFor": "postStartCommand",
   "customizations": {
     "vscode": {
       "extensions": [
         "esbenp.prettier-vscode",
-        "dbaeumer.vscode-eslint"
+        "dbaeumer.vscode-eslint",
+        "anthropic.claude-code"
       ],
       "settings": {
         "editor.tabSize": 2,
@@ -51,7 +64,8 @@
     "cursor": {
       "extensions": [
         "esbenp.prettier-vscode",
-        "dbaeumer.vscode-eslint"
+        "dbaeumer.vscode-eslint",
+        "anthropic.claude-code"
       ],
       "settings": {
         "editor.tabSize": 2,

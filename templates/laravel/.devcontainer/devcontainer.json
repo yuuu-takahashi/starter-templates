@@ -3,12 +3,21 @@
   "name": "template-laravel",
   "build": {
     "dockerfile": "Dockerfile",
-    "context": ".."
+    "context": "..",
+    "args": {
+      "TZ": "${localEnv:TZ:UTC}",
+      "CLAUDE_CODE_VERSION": "latest"
+    }
   },
   "workspaceFolder": "/workspace",
-  "mounts": [
-    "source=${localWorkspaceFolder},target=/workspace,type=bind"
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
+  "remoteUser": "node",
+  "runArgs": [
+    "--cap-add=NET_ADMIN",
+    "--cap-add=NET_RAW"
   ],
+  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
+  "waitFor": "postStartCommand",
   "postCreateCommand": [
     "bash -c '[ -f .env ] || cp .env.example .env'",
     "php artisan key:generate --force",

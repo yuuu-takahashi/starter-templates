@@ -19,6 +19,7 @@
 
 ### Dev Container でインストールされる主な拡張機能
 
+- anthropic.claude-code
 - dbaeumer.vscode-eslint — ESLint の静的解析
 - esbenp.prettier-vscode — コードフォーマット（Prettier）
 

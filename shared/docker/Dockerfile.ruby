@@ -1,18 +1,61 @@
 FROM ruby:3.3
 
-WORKDIR /workspace
+ARG TZ
+ENV TZ="$TZ"
 
-RUN apt-get update -qq && apt-get install --no-install-recommends -y \
-    curl \
-    openssh-client \
-    default-mysql-client \
-    tree \
-    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
-    && apt-get install -y nodejs \
-    && rm -rf /var/lib/apt/lists/*
+ARG CLAUDE_CODE_VERSION=latest
+
+# Install Node.js 20 and common dev tools + iptables/ipset (reference: anthropics/claude-code)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  curl \
+  openssh-client \
+  default-mysql-client \
+  tree \
+  less \
+  git \
+  procps \
+  sudo \
+  fzf \
+  zsh \
+  man-db \
+  unzip \
+  gnupg2 \
+  gh \
+  iptables \
+  ipset \
+  iproute2 \
+  dnsutils \
+  aggregate \
+  jq \
+  nano \
+  vim \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js 23.13.0 (exact version for markdownlint / CI / pre-commit)
+RUN NODE_VERSION=23.13.0 && \
+  ARCH=$(dpkg --print-architecture) && \
+  case "$ARCH" in amd64) NODE_ARCH=x64;; arm64) NODE_ARCH=arm64;; *) NODE_ARCH=x64;; esac && \
+  curl -sL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${NODE_ARCH}.tar.xz" | tar xJ -C /usr/local --strip-components=1
 
 RUN npm install -g yarn
 
+# Ensure node user and dirs (ruby image has no node user)
+RUN mkdir -p /usr/local/share/npm-global && useradd -m -s /bin/zsh node 2>/dev/null || true && chown -R node:node /usr/local/share
+ARG USERNAME=node
+RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
+  && mkdir /commandhistory && touch /commandhistory/.bash_history && chown -R $USERNAME /commandhistory
+ENV DEVCONTAINER=true
+RUN mkdir -p /workspace /home/node/.claude && chown -R node:node /workspace /home/node/.claude
+
+WORKDIR /workspace
+
+# git-delta
+ARG GIT_DELTA_VERSION=0.18.2
+RUN ARCH=$(dpkg --print-architecture) && \
+  wget -q "https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && \
+  dpkg -i "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && rm "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb"
+
+# Ruby: app deps (template context)
 COPY package.json yarn.lock ./
 RUN yarn install
 
@@ -20,3 +63,26 @@ COPY Gemfile Gemfile.lock ./
 RUN bundle install --path 'vendor/bundle'
 
 COPY . .
+
+RUN chown -R node:node /workspace
+
+# Common: zsh, Claude Code CLI, firewall
+USER node
+ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
+ENV PATH=$PATH:/usr/local/share/npm-global/bin
+ENV SHELL=/bin/zsh
+ENV EDITOR=nano
+ENV VISUAL=nano
+ARG ZSH_IN_DOCKER_VERSION=1.2.0
+RUN sh -c "$(wget -qO- https://github.com/deluan/zsh-in-docker/releases/download/v${ZSH_IN_DOCKER_VERSION}/zsh-in-docker.sh)" -- \
+  -p git -p fzf \
+  -a "source /usr/share/doc/fzf/examples/key-bindings.zsh" \
+  -a "source /usr/share/doc/fzf/examples/completion.zsh" \
+  -a "export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" -x
+RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
+
+COPY .devcontainer/init-firewall.sh /usr/local/bin/
+USER root
+RUN chmod +x /usr/local/bin/init-firewall.sh && \
+  echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && chmod 0440 /etc/sudoers.d/node-firewall
+USER node

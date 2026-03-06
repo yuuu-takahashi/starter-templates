@@ -4,6 +4,14 @@
   "dockerComposeFile": "./docker-compose.yml",
   "service": "web",
   "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
+  "remoteUser": "node",
+  "runArgs": [
+    "--cap-add=NET_ADMIN",
+    "--cap-add=NET_RAW"
+  ],
+  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
+  "waitFor": "postStartCommand",
   "customizations": {
     "vscode": {
       "extensions": [
