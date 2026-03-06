@@ -279,6 +279,9 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version-file: templates/go/.go-version
+      - name: Download Go modules
+        run: go mod download
+        working-directory: templates/go
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v6
         with:

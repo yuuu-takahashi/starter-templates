@@ -72,7 +72,6 @@ const transformStepsForMonorepo = (steps: WorkflowStep[], dir: string): Workflow
   return result;
 };
 
-const MONOREPO_PREFIX_STACKS = ["csharp", "go", "rust", "laravel", "django"];
 
 const transformNodeOnlySteps = (steps: WorkflowStep[], dir: string): WorkflowStep[] => {
   const result: WorkflowStep[] = [];

@@ -178,8 +178,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     treeExclude: "vendor|node_modules|tmp",
     setupSteps: [
       cloneStep("rails-api"),
-      { label: "環境変数の設定", commands: ["cp .env.example .env.development"] },
-      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動（環境変数は docker-compose で設定済み）", commands: [] },
       { label: "データベース準備", commands: ["bin/rails db:prepare"] },
       { label: "開発サーバー起動", commands: ["bin/rails s"] },
     ],
@@ -283,8 +282,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     treeExclude: "vendor|node_modules",
     setupSteps: [
       cloneStep("sinatra"),
-      { label: "環境変数の設定", commands: ["cp .env.example .env.development"] },
-      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動（環境変数は docker-compose で設定済み）", commands: [] },
       { label: "データベース準備", commands: ["bundle exec rake db:setup", "bundle exec rake db:seed"] },
       { label: "開発サーバー起動", commands: ["bundle exec ruby index.rb"] },
     ],

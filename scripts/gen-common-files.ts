@@ -3,7 +3,7 @@
  * Run via generate-configs.ts
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import {
   ROOT,
@@ -23,12 +23,6 @@ import {
 } from "./lib/stacks.js";
 
 export function run(): void {
-  // templates/go, templates/rust, templates/django は generate-deps で中身が作られないため .gitignore 等はここで書くので先にディレクトリを作成
-  mkdirSync(join(ROOT, "templates", "go"), { recursive: true });
-  mkdirSync(join(ROOT, "templates", "rust"), { recursive: true });
-  mkdirSync(join(ROOT, "templates", "django"), { recursive: true });
-  mkdirSync(join(ROOT, "templates", "laravel"), { recursive: true });
-
   // ── .editorconfig（shared からコピー）──────────────────────────────────────────
 
   const editorconfigContent = readFileSync(SHARED_EDITORCONFIG, "utf8");

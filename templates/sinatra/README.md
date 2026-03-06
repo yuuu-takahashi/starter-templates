@@ -61,22 +61,16 @@ tree -I 'vendor|node_modules'
    cd starter-templates/templates/sinatra
    ```
 
-2. 環境変数の設定
+2. VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動（環境変数は docker-compose で設定済み）
 
-   ```bash
-   cp .env.example .env.development
-   ```
-
-3. VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動
-
-4. データベース準備
+3. データベース準備
 
    ```bash
    bundle exec rake db:setup
    bundle exec rake db:seed
    ```
 
-5. 開発サーバー起動
+4. 開発サーバー起動
 
    ```bash
    bundle exec ruby index.rb

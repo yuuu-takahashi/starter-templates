@@ -60,6 +60,10 @@ function run(): void {
     console.log("Updated:", csharpGlobalPath);
   }
 
+  // Go/Rust/Django/Laravel: 設定のみ管理するテンプレートのディレクトリを事前作成
+  mkdirSync(join(ROOT, "templates/django"), { recursive: true });
+  mkdirSync(join(ROOT, "templates/laravel"), { recursive: true });
+
   // Go: shared/lint-format/golangci/ の設定のみ templates/go/ にコピー
   mkdirSync(join(ROOT, "templates/go"), { recursive: true });
   const golangciSrc = join(SHARED_GOLANGCI, ".golangci.yml");

@@ -12,8 +12,7 @@ import {
   RUBY_VERSION_DIRS,
   PYTHON_VERSION_DIRS,
 } from "../lib/stacks.js";
-
-const ROOT = process.cwd();
+import { ROOT } from "../lib/utils.js";
 
 describe("stacks.ts 整合性", () => {
   it("TEMPLATE_DIRS の全エントリが CODE_CHECK_SOURCE に存在する", () => {

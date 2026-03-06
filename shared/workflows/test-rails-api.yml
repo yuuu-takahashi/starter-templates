@@ -42,6 +42,5 @@ jobs:
 
       - name: Run tests
         run: |
-          cp .env.test .env
           bundle exec rails db:create db:migrate
           bundle exec rspec

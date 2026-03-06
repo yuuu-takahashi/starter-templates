@@ -61,21 +61,15 @@ tree -I 'vendor|node_modules|tmp'
    cd starter-templates/templates/rails-api
    ```
 
-2. 環境変数の設定
+2. VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動（環境変数は docker-compose で設定済み）
 
-   ```bash
-   cp .env.example .env.development
-   ```
-
-3. VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動
-
-4. データベース準備
+3. データベース準備
 
    ```bash
    bin/rails db:prepare
    ```
 
-5. 開発サーバー起動
+4. 開発サーバー起動
 
    ```bash
    bin/rails s

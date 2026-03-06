@@ -124,7 +124,7 @@ export const DEVCONTAINER_DOCKERFILE_MAP: Readonly<Record<string, string | null>
 };
 
 /** ルート CI でモノレポ向けパス変換（transformStepsForMonorepo）を適用するスタック */
-export const MONOREPO_PREFIX_STACKS: readonly string[] = ["csharp", "go", "rust", "laravel"];
+export const MONOREPO_PREFIX_STACKS: readonly string[] = ["csharp", "go", "rust", "laravel", "django"];
 
 /** ルート CI（generate-root-workflow）用: id / dir / pathFilter */
 export interface RootStackEntry {
