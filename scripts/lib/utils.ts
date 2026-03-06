@@ -15,19 +15,30 @@ export const VERSIONS = JSON.parse(
 /** 横断的な共通設定を配るテンプレート一覧（Prettier / EditorConfig 対象） */
 export const SHARED_CONFIG_STACKS: readonly string[] = TEMPLATE_DIRS;
 
-export const SHARED_EDITORCONFIG = join(ROOT, "shared", "editorconfig", ".editorconfig");
+/** フォーマッター・リンター設定の正本（一元管理・移行時はこの定数だけ変更） */
+export const SHARED_LINT_FORMAT = join(ROOT, "shared", "lint-format");
+
+export const SHARED_EDITORCONFIG = join(SHARED_LINT_FORMAT, "editorconfig", ".editorconfig");
 export const GITIGNORE_DIR = join(ROOT, "shared", "gitignore");
-export const RSPEC_COMMON = join(ROOT, "shared", "rspec", "rspec.common");
-export const SHARED_ESLINT = join(ROOT, "shared", "eslint");
+/** テスト関連設定の正本（一元管理・移行時はこの定数だけ変更） */
+export const SHARED_TEST = join(ROOT, "shared", "test");
+export const RSPEC_COMMON = join(SHARED_TEST, "rspec", "rspec.common");
+export const SHARED_ESLINT = join(SHARED_LINT_FORMAT, "eslint");
+export const SHARED_PRETTIER = join(SHARED_LINT_FORMAT, "prettier");
 export const SHARED_TSCONFIG = join(ROOT, "shared", "tsconfig");
-export const SHARED_VITEST = join(ROOT, "shared", "vitest");
+export const SHARED_VITEST = join(SHARED_TEST, "vitest");
+/** フレームワーク別設定の正本（一元管理・移行時はこの定数だけ変更） */
+export const SHARED_FRAMEWORK = join(ROOT, "shared", "framework");
+
 export const SHARED_NPM = join(ROOT, "shared", "npm");
 export const SHARED_GEMFILE = join(ROOT, "shared", "gemfile");
-export const SHARED_DOTNET = join(ROOT, "shared", "dotnet");
-export const SHARED_GOLANGCI = join(ROOT, "shared", "golangci");
+export const SHARED_DOTNET = join(SHARED_FRAMEWORK, "dotnet");
+export const SHARED_GOLANGCI = join(SHARED_LINT_FORMAT, "golangci");
 export const SHARED_RUST_TOOLCHAIN = join(ROOT, "shared", "rust-toolchain");
-export const SHARED_RUBOCOP = join(ROOT, "shared", "rubocop");
-export const SHARED_LARAVEL = join(ROOT, "shared", "laravel");
+export const SHARED_RUBOCOP = join(SHARED_LINT_FORMAT, "rubocop");
+export const SHARED_LARAVEL = join(SHARED_FRAMEWORK, "laravel");
+export const SHARED_NEXTJS = join(SHARED_FRAMEWORK, "nextjs");
+export const SHARED_REACTJS = join(SHARED_FRAMEWORK, "reactjs");
 
 export function deepMerge<T extends Record<string, unknown>>(a: T, b: Record<string, unknown>): T {
   const r = { ...a } as Record<string, unknown>;

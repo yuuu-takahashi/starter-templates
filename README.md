@@ -103,21 +103,21 @@ starter-templates/
 | ------- | ------------- | ----------- |
 | `templates/*/package.json` | `shared/npm/<stack>.json` | `generate-deps.ts` |
 | `templates/*/Gemfile` | `shared/gemfile/Gemfile.<stack>` | `generate-deps.ts` |
-| `templates/csharp/*.csproj` | `shared/dotnet/*.csproj` | `generate-deps.ts` |
-| `templates/csharp/global.json` | `shared/dotnet/global.json`（SDK 版は `shared/versions.json` の `dotnet`） | `generate-deps.ts` |
-| `templates/csharp/TemplateCsharp.sln` | `shared/dotnet/TemplateCsharp.sln` | `generate-deps.ts` |
-| `templates/*/.editorconfig` | `shared/editorconfig/.editorconfig` | `gen-common-files.ts` |
+| `templates/csharp/*.csproj` | `shared/framework/dotnet/*.csproj` | `generate-deps.ts` |
+| `templates/csharp/global.json` | `shared/framework/dotnet/global.json`（SDK 版は `shared/versions.json` の `dotnet`） | `generate-deps.ts` |
+| `templates/csharp/TemplateCsharp.sln` | `shared/framework/dotnet/TemplateCsharp.sln` | `generate-deps.ts` |
+| `templates/*/.editorconfig` | `shared/lint-format/editorconfig/.editorconfig` | `gen-common-files.ts` |
 | `templates/*/.gitignore` | `shared/gitignore/.gitignore.*` | `gen-common-files.ts` |
 | `templates/*/.node-version` | `shared/versions.json` | `gen-common-files.ts` |
 | `templates/*/.ruby-version` | `shared/versions.json` | `gen-common-files.ts` |
-| `templates/*/eslint.config.js` | `shared/eslint/eslint.config.<stack>.js` | `gen-tool-configs.ts` |
-| `templates/*/.prettierrc.json` | `shared/prettier/.prettierrc.ts` | `gen-tool-configs.ts` |
+| `templates/*/eslint.config.js` | `shared/lint-format/eslint/eslint.config.<stack>.js` | `gen-tool-configs.ts` |
+| `templates/*/.prettierrc.json` | `shared/lint-format/prettier/.prettierrc.ts` | `gen-tool-configs.ts` |
 | `templates/*/tsconfig*.json` | `shared/tsconfig/<stack>/tsconfig*.ts` | `gen-tool-configs.ts` |
-| `templates/*/vitest*.ts` | `shared/vitest/` | `gen-tool-configs.ts` |
-| `templates/*/.rspec` | `shared/rspec/rspec.common` | `gen-ruby-configs.ts` |
-| `templates/*/.rubocop.yml` | `shared/rubocop/rubocop.*.yml` | `gen-ruby-configs.ts` |
-| `templates/laravel/pint.json` | `shared/laravel/pint.json` | `gen-laravel-configs.ts` |
-| `templates/laravel/phpunit.xml` | `shared/laravel/phpunit.xml` | `gen-laravel-configs.ts` |
+| `templates/*/vitest*.ts` | `shared/test/vitest/` | `gen-tool-configs.ts` |
+| `templates/*/.rspec` | `shared/test/rspec/rspec.common` | `gen-ruby-configs.ts` |
+| `templates/*/.rubocop.yml` | `shared/lint-format/rubocop/rubocop.*.yml` | `gen-ruby-configs.ts` |
+| `templates/laravel/pint.json` | `shared/framework/laravel/pint.json` | `gen-laravel-configs.ts` |
+| `templates/laravel/phpunit.xml` | `shared/framework/laravel/phpunit.xml` | `gen-laravel-configs.ts` |
 | `templates/*/.github/workflows/*.yml` | `shared/workflows/*.yml` | `gen-workflows.ts` |
 | `templates/*/.github/dependabot.yml` | `shared/workflows/dependabot.yml` | `gen-workflows.ts` |
 | `templates/*/.env.*` | `shared/env/` | `gen-workflows.ts` |
@@ -146,12 +146,12 @@ starter-templates/
 
 ### よくある変更シナリオ
 
-- **ESLint 設定を変更する場合**: `shared/eslint/eslint.config.<stack>.js` を編集 → `yarn generate:configs`
+- **ESLint 設定を変更する場合**: `shared/lint-format/eslint/eslint.config.<stack>.js` を編集 → `yarn generate:configs`
 - **package.json を更新する場合**: `shared/npm/<stack>.json` を編集 → `yarn generate:deps`
 - **バージョン（Node.js / Ruby）を変更する場合**: `shared/versions.json` を編集 → `yarn generate:configs`（必要に応じて `shared/docker/` も更新し `yarn generate:devcontainer`）
 - **Gemfile を更新する場合**: `shared/gemfile/Gemfile.<stack>` を編集 → `yarn generate:deps`
-- **Prettier / tsconfig などのツール設定を変更する場合**: `shared/prettier/`, `shared/tsconfig/`, `shared/vitest/` 内の該当ファイルを編集 → `yarn generate:configs`
-- **Laravel Pint / PHPUnit を変更する場合**: `shared/laravel/pint.json`, `shared/laravel/phpunit.xml` を編集 → `yarn generate:configs`
+- **Prettier / tsconfig などのツール設定を変更する場合**: `shared/lint-format/prettier/`, `shared/tsconfig/`, `shared/test/vitest/` 内の該当ファイルを編集 → `yarn generate:configs`
+- **Laravel Pint / PHPUnit を変更する場合**: `shared/framework/laravel/pint.json`, `shared/framework/laravel/phpunit.xml` を編集 → `yarn generate:configs`
 - **README を更新する場合**: `scripts/template-readme-config.ts` を編集 → `yarn generate:configs`
 
 ### 新テンプレート追加手順
@@ -159,7 +159,7 @@ starter-templates/
 例として `templates/mystack` を追加する場合：
 
 1. **`shared/npm/mystack.json`** を作成（package.json のソース）
-2. **`shared/eslint/eslint.config.mystack.js`** を作成（必要な場合）
+2. **`shared/lint-format/eslint/eslint.config.mystack.js`** を作成（必要な場合）
 3. **`scripts/lib/stacks.ts`** にエントリを追加（`TEMPLATE_DIRS` / `NPM_STACKS` / `GITIGNORE_SOURCE` / `CODE_CHECK_SOURCE` / `NODE_VERSION_DIRS` など、必要なもの）
 4. **`scripts/gen-tool-configs.ts`** に ESLint / tsconfig などの生成処理を追加
 5. **`scripts/template-readme-config.ts`** の `TEMPLATE_README_CONFIGS` にエントリを追加
