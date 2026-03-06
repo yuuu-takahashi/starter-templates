@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   jq \
   nano \
   vim \
-  && curl -fsSL https://deb.nodesource.com/setup_23.x | bash - \
+  && curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
   && apt-get install -y nodejs \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
