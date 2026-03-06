@@ -26,6 +26,7 @@
 - @vitest/coverage-v8 — V8 ベースのカバレッジプロバイダー
 - eslint — JavaScript / TypeScript の静的解析
 - eslint-config-next — Next.js 推奨 ESLint 設定
+- happy-dom — テスト用の軽量 DOM 実装
 - prettier — コードフォーマッター
 - ts-node — TypeScript を直接実行
 - typescript — TypeScript コンパイラ

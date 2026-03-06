@@ -164,6 +164,8 @@ const EXTENSION_DESCRIPTIONS: Record<string, string> = {
   "github.vscode-github-actions": "GitHub Actions のサポート",
   "yzhang.markdown-all-in-one": "Markdown 編集支援",
   "DavidAnson.vscode-markdownlint": "Markdown の構文チェック",
+  "ms-python.python": "Python 言語サポート（IntelliSense・デバッグ・テスト等）",
+  "ms-python.vscode-pylance": "Python の型チェック・補完（Pylance）",
 };
 
 function withDesc(name: string, map: Record<string, string>): string {

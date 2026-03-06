@@ -37,7 +37,7 @@ export type TemplateReadmeDevGuide = {
 };
 
 /** Dev Container の拡張機能セット（shared/devcontainer/defaults.json の extensions キー） */
-export type ExtensionSetKey = "base" | "node" | "ruby" | "erb" | "php" | "csharp" | "go" | "rust" | "tooling";
+export type ExtensionSetKey = "base" | "node" | "ruby" | "erb" | "php" | "python" | "csharp" | "go" | "rust" | "tooling";
 
 export type TemplateReadmeConfig = {
   id: string;
@@ -247,6 +247,29 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
       { title: "ビルド", commands: "cargo build" },
       { title: "フォーマットチェック", commands: "cargo fmt --all -- --check" },
       { title: "リンター（Clippy）", commands: "cargo clippy --all-targets -- -D warnings" },
+    ],
+  },
+  {
+    id: "django",
+    title: "template-django",
+    description: "このリポジトリは Django（Python）のテンプレートプロジェクトです。",
+    repoSlug: "template-django",
+    extensionSets: ["base", "python"],
+    stackLibs: ["Django — Python Web フレームワーク"],
+    treeExclude: "__pycache__|.venv|*.pyc",
+    setupSteps: [
+      cloneStep("django"),
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
+      { label: "仮想環境と依存関係のインストール（postCreateCommand で自動実行される場合あり）", commands: ["python -m venv .venv", ". .venv/bin/activate && pip install -r requirements.txt"] },
+      { label: "マイグレーション（任意）", commands: [". .venv/bin/activate && python manage.py migrate"] },
+      { label: "開発サーバー起動", commands: [". .venv/bin/activate && python manage.py runserver"] },
+    ],
+    previewUrl: "http://localhost:8000",
+    devGuide: [
+      { title: "マイグレーションの作成", commands: ". .venv/bin/activate && python manage.py makemigrations" },
+      { title: "マイグレーションの実行", commands: ". .venv/bin/activate && python manage.py migrate" },
+      { title: "テストの実行", commands: ". .venv/bin/activate && python manage.py test" },
+      { title: "コードの静的解析（Ruff / Black）", commands: ". .venv/bin/activate && ruff check . && black --check ." },
     ],
   },
   {

@@ -8,6 +8,7 @@
     "generate:configs": "tsx scripts/generate-configs.ts",
     "generate:deps": "tsx scripts/generate-deps.ts",
     "generate:all": "yarn generate:configs && yarn generate:deps && yarn generate:ci && yarn generate:devcontainer",
+    "test": "vitest run",
     "lint": "eslint scripts/",
     "lint:fix": "eslint scripts/ --fix",
     "format": "prettier --write \"scripts/**/*.ts\""
@@ -21,6 +22,7 @@
     "tsx": "^4.0.0",
     "typescript": "^5.0.0",
     "typescript-eslint": "^8",
+    "vitest": "^3.0.0",
     "yaml": "^2.6.1"
   }
 }

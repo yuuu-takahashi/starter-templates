@@ -16,12 +16,14 @@ import {
   GITIGNORE_SOURCE,
   NODE_VERSION_DIRS,
   RUBY_VERSION_DIRS,
+  PYTHON_VERSION_DIRS,
 } from "./lib/stacks.js";
 
 export function run(): void {
-  // templates/go, templates/rust は generate-deps で中身が作られるが .gitignore 等はここで書くので先にディレクトリを作成
+  // templates/go, templates/rust, templates/django は generate-deps で中身が作られないため .gitignore 等はここで書くので先にディレクトリを作成
   mkdirSync(join(ROOT, "templates", "go"), { recursive: true });
   mkdirSync(join(ROOT, "templates", "rust"), { recursive: true });
+  mkdirSync(join(ROOT, "templates", "django"), { recursive: true });
   mkdirSync(join(ROOT, "templates", "laravel"), { recursive: true });
 
   // ── .editorconfig（shared からコピー）──────────────────────────────────────────
@@ -91,5 +93,15 @@ export function run(): void {
     const outPath = join(ROOT, "templates/go", ".go-version");
     writeFileSync(outPath, VERSIONS.go + "\n", "utf8");
     console.log("Generated:", outPath);
+  }
+
+  // ── .python-version（shared/versions.json から生成）────────────────────────────
+
+  if (VERSIONS.python) {
+    for (const dir of PYTHON_VERSION_DIRS) {
+      const outPath = join(ROOT, dir, ".python-version");
+      writeFileSync(outPath, VERSIONS.python + "\n", "utf8");
+      console.log("Generated:", outPath);
+    }
   }
 }

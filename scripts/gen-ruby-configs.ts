@@ -6,7 +6,7 @@
 import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import YAML from "yaml";
-import { ROOT, RSPEC_COMMON, deepMerge } from "./lib/utils.js";
+import { ROOT, RSPEC_COMMON, SHARED_RUBOCOP, deepMerge } from "./lib/utils.js";
 
 export function run(): void {
   // ── .rspec（共通オプション + 各 template の --require）────────────────────
@@ -27,7 +27,6 @@ export function run(): void {
 
   // ── .rubocop.yml（ベース + テンプレート用 fragment をマージ）──────────────
 
-  const SHARED_RUBOCOP = join(ROOT, "shared", "rubocop");
   const rubocopBase = YAML.parse(readFileSync(join(SHARED_RUBOCOP, "rubocop.base.yml"), "utf8")) as Record<string, unknown>;
 
   const rubocopRails = YAML.parse(readFileSync(join(SHARED_RUBOCOP, "rubocop.rails.yml"), "utf8")) as Record<string, unknown>;

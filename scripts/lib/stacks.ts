@@ -15,6 +15,7 @@ export const TEMPLATE_DIRS: readonly string[] = [
   "templates/csharp",
   "templates/go",
   "templates/rust",
+  "templates/django",
 ];
 
 /** package.json を shared/npm/<stack>.json から生成するスタック */
@@ -47,6 +48,9 @@ export const RUBY_VERSION_DIRS: readonly string[] = [
   "templates/sinatra",
 ];
 
+/** .python-version を配布するテンプレート */
+export const PYTHON_VERSION_DIRS: readonly string[] = ["templates/django"];
+
 /** code-check.yml の元ワークフロー名（shared/workflows/ 内のファイル名） */
 export const CODE_CHECK_SOURCE: Readonly<Record<string, string>> = {
   "templates/nextjs": "code-check-node.yml",
@@ -59,16 +63,21 @@ export const CODE_CHECK_SOURCE: Readonly<Record<string, string>> = {
   "templates/csharp": "code-check-dotnet.yml",
   "templates/go": "code-check-go.yml",
   "templates/rust": "code-check-rust.yml",
+  "templates/django": "code-check-django.yml",
 };
 
 /** test.yml を生成するテンプレートと元ワークフロー名 */
 export const TEST_SOURCE: Readonly<Record<string, string>> = {
+  "templates/nextjs": "test-node.yml",
   "templates/reactjs": "test-node.yml",
   "templates/sinatra": "test-sinatra.yml",
   "templates/rails": "test-rails.yml",
   "templates/rails-api": "test-rails-api.yml",
   "templates/laravel": "test-laravel.yml",
   "templates/csharp": "test-dotnet.yml",
+  "templates/go": "test-go.yml",
+  "templates/rust": "test-rust.yml",
+  "templates/django": "test-django.yml",
 };
 
 /** .gitignore の元ファイル名（shared/gitignore/ 内） */
@@ -83,6 +92,7 @@ export const GITIGNORE_SOURCE: Readonly<Record<string, string>> = {
   "templates/csharp": ".gitignore.dotnet",
   "templates/go": ".gitignore.go",
   "templates/rust": ".gitignore.rust",
+  "templates/django": ".gitignore.python",
 };
 
 /** ルート CI（generate-root-workflow）用: id / dir / pathFilter */
@@ -103,4 +113,5 @@ export const ROOT_STACKS: readonly RootStackEntry[] = [
   { id: "csharp", dir: "templates/csharp", pathFilter: "templates/csharp/**" },
   { id: "go", dir: "templates/go", pathFilter: "templates/go/**" },
   { id: "rust", dir: "templates/rust", pathFilter: "templates/rust/**" },
+  { id: "django", dir: "templates/django", pathFilter: "templates/django/**" },
 ];

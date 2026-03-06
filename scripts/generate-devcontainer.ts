@@ -47,6 +47,7 @@ const CSHARP_EXTENSIONS = DEFAULTS.extensions.csharp;
 const GO_EXTENSIONS = DEFAULTS.extensions.go;
 const RUST_EXTENSIONS = DEFAULTS.extensions.rust;
 const PHP_EXTENSIONS = DEFAULTS.extensions.php;
+const PYTHON_EXTENSIONS = DEFAULTS.extensions.python;
 const TOOLING_EXTENSIONS = DEFAULTS.extensions.tooling;
 
 type VscodeSettings = Record<string, unknown>;
@@ -93,6 +94,7 @@ const DOTNET_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.dotnet"
 const GO_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.go");
 const RUST_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.rust");
 const PHP_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.php");
+const PYTHON_DOCKERFILE_SRC = join(ROOT, "shared", "docker", "Dockerfile.python");
 
 const STACKS: Stack[] = [
   {
@@ -287,6 +289,27 @@ const STACKS: Stack[] = [
       },
     },
   },
+  {
+    dir: "templates/django",
+    config: {
+      name: "template-django",
+      build: { dockerfile: "Dockerfile", context: ".." },
+      workspaceFolder: "/workspace",
+      mounts: [
+        "source=${localWorkspaceFolder},target=/workspace,type=bind",
+      ],
+      postCreateCommand: [
+        "python -m venv .venv",
+        ". .venv/bin/activate && pip install -r requirements.txt",
+      ],
+      customizations: {
+        vscode: {
+          extensions: [...BASE_EXTENSIONS, ...PYTHON_EXTENSIONS],
+          settings: { ...BASE_SETTINGS },
+        },
+      },
+    },
+  },
 ];
 
 // ── Shared docker-compose ──────────────────────────────────────────────────────
@@ -360,6 +383,16 @@ for (const dir of ["templates/laravel"]) {
   mkdirSync(outDir, { recursive: true });
   const outPath = join(outDir, "Dockerfile");
   writeFileSync(outPath, DOCKERFILE_HEADER + phpDockerfileContent, "utf8");
+  console.log("Generated:", outPath);
+}
+
+// Django template: copy shared/docker/Dockerfile.python
+const pythonDockerfileContent = readFileSync(PYTHON_DOCKERFILE_SRC, "utf8");
+for (const dir of ["templates/django"]) {
+  const outDir = join(ROOT, dir, ".devcontainer");
+  mkdirSync(outDir, { recursive: true });
+  const outPath = join(outDir, "Dockerfile");
+  writeFileSync(outPath, DOCKERFILE_HEADER.replace("Dockerfile.node or shared/docker/Dockerfile.ruby", "Dockerfile.python") + pythonDockerfileContent, "utf8");
   console.log("Generated:", outPath);
 }
 

@@ -5,9 +5,8 @@
 
 import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
+import { ROOT, SHARED_LARAVEL } from "./lib/utils.js";
 
-const ROOT = process.cwd();
-const SHARED_LARAVEL = join(ROOT, "shared", "laravel");
 const LARAVEL_TEMPLATE = join(ROOT, "templates", "laravel");
 
 const PHPUNIT_HEADER =

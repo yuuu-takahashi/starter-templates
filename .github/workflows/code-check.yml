@@ -32,6 +32,7 @@ jobs:
       csharp: ${{ steps.filter.outputs.csharp }}
       go: ${{ steps.filter.outputs.go }}
       rust: ${{ steps.filter.outputs.rust }}
+      django: ${{ steps.filter.outputs.django }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -58,6 +59,8 @@ jobs:
               - 'templates/go/**'
             rust:
               - 'templates/rust/**'
+            django:
+              - 'templates/django/**'
   generate_check:
     runs-on: ubuntu-latest
     steps:
@@ -311,3 +314,36 @@ jobs:
       - name: Build
         run: cargo build
         working-directory: templates/rust
+  django:
+    needs: changes
+    if: needs.changes.outputs.django == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: templates/django
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements*.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+      - name: Install dependencies
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          pip install -r requirements.txt
+          pip install ruff black
+      - name: Ruff
+        run: |
+          . .venv/bin/activate
+          ruff check .
+      - name: Black
+        run: |
+          . .venv/bin/activate
+          black --check .
