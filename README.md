@@ -5,16 +5,16 @@
 ## テンプレートの種類
 
 | ディレクトリ | 用途 |
-|-------------|------|
+| ----------- | ---- |
 | [templates/](templates/) | **シンプルなテンプレート** — 最小構成。スクリプトで自動生成され、共通設定の正本は [shared/](shared/) にあります。 |
-| [starters/](starters/) | **個人開発用テンプレート** — すぐ使える形に整えたテンプレート。スクリプトで自動生成され、そのまま新規プロジェクトの起点として利用します。 |
+| [starters/](starters/) | **個人開発用テンプレート** — すぐ使える形に整えたテンプレート。手動管理。現在整備中です。 |
 
 ## テンプレート一覧（templates/）
 
 各テンプレートは [templates/](templates/) 配下にあります。**各フォルダはこのリポジトリから切り出して単体プロジェクトとして利用できます。**
 
 | テンプレート | 概要 |
-|------------|------|
+| ---------- | ---- |
 | [templates/nodejs](templates/nodejs) | Node.js |
 | [templates/nextjs](templates/nextjs) | Next.js（App Router） |
 | [templates/reactjs](templates/reactjs) | React + Vite |
@@ -35,7 +35,7 @@
 ## スクリプト
 
 | コマンド | 役割 |
-|---------|------|
+| ------- | ---- |
 | `yarn generate:all` | 全スクリプトをまとめて実行 |
 | `yarn generate:configs` | 設定ファイルを生成（ESLint / Prettier / tsconfig / workflow など） |
 | `yarn generate:deps` | `package.json` と `Gemfile` を生成 |
@@ -59,7 +59,7 @@
 
 ### リポジトリ構造
 
-```
+```text
 starter-templates/
 ├── scripts/          コード生成スクリプト
 │   └── lib/          スクリプト共通ユーティリティ
@@ -100,7 +100,7 @@ starter-templates/
 `templates/` 以下のファイルはすべてスクリプトで生成されます。**直接編集しても次回生成時に上書きされます。**
 
 | ファイル | 正本（編集場所） | 生成スクリプト |
-|---------|---------------|-------------|
+| ------- | ------------- | ----------- |
 | `templates/*/package.json` | `shared/npm/<stack>.json` | `generate-deps.ts` |
 | `templates/*/Gemfile` | `shared/gemfile/Gemfile.<stack>` | `generate-deps.ts` |
 | `templates/csharp/*.csproj` | `shared/dotnet/*.csproj` | `generate-deps.ts` |
@@ -128,12 +128,12 @@ starter-templates/
 ### スクリプト一覧（詳細）
 
 | コマンド | スクリプト | 役割 |
-|---------|-----------|------|
+| ------- | --------- | ---- |
 | `yarn generate:all` | — | configs → deps → ci → devcontainer の順で実行（テンプレートの workflow を生成してからルート CI を組み立てる） |
 | `yarn generate:ci` | `generate-root-workflow.ts` | ルートの CI ワークフローを生成 |
 | `yarn generate:devcontainer` | `generate-devcontainer.ts` | Dev Container 設定を生成 |
 | `yarn generate:configs` | `generate-configs.ts` | 設定ファイル全般を生成（エントリポイント） |
-| `yarn generate:deps` | `generate-deps.ts` | package.json / Gemfile / C# .csproj / Go / Rust (shared/* → templates/*) を生成 |
+| `yarn generate:deps` | `generate-deps.ts` | package.json / Gemfile / C# .csproj / Go / Rust (`shared/*` → `templates/*`) を生成 |
 
 `generate-configs.ts` は以下のモジュールを呼び出します：
 

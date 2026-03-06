@@ -95,6 +95,21 @@ export const GITIGNORE_SOURCE: Readonly<Record<string, string>> = {
   "templates/django": ".gitignore.python",
 };
 
+/** .devcontainer/Dockerfile のコピー元（shared/docker/ 内のファイル名）。null は docker-compose を使うため Dockerfile コピー不要 */
+export const DEVCONTAINER_DOCKERFILE_MAP: Readonly<Record<string, string | null>> = {
+  "templates/nextjs": "Dockerfile.node",
+  "templates/nodejs": "Dockerfile.node",
+  "templates/reactjs": "Dockerfile.node",
+  "templates/sinatra": "Dockerfile.ruby",
+  "templates/rails-api": "Dockerfile.ruby",
+  "templates/rails": null,
+  "templates/csharp": "Dockerfile.dotnet",
+  "templates/go": "Dockerfile.go",
+  "templates/rust": "Dockerfile.rust",
+  "templates/laravel": "Dockerfile.php",
+  "templates/django": "Dockerfile.python",
+};
+
 /** ルート CI（generate-root-workflow）用: id / dir / pathFilter */
 export interface RootStackEntry {
   id: string;
