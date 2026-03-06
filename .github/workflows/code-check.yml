@@ -282,10 +282,13 @@ jobs:
       - name: Download Go modules
         run: go mod download
         working-directory: templates/go
+      - name: Tidy Go modules
+        run: go mod tidy
+        working-directory: templates/go
       - name: golangci-lint
         run: |
           go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-          $(go env GOPATH)/bin/golangci-lint run
+          "$(go env GOPATH)/bin/golangci-lint" run
         working-directory: templates/go
       - name: Build
         run: go build ./...
