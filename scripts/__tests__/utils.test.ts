@@ -1,5 +1,31 @@
 import { describe, it, expect } from "vitest";
-import { deepMerge } from "../lib/utils.js";
+import { existsSync } from "fs";
+import { join } from "path";
+import { deepMerge, ROOT, VERSIONS } from "../lib/utils.js";
+
+describe("ROOT", () => {
+  it("process.cwd() に一致する", () => {
+    expect(ROOT).toBe(process.cwd());
+  });
+
+  it("shared/versions.json が ROOT 配下に存在する", () => {
+    expect(existsSync(join(ROOT, "shared", "versions.json"))).toBe(true);
+  });
+});
+
+describe("VERSIONS", () => {
+  it("node と ruby を必ず持つ", () => {
+    expect(VERSIONS).toHaveProperty("node");
+    expect(VERSIONS).toHaveProperty("ruby");
+    expect(typeof VERSIONS.node).toBe("string");
+    expect(typeof VERSIONS.ruby).toBe("string");
+  });
+
+  it("node / ruby が空文字でない", () => {
+    expect(VERSIONS.node.length).toBeGreaterThan(0);
+    expect(VERSIONS.ruby.length).toBeGreaterThan(0);
+  });
+});
 
 describe("deepMerge", () => {
   it("プリミティブ値を上書きする", () => {
