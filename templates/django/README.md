@@ -42,7 +42,7 @@ tree -I '__pycache__|.venv|*.pyc'
 
 2. VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動
 
-3. 仮想環境と依存関係のインストール（postCreateCommand で自動実行される場合あり）
+3. 仮想環境と依存関係のインストール
 
    ```bash
    python -m venv .venv

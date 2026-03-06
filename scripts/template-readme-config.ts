@@ -155,7 +155,8 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     treeExclude: "vendor|node_modules|storage",
     setupSteps: [
       cloneStep("laravel"),
-      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動（環境変数設定・依存関係インストールは postCreateCommand で自動実行）", commands: [] },
+      { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
+      { label: "環境変数と依存関係のセットアップ", commands: ["cp .env.example .env", "php artisan key:generate --force", "composer install --no-interaction"] },
       { label: "データベース準備（SQLite）", commands: ["touch database/database.sqlite", "php artisan migrate"] },
       { label: "開発サーバー起動", commands: ["php artisan serve"] },
     ],
@@ -257,7 +258,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     setupSteps: [
       cloneStep("django"),
       { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
-      { label: "仮想環境と依存関係のインストール（postCreateCommand で自動実行される場合あり）", commands: ["python -m venv .venv", ". .venv/bin/activate && pip install -r requirements.txt"] },
+      { label: "仮想環境と依存関係のインストール", commands: ["python -m venv .venv", ". .venv/bin/activate && pip install -r requirements.txt"] },
       { label: "マイグレーション（任意）", commands: [". .venv/bin/activate && python manage.py migrate"] },
       { label: "開発サーバー起動", commands: [". .venv/bin/activate && python manage.py runserver"] },
     ],

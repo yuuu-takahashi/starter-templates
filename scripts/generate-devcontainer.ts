@@ -355,11 +355,6 @@ const STACKS: Stack[] = [
       runArgs: RUN_ARGS_FIREWALL,
       postStartCommand: POST_START_FIREWALL,
       waitFor: "postStartCommand",
-      postCreateCommand: [
-        "bash -c '[ -f .env ] || cp .env.example .env'",
-        "php artisan key:generate --force",
-        "composer install --no-interaction",
-      ],
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...PHP_EXTENSIONS, ...TOOLING_EXTENSIONS],
@@ -383,10 +378,6 @@ const STACKS: Stack[] = [
       portsAttributes: {
         "8000": { label: "Django", onAutoForward: "openPreview" },
       },
-      postCreateCommand: [
-        "python -m venv .venv",
-        ". .venv/bin/activate && pip install -r requirements.txt",
-      ],
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...PYTHON_EXTENSIONS],

@@ -43,16 +43,24 @@ tree -I 'vendor|node_modules|storage'
    cd starter-templates/templates/laravel
    ```
 
-2. VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動（環境変数設定・依存関係インストールは postCreateCommand で自動実行）
+2. VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動
 
-3. データベース準備（SQLite）
+3. 環境変数と依存関係のセットアップ
+
+   ```bash
+   cp .env.example .env
+   php artisan key:generate --force
+   composer install --no-interaction
+   ```
+
+4. データベース準備（SQLite）
 
    ```bash
    touch database/database.sqlite
    php artisan migrate
    ```
 
-4. 開発サーバー起動
+5. 開発サーバー起動
 
    ```bash
    php artisan serve

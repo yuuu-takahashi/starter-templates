@@ -16,6 +16,7 @@
 - eslint-config-prettier — Prettier と競合する ESLint ルールを無効化
 - globals — グローバル変数の定義セット
 - prettier — コードフォーマッター
+- vitest — Vite ベースのテストフレームワーク
 
 ### Dev Container でインストールされる主な拡張機能
 
