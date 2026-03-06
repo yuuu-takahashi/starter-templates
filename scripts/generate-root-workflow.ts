@@ -170,6 +170,7 @@ const buildRootWorkflow = (): Record<string, WorkflowJob> => {
         with: { "node-version": VERSIONS.node, cache: "yarn", "cache-dependency-path": "yarn.lock" },
       },
       { name: "Install dependencies", run: "yarn install" },
+      { name: "Run tests", run: "yarn test" },
       { name: "Run generate:all", run: "yarn generate:all" },
       { name: "Check for uncommitted changes", run: "git diff --exit-code" },
     ],

@@ -72,6 +72,8 @@ jobs:
           cache-dependency-path: yarn.lock
       - name: Install dependencies
         run: yarn install
+      - name: Run tests
+        run: yarn test
       - name: Run generate:all
         run: yarn generate:all
       - name: Check for uncommitted changes
@@ -158,7 +160,7 @@ jobs:
           working-directory: templates/rails
           bundler-cache: true
       - name: rubocop
-        run: bundle exec rubocop -A
+        run: bundle exec rubocop
         working-directory: templates/rails
       - name: erb_lint
         run: bundle exec erb_lint app/views/**/*.erb
@@ -188,7 +190,7 @@ jobs:
           working-directory: templates/rails-api
           bundler-cache: true
       - name: rubocop
-        run: bundle exec rubocop -A
+        run: bundle exec rubocop
         working-directory: templates/rails-api
   laravel:
     needs: changes
@@ -239,7 +241,7 @@ jobs:
           working-directory: templates/sinatra
           bundler-cache: true
       - name: rubocop
-        run: bundle exec rubocop -A
+        run: bundle exec rubocop
         working-directory: templates/sinatra
       - name: erb_lint
         run: bundle exec erb_lint app/views/**/*.erb
