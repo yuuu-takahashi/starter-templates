@@ -8,6 +8,7 @@
 import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import YAML from "yaml";
+import { ROOT_STACKS } from "./lib/stacks.js";
 
 const ROOT: string = join(process.cwd());
 const VERSIONS = JSON.parse(readFileSync(join(ROOT, "shared", "versions.json"), "utf8")) as {
@@ -15,24 +16,7 @@ const VERSIONS = JSON.parse(readFileSync(join(ROOT, "shared", "versions.json"), 
   ruby: string;
 };
 
-interface Stack {
-  id: string;
-  dir: string;
-  pathFilter: string;
-}
-
-const STACKS: Stack[] = [
-  { id: "nextjs", dir: "templates/nextjs", pathFilter: "templates/nextjs/**" },
-  { id: "nodejs", dir: "templates/nodejs", pathFilter: "templates/nodejs/**" },
-  { id: "reactjs", dir: "templates/reactjs", pathFilter: "templates/reactjs/**" },
-  { id: "rails", dir: "templates/rails", pathFilter: "templates/rails/**" },
-  { id: "rails_api", dir: "templates/rails-api", pathFilter: "templates/rails-api/**" },
-  { id: "laravel", dir: "templates/laravel", pathFilter: "templates/laravel/**" },
-  { id: "sinatra", dir: "templates/sinatra", pathFilter: "templates/sinatra/**" },
-  { id: "csharp", dir: "templates/csharp", pathFilter: "templates/csharp/**" },
-  { id: "go", dir: "templates/go", pathFilter: "templates/go/**" },
-  { id: "rust", dir: "templates/rust", pathFilter: "templates/rust/**" },
-];
+const STACKS = ROOT_STACKS;
 
 interface WorkflowStep {
   uses?: string;

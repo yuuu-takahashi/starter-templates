@@ -108,7 +108,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
   {
     id: "reactjs",
     title: "template-reactjs",
-    description: "このリポジトリは React + Webpack のテンプレートプロジェクトです。",
+    description: "このリポジトリは React + Vite のテンプレートプロジェクトです。",
     repoSlug: "template-reactjs",
     npmStack: "reactjs",
     extensionSets: ["base", "node"],

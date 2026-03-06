@@ -22,6 +22,9 @@
 | [templates/rails-api](templates/rails-api) | Rails API |
 | [templates/laravel](templates/laravel) | Laravel（PHP） |
 | [templates/sinatra](templates/sinatra) | Sinatra |
+| [templates/csharp](templates/csharp) | ASP.NET Core Minimal API（C#） |
+| [templates/go](templates/go) | Go（Gin） |
+| [templates/rust](templates/rust) | Rust（Axum） |
 
 ## ファイルの正本について
 
@@ -37,6 +40,8 @@
 | `yarn generate:deps` | `package.json` と `Gemfile` を生成 |
 | `yarn generate:devcontainer` | Dev Container 設定を生成 |
 | `yarn generate:ci` | ルートの CI ワークフローを生成 |
+| `yarn lint` | `scripts/` 配下の TypeScript を ESLint でチェック |
+| `yarn format` | Prettier で `scripts/**/*.ts` をフォーマット |
 
 テンプレートの README を変更する場合は `scripts/template-readme-config.ts` を編集してから `yarn generate:configs` を実行してください。
 
@@ -77,13 +82,15 @@ starter-templates/
 ├── templates/        シンプルなテンプレート（スクリプト生成・手動編集禁止）
 │   ├── nextjs/
 │   ├── nodejs/
+│   ├── reactjs/
 │   ├── rails/
 │   ├── rails-api/
 │   ├── laravel/
-│   ├── reactjs/
-│   └── sinatra/
-├── starters/         個人開発用テンプレート（すぐ使える・手動管理）
-└── languages/        言語別の補助設定（Ruby など）
+│   ├── sinatra/
+│   ├── csharp/
+│   ├── go/
+│   └── rust/
+└── starters/         個人開発用テンプレート（すぐ使える・手動管理）
 ```
 
 ### 正本 vs 生成ファイル
@@ -151,12 +158,10 @@ starter-templates/
 
 1. **`shared/npm/mystack.json`** を作成（package.json のソース）
 2. **`shared/eslint/eslint.config.mystack.js`** を作成（必要な場合）
-3. **`scripts/generate-deps.ts`** の `NPM_STACKS` に `"mystack"` を追加
-4. **`scripts/lib/utils.ts`** の `SHARED_CONFIG_STACKS` に `"templates/mystack"` を追加（Prettier / editorconfig 配布対象にする場合）
-5. **`scripts/gen-common-files.ts`** の `GITIGNORE_SOURCE` / バージョン配布先リストに追加
-6. **`scripts/gen-tool-configs.ts`** に ESLint / tsconfig などの生成処理を追加
-7. **`scripts/gen-workflows.ts`** に CI ワークフロー生成処理を追加
-8. **`scripts/template-readme-config.ts`** の `TEMPLATE_README_CONFIGS` にエントリを追加
-9. **`scripts/generate-root-workflow.ts`** にルート CI への追加が必要か確認
-10. `templates/mystack/` に手動で管理する残りのファイルを配置
-11. `yarn generate:all` を実行して動作確認
+3. **`scripts/lib/stacks.ts`** にエントリを追加（`TEMPLATE_DIRS` / `NPM_STACKS` / `GITIGNORE_SOURCE` / `CODE_CHECK_SOURCE` / `NODE_VERSION_DIRS` など、必要なもの）
+4. **`scripts/gen-tool-configs.ts`** に ESLint / tsconfig などの生成処理を追加
+5. **`scripts/template-readme-config.ts`** の `TEMPLATE_README_CONFIGS` にエントリを追加
+6. **`scripts/generate-devcontainer.ts`** の `STACKS` に devcontainer 用のエントリを追加（必要な場合）
+7. **`scripts/generate-root-workflow.ts`** は `stacks.ts` の `ROOT_STACKS` を参照するため、`stacks.ts` に追加すれば自動でルート CI に含まれる
+8. `templates/mystack/` に手動で管理する残りのファイルを配置
+9. `yarn generate:all` を実行して動作確認

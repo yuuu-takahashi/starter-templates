@@ -4,6 +4,7 @@
 
 import { readFileSync } from "fs";
 import { join } from "path";
+import { TEMPLATE_DIRS } from "./stacks.js";
 
 export const ROOT: string = process.cwd();
 
@@ -11,19 +12,8 @@ export const VERSIONS = JSON.parse(
   readFileSync(join(ROOT, "shared", "versions.json"), "utf8")
 ) as { node: string; ruby: string; php?: string; go?: string };
 
-// 横断的な共通設定を配るテンプレート一覧（Prettier / EditorConfig 対象）
-export const SHARED_CONFIG_STACKS: string[] = [
-  "templates/nextjs",
-  "templates/nodejs",
-  "templates/reactjs",
-  "templates/rails",
-  "templates/rails-api",
-  "templates/laravel",
-  "templates/sinatra",
-  "templates/csharp",
-  "templates/go",
-  "templates/rust",
-];
+/** 横断的な共通設定を配るテンプレート一覧（Prettier / EditorConfig 対象） */
+export const SHARED_CONFIG_STACKS: readonly string[] = TEMPLATE_DIRS;
 
 export const SHARED_EDITORCONFIG = join(ROOT, "shared", "editorconfig", ".editorconfig");
 export const GITIGNORE_DIR = join(ROOT, "shared", "gitignore");
