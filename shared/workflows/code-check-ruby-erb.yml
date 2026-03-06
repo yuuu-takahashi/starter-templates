@@ -10,7 +10,7 @@ defaults:
     shell: bash
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -45,7 +45,7 @@ jobs:
           bundler-cache: true
 
       - name: rubocop
-        run: bundle exec rubocop -A
+        run: bundle exec rubocop
 
       - name: erb_lint
         run: bundle exec erb_lint app/views/**/*.erb

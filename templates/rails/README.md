@@ -32,8 +32,10 @@
 - importmap-rails — Import Maps による JS 管理
 - jbuilder — JSON レスポンスを DSL で構築
 - mysql2 — MySQL クライアント
+- nokogiri — XML/HTML パーサー
 - prettier — コードフォーマッター
 - puma — マルチスレッド Web サーバー
+- rack — Ruby Web サーバーインターフェース
 - rails — Ruby on Rails フレームワーク
 - rspec-rails — Rails 向けテストフレームワーク
 - rubocop — Ruby の静的解析・フォーマッター
@@ -54,6 +56,7 @@
 - Gruntfuggly.todo-tree — TODO / FIXME コメントの一覧表示
 - Shopify.ruby-extensions-pack — Ruby 開発ツール一式（Ruby LSP など）
 - aliariff.vscode-erb-beautify — ERB テンプレートのフォーマット
+- anthropic.claude-code
 - dbaeumer.vscode-eslint — ESLint の静的解析
 - donjayamanne.githistory — Git ログの可視化
 - eamodio.gitlens — Git 履歴・差分の強力な可視化

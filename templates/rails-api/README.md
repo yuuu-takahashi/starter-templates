@@ -26,7 +26,9 @@
 - factory_bot_rails — テスト用フィクスチャファクトリー（Rails）
 - faker — テスト用ダミーデータ生成
 - mysql2 — MySQL クライアント
+- nokogiri — XML/HTML パーサー
 - puma — マルチスレッド Web サーバー
+- rack — Ruby Web サーバーインターフェース
 - rails — Ruby on Rails フレームワーク
 - rspec-rails — Rails 向けテストフレームワーク
 - rswag — RSpec から Swagger ドキュメントを生成
@@ -95,6 +97,7 @@ bundle exec rake rswag:specs:swaggerize
 
 ```bash
 yarn format
+yarn lint
 bundle exec rubocop -A
 ```
 

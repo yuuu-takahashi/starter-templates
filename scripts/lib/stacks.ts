@@ -38,7 +38,7 @@ function slug(dir: string): string {
 
 const STACK_DEFINITIONS: readonly StackDefinition[] = [
   { dir: "templates/nextjs", id: "nextjs", runtime: "node", codeCheckWorkflow: "code-check-node.yml", testWorkflow: "test-node.yml", gitignore: ".gitignore.node", devcontainerDockerfile: "Dockerfile.node", hasNpm: true, hasGemfile: false, monorepoPrefix: false },
-  { dir: "templates/nodejs", id: "nodejs", runtime: "node", codeCheckWorkflow: "code-check-node.yml", gitignore: ".gitignore.node", devcontainerDockerfile: "Dockerfile.node", hasNpm: true, hasGemfile: false, monorepoPrefix: false },
+  { dir: "templates/nodejs", id: "nodejs", runtime: "node", codeCheckWorkflow: "code-check-node.yml", testWorkflow: "test-node.yml", gitignore: ".gitignore.node", devcontainerDockerfile: "Dockerfile.node", hasNpm: true, hasGemfile: false, monorepoPrefix: false },
   { dir: "templates/reactjs", id: "reactjs", runtime: "node", codeCheckWorkflow: "code-check-node.yml", testWorkflow: "test-node.yml", gitignore: ".gitignore.node", devcontainerDockerfile: "Dockerfile.node", hasNpm: true, hasGemfile: false, monorepoPrefix: false },
   { dir: "templates/rails", id: "rails", runtime: "ruby", codeCheckWorkflow: "code-check-ruby-erb.yml", testWorkflow: "test-rails.yml", gitignore: ".gitignore.rails", devcontainerDockerfile: null, hasNpm: true, hasGemfile: true, monorepoPrefix: false },
   { dir: "templates/rails-api", id: "rails_api", runtime: "ruby", codeCheckWorkflow: "code-check-ruby.yml", testWorkflow: "test-rails-api.yml", gitignore: ".gitignore.rails", devcontainerDockerfile: "Dockerfile.ruby", hasNpm: true, hasGemfile: true, monorepoPrefix: false },
@@ -100,15 +100,17 @@ export const DEVCONTAINER_DOCKERFILE_MAP: Readonly<Record<string, string | null>
 /** ルート CI でモノレポ向け path 変換を適用するスタック名（slug） */
 export const MONOREPO_PREFIX_STACKS: readonly string[] = STACK_DEFINITIONS.filter((s) => s.monorepoPrefix).map((s) => slug(s.dir));
 
-/** ルート CI（generate-root-workflow）用: id / dir / pathFilter */
+/** ルート CI（generate-root-workflow）用: id / dir / pathFilter / runtime */
 export interface RootStackEntry {
   id: string;
   dir: string;
   pathFilter: string;
+  runtime: Runtime;
 }
 
 export const ROOT_STACKS: readonly RootStackEntry[] = STACK_DEFINITIONS.map((s) => ({
   id: s.id,
   dir: s.dir,
   pathFilter: `${s.dir}/**`,
+  runtime: s.runtime,
 }));

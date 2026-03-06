@@ -4,7 +4,8 @@
       "esbenp.prettier-vscode"
     ],
     "node": [
-      "dbaeumer.vscode-eslint"
+      "dbaeumer.vscode-eslint",
+      "anthropic.claude-code"
     ],
     "ruby": [
       "Shopify.ruby-extensions-pack"

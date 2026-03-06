@@ -4,6 +4,9 @@ services:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
+      args:
+        TZ: ${TZ:-UTC}
+        CLAUDE_CODE_VERSION: latest
     volumes:
       - ..:/workspace
       - node_modules_cache:/workspace/node_modules

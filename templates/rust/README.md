@@ -10,6 +10,7 @@
 ### 主なライブラリ
 
 - axum — 軽量 Web フレームワーク（Sinatra 的）
+- tokio — 非同期ランタイム
 
 ### Dev Container でインストールされる主な拡張機能
 

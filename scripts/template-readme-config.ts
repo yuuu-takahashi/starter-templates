@@ -155,9 +155,8 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     treeExclude: "vendor|node_modules|storage",
     setupSteps: [
       cloneStep("laravel"),
-      { label: "環境変数の設定", commands: ["cp .env.example .env", "php artisan key:generate"] },
       { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
-      { label: "依存関係のインストール", commands: ["composer install"] },
+      { label: "環境変数と依存関係のセットアップ", commands: ["cp .env.example .env", "php artisan key:generate --force", "composer install --no-interaction"] },
       { label: "データベース準備（SQLite）", commands: ["touch database/database.sqlite", "php artisan migrate"] },
       { label: "開発サーバー起動", commands: ["php artisan serve"] },
     ],
@@ -186,7 +185,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     devGuide: [
       { title: "テストの実行", commands: "bundle exec rspec" },
       { title: "APIドキュメント生成", commands: "bundle exec rake rswag:specs:swaggerize" },
-      { title: "コードの静的解析と修正", commands: "yarn format\nbundle exec rubocop -A" },
+      { title: "コードの静的解析と修正", commands: "yarn format\nyarn lint\nbundle exec rubocop -A" },
     ],
   },
   {
@@ -234,7 +233,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     description: "このリポジトリは Rust のテンプレートプロジェクトです。",
     repoSlug: "template-rust",
     extensionSets: ["base", "rust"],
-    stackLibs: ["axum — 軽量 Web フレームワーク（Sinatra 的）"],
+    stackLibs: ["axum — 軽量 Web フレームワーク（Sinatra 的）", "tokio — 非同期ランタイム"],
     treeExclude: "target",
     setupSteps: [
       cloneStep("rust"),
@@ -259,7 +258,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     setupSteps: [
       cloneStep("django"),
       { label: "VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動", commands: [] },
-      { label: "仮想環境と依存関係のインストール（postCreateCommand で自動実行される場合あり）", commands: ["python -m venv .venv", ". .venv/bin/activate && pip install -r requirements.txt"] },
+      { label: "仮想環境と依存関係のインストール", commands: ["python -m venv .venv", ". .venv/bin/activate && pip install -r requirements.txt"] },
       { label: "マイグレーション（任意）", commands: [". .venv/bin/activate && python manage.py migrate"] },
       { label: "開発サーバー起動", commands: [". .venv/bin/activate && python manage.py runserver"] },
     ],

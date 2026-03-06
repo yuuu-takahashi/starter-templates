@@ -119,6 +119,9 @@ const GEM_DESCRIPTIONS: Record<string, string> = {
   "rswag": "RSpec から Swagger ドキュメントを生成",
   // DB / ORM
   "sequel": "ORM / データベースツールキット",
+  "nokogiri": "XML/HTML パーサー",
+  // ミドルウェア
+  "rack": "Ruby Web サーバーインターフェース",
   // タスク
   "rake": "Ruby のタスクランナー",
   // 開発ツール
@@ -166,6 +169,7 @@ const EXTENSION_DESCRIPTIONS: Record<string, string> = {
   "DavidAnson.vscode-markdownlint": "Markdown の構文チェック",
   "ms-python.python": "Python 言語サポート（IntelliSense・デバッグ・テスト等）",
   "ms-python.vscode-pylance": "Python の型チェック・補完（Pylance）",
+  "bmewburn.vscode-intelephense-client": "PHP の IntelliSense・補完（Intelephense）",
 };
 
 function withDesc(name: string, map: Record<string, string>): string {
