@@ -5,8 +5,8 @@
  * - package.json: shared/npm/<stack>.json → templates/<stack>/package.json
  * - Gemfile:      shared/gemfile/Gemfile.<stack> → templates/<stack>/Gemfile
  * - C# global.json: templates/csharp/global.json の sdk.version を shared/versions.json の dotnet で上書き
- * - Go:           shared/lint-format/golangci/.golangci.yml → templates/go/.golangci.yml（設定のみ）
- * - Rust:         shared/rust-toolchain/rust-toolchain.toml → templates/rust/（設定のみ）
+ * - Go:           .golangci.yml は templates/go/ を正本として編集
+ * - Rust:         rust-toolchain.toml は templates/rust/ を正本として編集
  *
  * フレームワーク別（next.config.ts, vite.config.ts, Laravel pint/phpunit, C# .csproj/.sln）は
  * templates/<stack>/ 直下を正本として編集する。
@@ -22,8 +22,6 @@ import {
   VERSIONS,
   SHARED_NPM,
   SHARED_GEMFILE,
-  SHARED_GOLANGCI,
-  SHARED_RUST_TOOLCHAIN,
 } from "./lib/utils.js";
 
 const GEMFILE_HEADER =
@@ -60,23 +58,9 @@ function run(): void {
     console.log("Updated:", csharpGlobalPath);
   }
 
-  // Go/Rust/Django/Laravel: 設定のみ管理するテンプレートのディレクトリを事前作成
+  // Django/Laravel: 設定のみ管理するテンプレートのディレクトリを事前作成
   mkdirSync(join(ROOT, "templates/django"), { recursive: true });
   mkdirSync(join(ROOT, "templates/laravel"), { recursive: true });
-
-  // Go: shared/lint-format/golangci/ の設定のみ templates/go/ にコピー
-  mkdirSync(join(ROOT, "templates/go"), { recursive: true });
-  const golangciSrc = join(SHARED_GOLANGCI, ".golangci.yml");
-  const golangciContent = readFileSync(golangciSrc, "utf8");
-  writeFileSync(join(ROOT, "templates/go/.golangci.yml"), SHARED_CONFIG_HEADER + golangciContent, "utf8");
-  console.log("Generated:", join(ROOT, "templates/go/.golangci.yml"));
-
-  // Rust: shared/rust-toolchain/ の設定のみ templates/rust/ にコピー
-  mkdirSync(join(ROOT, "templates/rust"), { recursive: true });
-  const rustToolchainSrc = join(SHARED_RUST_TOOLCHAIN, "rust-toolchain.toml");
-  const rustToolchainContent = readFileSync(rustToolchainSrc, "utf8");
-  writeFileSync(join(ROOT, "templates/rust/rust-toolchain.toml"), SHARED_CONFIG_HEADER + rustToolchainContent, "utf8");
-  console.log("Generated:", join(ROOT, "templates/rust/rust-toolchain.toml"));
 }
 
 run();

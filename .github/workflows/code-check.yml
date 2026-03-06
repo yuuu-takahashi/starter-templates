@@ -13,7 +13,7 @@ defaults:
     shell: bash
 
 concurrency:
-  group: '${{ github.workflow }}-${{ github.head_ref || github.ref_name }}'
+  group: "${{ github.workflow }}-${{ github.head_ref || github.ref_name }}"
   cancel-in-progress: true
 jobs:
   changes:
@@ -202,7 +202,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: "8.3"
           extensions: mbstring, zip, exif, pcntl, bcmath, gd
           coverage: none
       - name: Cache dependencies
@@ -283,7 +283,9 @@ jobs:
         run: go mod download
         working-directory: templates/go
       - name: golangci-lint
-        run: go run github.com/golangci/golangci-lint/cmd/golangci-lint@latest run
+        run: |
+          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+          $(go env GOPATH)/bin/golangci-lint run
         working-directory: templates/go
       - name: Build
         run: go build ./...

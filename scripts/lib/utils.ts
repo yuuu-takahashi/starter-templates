@@ -30,8 +30,6 @@ export const SHARED_VITEST = join(SHARED_TEST, "vitest");
 
 export const SHARED_NPM = join(ROOT, "shared", "npm");
 export const SHARED_GEMFILE = join(ROOT, "shared", "gemfile");
-export const SHARED_GOLANGCI = join(SHARED_LINT_FORMAT, "golangci");
-export const SHARED_RUST_TOOLCHAIN = join(ROOT, "shared", "rust-toolchain");
 export const SHARED_RUBOCOP = join(SHARED_LINT_FORMAT, "rubocop");
 
 export function deepMerge<T extends Record<string, unknown>>(a: T, b: Record<string, unknown>): T {
