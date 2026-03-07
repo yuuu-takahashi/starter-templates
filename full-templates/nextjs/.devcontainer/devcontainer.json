@@ -19,7 +19,10 @@
     "source=${localWorkspaceFolderBasename}-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
     "source=${localWorkspaceFolderBasename}-claude-config-${devcontainerId},target=/home/node/.claude,type=volume"
   ],
-  "runArgs": ["--cap-add=NET_ADMIN", "--cap-add=NET_RAW"],
+  "runArgs": [
+    "--cap-add=NET_ADMIN",
+    "--cap-add=NET_RAW"
+  ],
   "containerEnv": {
     "CLAUDE_CONFIG_DIR": "/home/node/.claude",
     "POWERLEVEL9K_DISABLE_GITSTATUS": "true",
@@ -55,7 +58,12 @@
             "path": "zsh"
           }
         },
-        "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
+        "eslint.validate": [
+          "javascript",
+          "javascriptreact",
+          "typescript",
+          "typescriptreact"
+        ]
       }
     },
     "cursor": {
@@ -85,7 +93,12 @@
             "path": "zsh"
           }
         },
-        "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
+        "eslint.validate": [
+          "javascript",
+          "javascriptreact",
+          "typescript",
+          "typescriptreact"
+        ]
       }
     }
   }

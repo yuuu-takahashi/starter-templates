@@ -19,7 +19,7 @@ vi.mock('next/font/google', () => {
         if (prop === '__esModule') return true;
         return mock;
       },
-    }
+    },
   );
 });
 

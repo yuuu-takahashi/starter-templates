@@ -15,14 +15,15 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
 
-  reporter: process.env.CI
-    ? [
-        ['list'],
-        ['html', { open: 'never', outputFolder: 'playwright-report' }],
-        ['json', { outputFile: 'test-results/results.json' }],
-        ['github'],
-      ]
-    : [['list'], ['html', { open: 'on-failure', outputFolder: 'playwright-report' }]],
+  reporter:
+    process.env.CI
+      ? [
+          ['list'],
+          ['html', { open: 'never', outputFolder: 'playwright-report' }],
+          ['json', { outputFile: 'test-results/results.json' }],
+          ['github'],
+        ]
+      : [['list'], ['html', { open: 'on-failure', outputFolder: 'playwright-report' }]],
 
   use: {
     baseURL: 'http://localhost:3000',
