@@ -21,6 +21,8 @@ export type Runtime =
 export interface StackDefinition {
   /** テンプレートディレクトリ（minimal-templates/ からの相対） */
   dir: string;
+  /** full-templates/ の出力先。undefined なら full-templates には出力しない */
+  fullDir?: string;
   /** ルートワークフロー用 ID（path_filter のキー、ハイフンはアンダースコア） */
   id: string;
   /** ランタイム（.node-version / .ruby-version 等の配布先） */
@@ -35,6 +37,12 @@ export interface StackDefinition {
   devcontainerDockerfile: string | null;
   /** package.json を shared/npm/<slug>.json から生成する */
   hasNpm: boolean;
+  /** full-templates 用 npm 差分ファイルのスラグ。shared/npm/<slug>.diff.json を base にマージする */
+  fullNpmDiffSlug?: string;
+  /** full-templates 用 code-check ワークフロー（未定義なら codeCheckWorkflow と同じ） */
+  fullCodeCheckWorkflow?: string;
+  /** full-templates 用 CI ワークフロー（e2e + lighthouse）。shared/workflows/ 内のファイル名 */
+  ciWorkflow?: string;
   /** Gemfile を shared/gemfile/Gemfile.<slug> から生成する */
   hasGemfile: boolean;
   /** ルート CI でモノレポ向け path/working-directory 変換を適用する */
@@ -50,6 +58,7 @@ const td = TEMPLATES_DIR;
 export const STACK_DEFINITIONS: readonly StackDefinition[] = [
   {
     dir: `${td}/nextjs`,
+    fullDir: 'full-templates/nextjs',
     id: 'nextjs',
     runtime: 'node',
     codeCheckWorkflow: 'code-check-node.yml',
@@ -59,6 +68,9 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
     hasNpm: true,
     hasGemfile: false,
     monorepoPrefix: false,
+    fullNpmDiffSlug: 'nextjs-full',
+    fullCodeCheckWorkflow: 'code-check-nextjs-full.yml',
+    ciWorkflow: 'ci-nextjs-full.yml',
   },
   {
     dir: `${td}/nodejs`,
@@ -259,6 +271,56 @@ export const DEVCONTAINER_DOCKERFILE_MAP: Readonly<
 export const MONOREPO_PREFIX_STACKS: readonly string[] =
   STACK_DEFINITIONS.filter((s) => s.monorepoPrefix).map((s) => slug(s.dir));
 
+// ── full-templates/ 向け導出定数 ─────────────────────────────────────────────
+
+/** full-templates/ の出力先ディレクトリ一覧 */
+export const FULL_TEMPLATE_DIRS: readonly string[] = STACK_DEFINITIONS.filter(
+  (s) => s.fullDir != null,
+).map((s) => s.fullDir!);
+
+/** code-check.yml の元ワークフロー名（full-templates/ 用。fullCodeCheckWorkflow が定義されていればそれを優先） */
+export const FULL_CODE_CHECK_SOURCE: Readonly<Record<string, string>> =
+  Object.fromEntries(
+    STACK_DEFINITIONS.filter((s) => s.fullDir != null).map((s) => [
+      s.fullDir!,
+      s.fullCodeCheckWorkflow ?? s.codeCheckWorkflow,
+    ]),
+  );
+
+/** ci.yml を生成する full-templates/ とそのワークフロー名 */
+export const FULL_CI_SOURCE: Readonly<Record<string, string>> =
+  Object.fromEntries(
+    STACK_DEFINITIONS.filter(
+      (s) => s.fullDir != null && s.ciWorkflow != null,
+    ).map((s) => [s.fullDir!, s.ciWorkflow!]),
+  );
+
+/** test.yml を生成する full-templates/ とそのワークフロー名 */
+export const FULL_TEST_SOURCE: Readonly<Record<string, string>> =
+  Object.fromEntries(
+    STACK_DEFINITIONS.filter(
+      (s) => s.fullDir != null && s.testWorkflow != null,
+    ).map((s) => [s.fullDir!, s.testWorkflow!]),
+  );
+
+/** .gitignore の元ファイル名（full-templates/ 用） */
+export const FULL_GITIGNORE_SOURCE: Readonly<Record<string, string>> =
+  Object.fromEntries(
+    STACK_DEFINITIONS.filter((s) => s.fullDir != null).map((s) => [
+      s.fullDir!,
+      s.gitignore,
+    ]),
+  );
+
+/** .dockerignore の元ファイル名（full-templates/ 用） */
+export const FULL_DOCKERIGNORE_SOURCE: Readonly<Record<string, string>> =
+  Object.fromEntries(
+    STACK_DEFINITIONS.filter((s) => s.fullDir != null).map((s) => [
+      s.fullDir!,
+      `dockerignore.${slug(s.dir)}`,
+    ]),
+  );
+
 /** ルート CI（generate-root-workflow）用: id / dir / pathFilter / runtime */
 export interface RootStackEntry {
   id: string;
@@ -275,3 +337,13 @@ export const ROOT_STACKS: readonly RootStackEntry[] = STACK_DEFINITIONS.map(
     runtime: s.runtime,
   }),
 );
+
+/** full-templates/ の CI エントリ（id は full_<id> でプレフィックス） */
+export const FULL_ROOT_STACKS: readonly RootStackEntry[] = STACK_DEFINITIONS
+  .filter((s) => s.fullDir != null)
+  .map((s) => ({
+    id: `full_${s.id}`,
+    dir: s.fullDir!,
+    pathFilter: `${s.fullDir}/**`,
+    runtime: s.runtime,
+  }));

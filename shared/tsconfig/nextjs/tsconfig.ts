@@ -3,7 +3,7 @@
  */
 export default {
   compilerOptions: {
-    target: "ES2017",
+    target: "ES2020",
     lib: ["dom", "dom.iterable", "esnext"],
     allowJs: true,
     skipLibCheck: true,
@@ -17,6 +17,7 @@ export default {
     jsx: "preserve",
     incremental: true,
     plugins: [{ name: "next" }],
+    types: ["@testing-library/jest-dom", "vitest/globals"],
     paths: {
       "@/*": ["./src/*"],
     },

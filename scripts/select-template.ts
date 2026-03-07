@@ -71,12 +71,25 @@ function copyTemplate(sourceDir: string, destDir: string): void {
 }
 
 async function main(): Promise<void> {
-  const templates = STACK_DEFINITIONS.map((s) => ({
-    dir: s.dir,
-    id: s.id,
-    slug: slug(s.dir),
-    label: TEMPLATE_LABELS[s.id] ?? s.id,
-  }));
+  const templates: { dir: string; id: string; slug: string; label: string }[] = [];
+  for (const s of STACK_DEFINITIONS) {
+    templates.push({
+      dir: s.dir,
+      id: s.id,
+      slug: slug(s.dir),
+      label: TEMPLATE_LABELS[s.id] ?? s.id,
+    });
+    if (s.fullDir) {
+      const fullId = `${s.id}_full`;
+      const fullSlug = `${s.id}-full`;
+      templates.push({
+        dir: s.fullDir,
+        id: fullId,
+        slug: fullSlug,
+        label: TEMPLATE_LABELS[fullId] ?? `${TEMPLATE_LABELS[s.id] ?? s.id} - 実用`,
+      });
+    }
+  }
 
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 

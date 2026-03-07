@@ -11,7 +11,8 @@ RSpec.describe UsersController, type: :request do
       user1 = create(:user)
       user2 = create(:user)
       get users_path
-      expect(response.body).to include(user1.name, user2.name)
+      # HTML エスケープされた名前で比較（例: O'Keefe → O&#39;Keefe）
+      expect(response.body).to include(ERB::Util.html_escape(user1.name), ERB::Util.html_escape(user2.name))
     end
   end
 end

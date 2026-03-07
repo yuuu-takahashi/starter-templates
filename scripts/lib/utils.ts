@@ -4,7 +4,7 @@
 
 import { readFileSync } from "fs";
 import { join } from "path";
-import { TEMPLATE_DIRS } from "./stacks.js";
+import { TEMPLATE_DIRS, FULL_TEMPLATE_DIRS } from "./stacks.js";
 
 export const ROOT: string = process.cwd();
 
@@ -13,7 +13,10 @@ export const VERSIONS = JSON.parse(
 ) as { node: string; ruby: string; php?: string; go?: string; python?: string; dotnet?: string; rust?: string };
 
 /** 横断的な共通設定を配るテンプレート一覧（Prettier / EditorConfig 対象） */
-export const SHARED_CONFIG_STACKS: readonly string[] = TEMPLATE_DIRS;
+export const SHARED_CONFIG_STACKS: readonly string[] = [
+  ...TEMPLATE_DIRS,
+  ...FULL_TEMPLATE_DIRS,
+];
 
 /** フォーマッター・リンター設定の正本（一元管理・移行時はこの定数だけ変更） */
 export const SHARED_LINT_FORMAT = join(ROOT, "shared", "lint-format");

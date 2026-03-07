@@ -30,6 +30,7 @@ jobs:
       go: ${{ steps.filter.outputs.go }}
       rust: ${{ steps.filter.outputs.rust }}
       django: ${{ steps.filter.outputs.django }}
+      full_nextjs: ${{ steps.filter.outputs.full_nextjs }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -58,6 +59,8 @@ jobs:
               - 'minimal-templates/rust/.devcontainer/**'
             django:
               - 'minimal-templates/django/.devcontainer/**'
+            full_nextjs:
+              - 'full-templates/nextjs/.devcontainer/**'
   nextjs:
     needs: changes
     if: needs.changes.outputs.nextjs == 'true'
@@ -167,4 +170,14 @@ jobs:
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: minimal-templates/django/.devcontainer/Dockerfile
+          failure-threshold: error
+  full_nextjs:
+    needs: changes
+    if: needs.changes.outputs.full_nextjs == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: full-templates/nextjs/.devcontainer/Dockerfile
           failure-threshold: error

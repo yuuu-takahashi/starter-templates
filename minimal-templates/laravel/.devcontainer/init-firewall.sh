@@ -66,7 +66,7 @@ while read -r cidr; do
   ipset add -exist allowed-domains "$cidr"
 done < <(echo "$gh_ranges" | jq -r '(.web + .api + .git)[]' | aggregate -q)
 
-# Resolve and add other allowed domains (list injected per-template by generate-devcontainer.ts)
+# Resolve and add other allowed domains (list from scripts/lib/firewall-domains.ts, injected by generate-devcontainer.ts)
 for domain in \
   "github.com" \
   "api.github.com" \

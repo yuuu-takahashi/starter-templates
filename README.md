@@ -4,6 +4,44 @@
 
 ## 使い方
 
+### ローカル環境の準備（ローカルで実行する場合）
+
+このリポジトリで `yarn create-project` や `yarn generate:all` などを**ローカルで実行する**には、Node.js と Yarn が必要です。Dev Container で開く場合は不要です。
+
+- **Node.js**（推奨: v22 以上。テンプレートは Node 24 を想定）
+
+  - [nodejs.org](https://nodejs.org/ja/) から LTS をインストールする
+  - または [nodenv](https://github.com/nodenv/nodenv) を使う場合:
+
+    ```bash
+    # nodenv の例（rbenv と同じ思想。Rails などと合わせて使いやすい）
+    nodenv install 24
+    nodenv local 24
+    ```
+
+- **Yarn**
+
+  Node.js に同梱の **Corepack** で有効化する方法（推奨）:
+
+  ```bash
+  corepack enable
+  yarn --version   # 利用可能か確認
+  ```
+
+  または npm でグローバルにインストール:
+
+  ```bash
+  npm install -g yarn
+  ```
+
+- **依存関係のインストール**
+
+  リポジトリのルートで:
+
+  ```bash
+  yarn install
+  ```
+
 ### 新規プロジェクトを作る
 
 1. **リポジトリをクローンする**
@@ -22,14 +60,14 @@
    番号でテンプレートを選び、作成先のパス（例: `../my-app`）を入力すると、選んだテンプレートがコピーされます。コピー先には **ESLint・Prettier・Dev Container・CI（GitHub Actions）** などが含まれており、表示されるコマンドで依存関係をインストールして開発を始めてください。
 
 3. **代替: テンプレートを直接使う**  
-   Dev Container で開く場合は、クローンしたリポジトリ内の `minimal-templates/<テンプレート名>` を開いてもかまいません。
+   Dev Container で開く場合は、クローンしたリポジトリ内の `minimal-templates/<テンプレート名>` または `full-templates/<テンプレート名>` を開いてもかまいません。
 
 ## テンプレートの種類
 
 | ディレクトリ | 用途 |
 | ----------- | ---- |
 | [minimal-templates/](minimal-templates/) | **最低限** — 最小構成。スクリプトで自動生成され、共通設定の正本は [shared/](shared/) にあります。 |
-| [full-templates/](full-templates/) | **実用** — すぐ使える形に整えたテンプレート。手動管理。現在整備中です。 |
+| [full-templates/](full-templates/) | **実用** — すぐ使える形に整えたテンプレート。スクリプトで自動生成され、設定の正本は [shared/](shared/) にあります。 |
 
 ## テンプレート一覧（minimal-templates/）
 
@@ -49,9 +87,17 @@
 | [minimal-templates/rust](minimal-templates/rust) | Rust（Axum） |
 | [minimal-templates/django](minimal-templates/django) | Django（Python） |
 
+## テンプレート一覧（full-templates/）
+
+各テンプレートは [full-templates/](full-templates/) 配下にあります。Storybook・E2E・Lighthouse など実運用を想定したツールが含まれます。
+
+| テンプレート | 概要 |
+| ---------- | ---- |
+| [full-templates/nextjs](full-templates/nextjs) | Next.js（App Router）+ Storybook / Vitest / Playwright / Lighthouse CI |
+
 ## ファイルの正本について
 
-`minimal-templates/` 以下のファイルは**スクリプトで自動生成**されます。直接編集しても次回の生成で上書きされます。
+`minimal-templates/` と `full-templates/` 以下の生成対象ファイルは**スクリプトで自動生成**されます。直接編集しても次回の生成で上書きされます。
 設定を変更する場合は [shared/](shared/) 配下のファイルを編集してください。
 
 ## スクリプト
@@ -90,7 +136,7 @@
 
 ### 正本のルール
 
-- **編集する場所**: `minimal-templates/` 以下のファイルはスクリプトで生成されるため、**直接編集しない**。設定を変える場合は [shared/](shared/) 配下の該当ファイルを編集する。
+- **編集する場所**: `minimal-templates/` と `full-templates/` 以下の生成対象ファイルはスクリプトで生成されるため、**直接編集しない**。設定を変える場合は [shared/](shared/) 配下の該当ファイルを編集する。
 - **生成の実行順序**: `yarn generate:all` は `generate:configs` → `generate:deps` → `generate:ci` → `generate:devcontainer` の順で実行される。ルートの `code-check.yml` は各テンプレートの workflow を組み合わせて生成されるため、テンプレートの workflow を変えたあとに `generate:ci` が必要。
 
 ### スタック一覧の管理
@@ -117,9 +163,11 @@ starter-templates/
 │   ├── laravel/      Laravel Pint・PHPUnit のソース
 │   ├── tsconfig/     tsconfig.json のソース
 │   ├── versions.json Node.js / Ruby バージョンの正本
-│   ├── vitest/       vitest.config.ts のソース
+│   ├── readme/       README.md 用 Handlebars テンプレート
+│   ├── actions/      GitHub Actions（setup-node-yarn 等）
+│   ├── test/         Vitest / RSpec のソース
 │   └── workflows/    GitHub Actions ワークフローのソース
-├── minimal-templates/ 最低限（スクリプト生成・手動編集禁止）
+├── minimal-templates/ 最低限（スクリプト生成・直接編集禁止）
 │   ├── nextjs/
 │   ├── nodejs/
 │   ├── reactjs/
@@ -131,12 +179,13 @@ starter-templates/
 │   ├── go/
 │   ├── rust/
 │   └── django/
-└── full-templates/   実用（すぐ使える・手動管理）
+└── full-templates/   実用（スクリプト生成・直接編集禁止）
+    └── nextjs/
 ```
 
 ### 正本 vs 生成ファイル
 
-`minimal-templates/` 以下の多くはスクリプトで生成されます。**生成されるファイルは直接編集すると次回生成で上書きされます。** 一方、フレームワーク別（next.config.ts, vite.config.ts, Laravel の pint/phpunit, C# の .csproj/.sln 等）は **minimal-templates/<stack>/ 直下を正本として直接編集**します。
+`minimal-templates/` と `full-templates/` 以下の多くはスクリプトで生成されます。**生成されるファイルは直接編集すると次回生成で上書きされます。** 一方、フレームワーク別（next.config.ts, vite.config.ts, Laravel の pint/phpunit, C# の .csproj/.sln 等）は **minimal-templates/<stack>/ または full-templates/<stack>/ 直下を正本として直接編集**します。
 
 | ファイル | 正本（編集場所） | 生成スクリプト |
 | ------- | ------------- | ----------- |
