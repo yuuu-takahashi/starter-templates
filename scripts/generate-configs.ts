@@ -14,16 +14,37 @@ import { run as genToolConfigs } from "./gen-tool-configs.js";
 import { run as genRubyConfigs } from "./gen-ruby-configs.js";
 import { run as genWorkflows } from "./gen-workflows.js";
 import { run as genReadme } from "./gen-readme.js";
+import { logger } from "./lib/logger.js";
 
 async function run(): Promise<void> {
-  genCommonFiles();
-  await genToolConfigs();
-  genRubyConfigs();
-  genWorkflows();
-  await genReadme();
+  logger.info('🔄 Starting configuration generation...\n');
+
+  try {
+    logger.info('📝 Generating common files...');
+    genCommonFiles();
+    logger.info('✓ Common files generated\n');
+
+    logger.info('🔧 Generating tool configs...');
+    await genToolConfigs();
+    logger.info('✓ Tool configs generated\n');
+
+    logger.info('💎 Generating Ruby configs...');
+    genRubyConfigs();
+    logger.info('✓ Ruby configs generated\n');
+
+    logger.info('⚙️ Generating workflows...');
+    genWorkflows();
+    logger.info('✓ Workflows generated\n');
+
+    logger.info('📚 Generating READMEs...');
+    await genReadme();
+    logger.info('✓ READMEs generated\n');
+
+    logger.success('All configurations generated successfully!');
+  } catch (error) {
+    logger.error('Configuration generation failed', error instanceof Error ? error : undefined);
+    process.exit(1);
+  }
 }
 
-run().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+run();
