@@ -281,16 +281,21 @@ async function generateMocks(): Promise<void> {
 export async function run(): Promise<void> {
   try {
     logger.start('Tool Configs Generation');
-    await generateESLint();
+
+    // Generate configs concurrently where possible
+    // Group 1: Independent tool configs (can run in parallel)
+    await Promise.all([generateESLint(), generatePrettier()]);
+
+    // Group 2: Template-specific configs (sequential to avoid conflicts)
     await generateVitest();
-    await generatePrettier();
     await generateTsconfig();
-    await generateMarkuplint();
-    await generateMarkdownlint();
-    await generateLighthouse();
-    await generateKnip();
-    await generatePlaywright();
-    await generateMocks();
+
+    // Group 3: Markup/format tools (can run in parallel)
+    await Promise.all([generateMarkuplint(), generateMarkdownlint(), generateLighthouse()]);
+
+    // Group 4: Advanced tools (can run in parallel)
+    await Promise.all([generateKnip(), generatePlaywright(), generateMocks()]);
+
     logger.end('Tool Configs Generation');
   } catch (error) {
     if (error instanceof GenerationError) {

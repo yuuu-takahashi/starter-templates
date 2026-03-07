@@ -3,7 +3,7 @@
  * Run via generate-configs.ts
  */
 
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync, promises as fsPromises } from "fs";
 import { join } from "path";
 import {
   ROOT,
