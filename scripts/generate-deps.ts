@@ -16,7 +16,7 @@
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import { NPM_STACKS, GEMFILE_STACKS, TEMPLATES_DIR } from './lib/stacks.js';
+import { NPM_STACKS, GEMFILE_STACKS, STACK_DEFINITIONS, TEMPLATES_DIR } from './lib/stacks.js';
 import { ROOT, VERSIONS, SHARED_NPM, SHARED_GEMFILE } from './lib/utils.js';
 
 const GEMFILE_HEADER =
@@ -57,6 +57,17 @@ function run(): void {
   // Django/Laravel: 設定のみ管理するテンプレートのディレクトリを事前作成
   mkdirSync(join(ROOT, TEMPLATES_DIR, 'django'), { recursive: true });
   mkdirSync(join(ROOT, TEMPLATES_DIR, 'laravel'), { recursive: true });
+
+  // full-templates: package.json を shared/npm/<stack>.json から生成
+  for (const s of STACK_DEFINITIONS.filter((s) => s.fullDir != null && s.hasNpm)) {
+    const stackSlug = s.dir.replace(new RegExp(`^${TEMPLATES_DIR}/`), '');
+    const srcPath = join(SHARED_NPM, `${s.fullNpmSlug ?? stackSlug}.json`);
+    const content = readFileSync(srcPath, 'utf8');
+    mkdirSync(join(ROOT, s.fullDir!), { recursive: true });
+    const outPath = join(ROOT, s.fullDir!, 'package.json');
+    writeFileSync(outPath, content + '\n', 'utf8');
+    console.log('Generated:', outPath);
+  }
 }
 
 run();

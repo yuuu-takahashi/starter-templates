@@ -1,0 +1,9 @@
+:root {
+  --font-default: 'Noto Sans JP';
+  --font-game: 'DotGothic16';
+  --font-heading: 'M PLUS 1p';
+}
+
+body {
+  font-family: var(--font-default), var(--font-heading), sans-serif;
+}

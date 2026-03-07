@@ -12,7 +12,11 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { getFirewallDomainsForStack } from './lib/firewall-domains.js';
-import { DEVCONTAINER_DOCKERFILE_MAP, TEMPLATES_DIR } from './lib/stacks.js';
+import {
+  DEVCONTAINER_DOCKERFILE_MAP,
+  STACK_DEFINITIONS,
+  TEMPLATES_DIR,
+} from './lib/stacks.js';
 import { ROOT } from './lib/utils.js';
 
 // ── Shared devcontainer defaults (extensions + settings) ───────────────────────
@@ -169,6 +173,36 @@ const STACKS: Stack[] = [
     dir: `${TEMPLATES_DIR}/nextjs`,
     config: {
       name: 'template-nextjs',
+      build: { dockerfile: 'Dockerfile', context: '..', args: NODE_BUILD_ARGS },
+      workspaceFolder: '/workspace',
+      workspaceMount: WORKSPACE_MOUNT,
+      remoteUser: 'node',
+      mounts: NODE_MOUNTS,
+      runArgs: NODE_RUN_ARGS,
+      containerEnv: NODE_CONTAINER_ENV,
+      postStartCommand: NODE_POST_START,
+      waitFor: 'postStartCommand',
+      customizations: {
+        vscode: {
+          extensions: [...BASE_EXTENSIONS, ...NODE_EXTENSIONS],
+          settings: {
+            ...BASE_SETTINGS,
+            ...NODE_TERMINAL_SETTINGS,
+            'eslint.validate': [
+              'javascript',
+              'javascriptreact',
+              'typescript',
+              'typescriptreact',
+            ],
+          },
+        },
+      },
+    },
+  },
+  {
+    dir: 'full-templates/nextjs',
+    config: {
+      name: 'full-template-nextjs',
       build: { dockerfile: 'Dockerfile', context: '..', args: NODE_BUILD_ARGS },
       workspaceFolder: '/workspace',
       workspaceMount: WORKSPACE_MOUNT,
@@ -510,7 +544,7 @@ const FIREWALL_PLACEHOLDER = '__ALLOWED_FIREWALL_DOMAINS__';
 
 // Copy Dockerfiles and init-firewall.sh to each template (domain list is per-stack)
 function writeInitFirewall(outDir: string, templateDir: string): void {
-  const slug = templateDir.replace(new RegExp(`^${TEMPLATES_DIR}/`), '');
+  const slug = templateDir.replace(/^(minimal|full)-templates\//, '');
   const domains = getFirewallDomainsForStack(slug);
   const domainBlock =
     domains.length === 1
@@ -543,9 +577,18 @@ function writeInitFirewall(outDir: string, templateDir: string): void {
   console.log('Generated:', firewallOut);
 }
 
-for (const [dir, dockerfileName] of Object.entries(
-  DEVCONTAINER_DOCKERFILE_MAP,
-)) {
+const FULL_DEVCONTAINER_DOCKERFILE_MAP: Record<string, string | null> =
+  Object.fromEntries(
+    STACK_DEFINITIONS.filter((s) => s.fullDir != null).map((s) => [
+      s.fullDir!,
+      s.devcontainerDockerfile,
+    ]),
+  );
+
+for (const [dir, dockerfileName] of Object.entries({
+  ...DEVCONTAINER_DOCKERFILE_MAP,
+  ...FULL_DEVCONTAINER_DOCKERFILE_MAP,
+})) {
   if (dockerfileName === null) continue;
   const outDir = join(ROOT, dir, '.devcontainer');
   mkdirSync(outDir, { recursive: true });

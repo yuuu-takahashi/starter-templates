@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=M+PLUS+1p:wght@400;500;700&family=DotGothic16&display=swap');
+
+/* Storybook全体でのフォント設定 */
+:root {
+  --font-default: 'Noto Sans JP';
+  --font-game: 'DotGothic16';
+  --font-heading: 'M PLUS 1p';
+}
+
+body {
+  font-family: var(--font-default), var(--font-heading), sans-serif !important;
+}
+
+/* フォントの適用確認用スタイル */
+.mplus-font {
+  font-family: var(--font-heading), sans-serif !important;
+}
+
+.noto-font {
+  font-family: var(--font-default), sans-serif !important;
+}
+
+.game-font {
+  font-family: var(--font-game), sans-serif !important;
+}
+
+/* Vanilla Extractで生成されるクラスに対するフォント設定 */
+[class*='textFamily_default'] {
+  font-family: var(--font-default), sans-serif !important;
+}
+
+[class*='textFamily_game'] {
+  font-family: var(--font-game), sans-serif !important;
+}
+
+[class*='textFamily_heading'] {
+  font-family: var(--font-heading), sans-serif !important;
+}
