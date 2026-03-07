@@ -9,7 +9,7 @@ ARG CLAUDE_CODE_VERSION=latest
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Install basic development tools and iptables/ipset (reference: anthropics/claude-code .devcontainer)
+# Install basic development tools and iptables/ipset (reference: anthropics/claude-code, techseek)
 RUN apt-get update && apt-get install -y --no-install-recommends \
   less \
   git \
@@ -29,6 +29,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   jq \
   nano \
   vim \
+  direnv \
+  build-essential \
+  openssh-client \
+  tree \
+  net-tools \
+  iputils-ping \
+  htop \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Ensure default node user has access to /usr/local/share
@@ -56,6 +63,9 @@ RUN ARCH=$(dpkg --print-architecture) && \
   curl -fsSL "https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" -o "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && \
   dpkg -i "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && \
   rm "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb"
+
+# Enable corepack (yarn/pnpm shims in /usr/local/bin)
+RUN corepack enable
 
 # Set up non-root user
 USER node
