@@ -15,3 +15,7 @@ bootstrap/cache/*
 .phpunit.cache
 .phpunit.result.cache
 *.log
+.dockerignore
+Dockerfile*
+docker-compose*.yml
+compose*.yml

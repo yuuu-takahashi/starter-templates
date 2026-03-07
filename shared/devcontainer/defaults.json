@@ -1,37 +1,15 @@
 {
   "extensions": {
-    "base": [
-      "esbenp.prettier-vscode"
-    ],
-    "node": [
-      "dbaeumer.vscode-eslint",
-      "anthropic.claude-code"
-    ],
-    "ruby": [
-      "Shopify.ruby-extensions-pack"
-    ],
-    "erb": [
-      "aliariff.vscode-erb-beautify"
-    ],
-    "csharp": [
-      "ms-dotnettools.csharp",
-      "ms-dotnettools.csdevkit"
-    ],
-    "go": [
-      "golang.go"
-    ],
-    "rust": [
-      "rust-lang.rust-analyzer"
-    ],
-    "python": [
-      "ms-python.python",
-      "ms-python.vscode-pylance"
-    ],
-    "php": [
-      "bmewburn.vscode-intelephense-client"
-    ],
+    "base": ["esbenp.prettier-vscode", "eamodio.gitlens"],
+    "node": ["dbaeumer.vscode-eslint", "anthropic.claude-code"],
+    "ruby": ["Shopify.ruby-extensions-pack"],
+    "erb": ["aliariff.vscode-erb-beautify"],
+    "csharp": ["ms-dotnettools.csharp", "ms-dotnettools.csdevkit"],
+    "go": ["golang.go"],
+    "rust": ["rust-lang.rust-analyzer"],
+    "python": ["ms-python.python", "ms-python.vscode-pylance"],
+    "php": ["bmewburn.vscode-intelephense-client"],
     "tooling": [
-      "eamodio.gitlens",
       "Gruntfuggly.todo-tree",
       "mhutchie.git-graph",
       "streetsidesoftware.code-spell-checker",
@@ -49,7 +27,8 @@
       "editor.defaultFormatter": "esbenp.prettier-vscode",
       "editor.formatOnSave": true,
       "editor.codeActionsOnSave": {
-        "source.fixAll": "explicit"
+        "source.fixAll": "explicit",
+        "source.fixAll.eslint": "explicit"
       }
     },
     "ruby": {

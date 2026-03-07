@@ -1,7 +1,7 @@
 #!/bin/bash
 # Reference: https://github.com/anthropics/claude-code/blob/main/.devcontainer/init-firewall.sh
-set -euo pipefail
-IFS=$'\n\t'
+set -euo pipefail  # Exit on error, undefined vars, and pipeline failures
+IFS=$'\n\t'       # Stricter word splitting
 
 # 1. Extract Docker DNS info BEFORE any flushing
 DOCKER_DNS_RULES=$(iptables-save -t nat | grep "127\.0\.0\.11" || true)
@@ -26,10 +26,15 @@ else
 fi
 
 # First allow DNS and localhost before any restrictions
+# Allow outbound DNS
 iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+# Allow inbound DNS responses
 iptables -A INPUT -p udp --sport 53 -j ACCEPT
+# Allow outbound SSH
 iptables -A OUTPUT -p tcp --dport 22 -j ACCEPT
+# Allow inbound SSH responses
 iptables -A INPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+# Allow localhost
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 
@@ -56,12 +61,16 @@ while read -r cidr; do
     exit 1
   fi
   echo "Adding GitHub range $cidr"
-  ipset add allowed-domains "$cidr"
+  ipset add -exist allowed-domains "$cidr"
 done < <(echo "$gh_ranges" | jq -r '(.web + .api + .git)[]' | aggregate -q)
 
 # Resolve and add other allowed domains
 for domain in \
   "registry.npmjs.org" \
+  "api.anthropic.com" \
+  "sentry.io" \
+  "statsig.anthropic.com" \
+  "statsig.com" \
   "marketplace.visualstudio.com" \
   "vscode.blob.core.windows.net" \
   "update.code.visualstudio.com"; do
@@ -78,7 +87,7 @@ for domain in \
       exit 1
     fi
     echo "Adding $ip for $domain"
-    ipset add allowed-domains "$ip"
+    ipset add -exist allowed-domains "$ip"
   done < <(echo "$ips")
 done
 

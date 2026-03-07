@@ -5,6 +5,8 @@ ENV TZ="$TZ"
 
 ARG CLAUDE_CODE_VERSION=latest
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Install common dev tools + iptables/ipset (reference: anthropics/claude-code)
 RUN apt-get update && apt-get install -y --no-install-recommends \
   curl \
@@ -33,27 +35,27 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && apt-get install -y nodejs \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g yarn
+# hadolint DL3016: pin npm install version (yarn is needed for Rails asset pipeline)
+RUN npm install -g yarn@1.22.22
 
 # Ensure node user and dirs (ruby image has no node user)
 RUN mkdir -p /usr/local/share/npm-global && useradd -m -s /bin/zsh node 2>/dev/null || true && chown -R node:node /usr/local/share
 ARG USERNAME=node
-RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
-  && mkdir /commandhistory && touch /commandhistory/.bash_history && chown -R $USERNAME /commandhistory
+RUN mkdir /commandhistory && touch /commandhistory/.bash_history && chown -R $USERNAME /commandhistory
 ENV DEVCONTAINER=true
 RUN mkdir -p /workspace /home/node/.claude && chown -R node:node /workspace /home/node/.claude
 
 WORKDIR /workspace
 
-# git-delta
+# git-delta (use curl only to satisfy hadolint DL4001: avoid mixing wget and curl)
 ARG GIT_DELTA_VERSION=0.18.2
 RUN ARCH=$(dpkg --print-architecture) && \
-  wget -q "https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && \
+  curl -fsSL "https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" -o "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && \
   dpkg -i "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && rm "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb"
 
 # Ruby: app deps (template context)
 COPY package.json yarn.lock ./
-RUN yarn install
+RUN yarn install && yarn cache clean
 
 COPY Gemfile Gemfile.lock ./
 RUN bundle install --path 'vendor/bundle'
@@ -70,7 +72,7 @@ ENV SHELL=/bin/zsh
 ENV EDITOR=nano
 ENV VISUAL=nano
 ARG ZSH_IN_DOCKER_VERSION=1.2.0
-RUN sh -c "$(wget -qO- https://github.com/deluan/zsh-in-docker/releases/download/v${ZSH_IN_DOCKER_VERSION}/zsh-in-docker.sh)" -- \
+RUN sh -c "$(curl -fsSL https://github.com/deluan/zsh-in-docker/releases/download/v${ZSH_IN_DOCKER_VERSION}/zsh-in-docker.sh)" -- \
   -p git -p fzf \
   -a "source /usr/share/doc/fzf/examples/key-bindings.zsh" \
   -a "source /usr/share/doc/fzf/examples/completion.zsh" \

@@ -3,8 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "create-project": "tsx scripts/select-template.ts",
     "generate:ci": "tsx scripts/generate-root-workflow.ts",
     "generate:devcontainer": "tsx scripts/generate-devcontainer.ts",
+    "devcontainer": "devcontainer",
     "generate:configs": "tsx scripts/generate-configs.ts",
     "generate:deps": "tsx scripts/generate-deps.ts",
     "generate:all": "yarn generate:configs && yarn generate:deps && yarn generate:ci && yarn generate:devcontainer",
@@ -14,6 +16,7 @@
     "format": "prettier --write \"scripts/**/*.ts\""
   },
   "devDependencies": {
+    "@devcontainers/cli": "^0.83.0",
     "@eslint/js": "^9",
     "@types/node": "^22.0.0",
     "eslint": "^9",

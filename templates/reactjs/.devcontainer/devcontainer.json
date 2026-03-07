@@ -16,13 +16,16 @@
   "remoteUser": "node",
   "mounts": [
     "source=${localWorkspaceFolderBasename}_node_modules,target=/workspace/node_modules,type=volume",
-    "source=${localWorkspaceFolderBasename}-bashhistory-${devcontainerId},target=/commandhistory,type=volume"
+    "source=${localWorkspaceFolderBasename}-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
+    "source=${localWorkspaceFolderBasename}-claude-config-${devcontainerId},target=/home/node/.claude,type=volume"
   ],
   "runArgs": [
     "--cap-add=NET_ADMIN",
     "--cap-add=NET_RAW"
   ],
   "containerEnv": {
+    "CLAUDE_CONFIG_DIR": "/home/node/.claude",
+    "POWERLEVEL9K_DISABLE_GITSTATUS": "true",
     "NODE_OPTIONS": "--max-old-space-size=4096"
   },
   "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
@@ -31,6 +34,7 @@
     "vscode": {
       "extensions": [
         "esbenp.prettier-vscode",
+        "eamodio.gitlens",
         "dbaeumer.vscode-eslint",
         "anthropic.claude-code"
       ],
@@ -41,7 +45,8 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-          "source.fixAll": "explicit"
+          "source.fixAll": "explicit",
+          "source.fixAll.eslint": "explicit"
         },
         "terminal.integrated.defaultProfile.linux": "zsh",
         "terminal.integrated.profiles.linux": {
@@ -64,6 +69,7 @@
     "cursor": {
       "extensions": [
         "esbenp.prettier-vscode",
+        "eamodio.gitlens",
         "dbaeumer.vscode-eslint",
         "anthropic.claude-code"
       ],
@@ -74,7 +80,8 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-          "source.fixAll": "explicit"
+          "source.fixAll": "explicit",
+          "source.fixAll.eslint": "explicit"
         },
         "terminal.integrated.defaultProfile.linux": "zsh",
         "terminal.integrated.profiles.linux": {
