@@ -9,14 +9,14 @@ import * as os from "node:os";
 import * as path from "node:path";
 import * as readline from "node:readline";
 import { fileURLToPath } from "node:url";
-import { STACK_DEFINITIONS } from "./lib/stacks.js";
+import { STACK_DEFINITIONS, TEMPLATES_DIR } from "./lib/stacks.js";
 import { TEMPLATE_LABELS } from "./lib/template-labels.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..");
 
 function slug(dir: string): string {
-  return dir.replace(/^templates\//, "");
+  return dir.replace(new RegExp(`^${TEMPLATES_DIR}/`), "");
 }
 
 function ask(rl: readline.Interface, question: string): Promise<string> {

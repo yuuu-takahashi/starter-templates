@@ -37,27 +37,27 @@ jobs:
         with:
           filters: |-
             nextjs:
-              - 'templates/nextjs/**'
+              - 'minimal-templates/nextjs/**'
             nodejs:
-              - 'templates/nodejs/**'
+              - 'minimal-templates/nodejs/**'
             reactjs:
-              - 'templates/reactjs/**'
+              - 'minimal-templates/reactjs/**'
             rails:
-              - 'templates/rails/**'
+              - 'minimal-templates/rails/**'
             rails_api:
-              - 'templates/rails-api/**'
+              - 'minimal-templates/rails-api/**'
             laravel:
-              - 'templates/laravel/**'
+              - 'minimal-templates/laravel/**'
             sinatra:
-              - 'templates/sinatra/**'
+              - 'minimal-templates/sinatra/**'
             csharp:
-              - 'templates/csharp/**'
+              - 'minimal-templates/csharp/**'
             go:
-              - 'templates/go/**'
+              - 'minimal-templates/go/**'
             rust:
-              - 'templates/rust/**'
+              - 'minimal-templates/rust/**'
             django:
-              - 'templates/django/**'
+              - 'minimal-templates/django/**'
   nextjs:
     needs: changes
     if: needs.changes.outputs.nextjs == 'true'
@@ -68,7 +68,7 @@ jobs:
         with:
           node-version: "24"
           cache: yarn
-          cache-dependency-path: templates/nextjs/yarn.lock
+          cache-dependency-path: minimal-templates/nextjs/yarn.lock
       - name: Install dependencies
         run: yarn install
       - name: test
@@ -83,7 +83,7 @@ jobs:
         with:
           node-version: "24"
           cache: yarn
-          cache-dependency-path: templates/nodejs/yarn.lock
+          cache-dependency-path: minimal-templates/nodejs/yarn.lock
       - name: Install dependencies
         run: yarn install
       - name: test
@@ -98,7 +98,7 @@ jobs:
         with:
           node-version: "24"
           cache: yarn
-          cache-dependency-path: templates/reactjs/yarn.lock
+          cache-dependency-path: minimal-templates/reactjs/yarn.lock
       - name: Install dependencies
         run: yarn install
       - name: test
@@ -112,8 +112,8 @@ jobs:
       - name: Cache Ruby gems
         uses: actions/cache@v4
         with:
-          path: templates/rails/vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('templates/rails/Gemfile.lock') }}
+          path: minimal-templates/rails/vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('minimal-templates/rails/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
       - name: Install Node.js & Yarn inside the container
@@ -123,25 +123,25 @@ jobs:
           curl -fsSL https://deb.nodesource.com/setup_24.x | bash -
           apt-get install -y nodejs
           npm install -g yarn
-        working-directory: templates/rails
+        working-directory: minimal-templates/rails
       - name: Cache node_modules
         uses: actions/cache@v4
         with:
-          path: templates/rails/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('templates/rails/yarn.lock') }}
+          path: minimal-templates/rails/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('minimal-templates/rails/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install dependencies
         run: bundle install --path vendor/bundle
-        working-directory: templates/rails
+        working-directory: minimal-templates/rails
       - name: Install JS dependencies
         run: yarn install
-        working-directory: templates/rails
+        working-directory: minimal-templates/rails
       - name: Run tests
         run: |
           bin/rails db:prepare
           bundle exec rspec
-        working-directory: templates/rails
+        working-directory: minimal-templates/rails
     container:
       image: ruby:3.3.6
     services:
@@ -163,19 +163,19 @@ jobs:
       - name: Cache Ruby gems
         uses: actions/cache@v4
         with:
-          path: templates/rails-api/vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('templates/rails-api/Gemfile.lock') }}
+          path: minimal-templates/rails-api/vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('minimal-templates/rails-api/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
       - name: Install dependencies
         run: bundle install --path vendor/bundle
-        working-directory: templates/rails-api
+        working-directory: minimal-templates/rails-api
       - name: Run tests
         run: |
           cp .env.test .env
           bundle exec rails db:create db:migrate
           bundle exec rspec
-        working-directory: templates/rails-api
+        working-directory: minimal-templates/rails-api
     container:
       image: ruby:3.3.6
     services:
@@ -199,21 +199,21 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
-          path: templates/laravel/.composer-cache
-          key: ${{ runner.os }}-composer-${{ hashFiles('templates/laravel/composer.lock') }}
+          path: minimal-templates/laravel/.composer-cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('minimal-templates/laravel/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
         run: COMPOSER_CACHE_DIR=.composer-cache composer install --prefer-dist --no-progress
-        working-directory: templates/laravel
+        working-directory: minimal-templates/laravel
       - name: Prepare Laravel
         run: |
           cp .env.example .env
           php artisan key:generate
           touch database/database.sqlite
-        working-directory: templates/laravel
+        working-directory: minimal-templates/laravel
       - name: Run tests
         run: php artisan test
-        working-directory: templates/laravel
+        working-directory: minimal-templates/laravel
   sinatra:
     needs: changes
     if: needs.changes.outputs.sinatra == 'true'
@@ -223,17 +223,17 @@ jobs:
       - name: Cache Ruby gems
         uses: actions/cache@v4
         with:
-          path: templates/sinatra/vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('templates/sinatra/Gemfile.lock') }}
+          path: minimal-templates/sinatra/vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('minimal-templates/sinatra/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
       - name: Install dependencies
         run: bundle install --path vendor/bundle
-        working-directory: templates/sinatra
+        working-directory: minimal-templates/sinatra
       - name: Run tests
         run: |
           bundle exec rspec
-        working-directory: templates/sinatra
+        working-directory: minimal-templates/sinatra
     container:
       image: ruby:3.3.6
     services:
@@ -258,13 +258,13 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
-          global-json-file: templates/csharp/global.json
+          global-json-file: minimal-templates/csharp/global.json
       - name: Restore
         run: dotnet restore
-        working-directory: templates/csharp
+        working-directory: minimal-templates/csharp
       - name: Test
         run: dotnet test --verbosity normal
-        working-directory: templates/csharp
+        working-directory: minimal-templates/csharp
   go:
     needs: changes
     if: needs.changes.outputs.go == 'true'
@@ -274,13 +274,13 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: templates/go/.go-version
+          go-version-file: minimal-templates/go/.go-version
       - name: Tidy
         run: go mod tidy
-        working-directory: templates/go
+        working-directory: minimal-templates/go
       - name: Test
         run: go test ./...
-        working-directory: templates/go
+        working-directory: minimal-templates/go
   rust:
     needs: changes
     if: needs.changes.outputs.rust == 'true'
@@ -292,12 +292,12 @@ jobs:
       - name: Cache cargo
         uses: actions/cache@v4
         with:
-          path: templates/rust/target
-          key: ${{ runner.os }}-cargo-rust-${{ hashFiles('templates/rust/Cargo.lock', 'templates/rust/Cargo.toml') }}
+          path: minimal-templates/rust/target
+          key: ${{ runner.os }}-cargo-rust-${{ hashFiles('minimal-templates/rust/Cargo.lock', 'minimal-templates/rust/Cargo.toml') }}
           restore-keys: ${{ runner.os }}-cargo-rust-
       - name: Test
         run: cargo test
-        working-directory: templates/rust
+        working-directory: minimal-templates/rust
   django:
     needs: changes
     if: needs.changes.outputs.django == 'true'
@@ -307,25 +307,25 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version-file: templates/django/.python-version
+          python-version-file: minimal-templates/django/.python-version
       - name: Cache pip
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('templates/django/requirements*.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('minimal-templates/django/requirements*.txt') }}
           restore-keys: ${{ runner.os }}-pip-
       - name: Install dependencies
         run: |
           python -m venv .venv
           . .venv/bin/activate
           pip install -r requirements.txt
-        working-directory: templates/django
+        working-directory: minimal-templates/django
       - name: Prepare environment
         run: |
           cp .env.example .env
-        working-directory: templates/django
+        working-directory: minimal-templates/django
       - name: Run tests
         run: |
           . .venv/bin/activate
           python manage.py test
-        working-directory: templates/django
+        working-directory: minimal-templates/django

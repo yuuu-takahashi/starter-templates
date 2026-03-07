@@ -37,27 +37,27 @@ jobs:
         with:
           filters: |-
             nextjs:
-              - 'templates/nextjs/**'
+              - 'minimal-templates/nextjs/**'
             nodejs:
-              - 'templates/nodejs/**'
+              - 'minimal-templates/nodejs/**'
             reactjs:
-              - 'templates/reactjs/**'
+              - 'minimal-templates/reactjs/**'
             rails:
-              - 'templates/rails/**'
+              - 'minimal-templates/rails/**'
             rails_api:
-              - 'templates/rails-api/**'
+              - 'minimal-templates/rails-api/**'
             laravel:
-              - 'templates/laravel/**'
+              - 'minimal-templates/laravel/**'
             sinatra:
-              - 'templates/sinatra/**'
+              - 'minimal-templates/sinatra/**'
             csharp:
-              - 'templates/csharp/**'
+              - 'minimal-templates/csharp/**'
             go:
-              - 'templates/go/**'
+              - 'minimal-templates/go/**'
             rust:
-              - 'templates/rust/**'
+              - 'minimal-templates/rust/**'
             django:
-              - 'templates/django/**'
+              - 'minimal-templates/django/**'
   generate_check:
     runs-on: ubuntu-latest
     steps:
@@ -83,14 +83,14 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: templates/nextjs
+        working-directory: minimal-templates/nextjs
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
           cache: yarn
-          cache-dependency-path: templates/nextjs/yarn.lock
+          cache-dependency-path: minimal-templates/nextjs/yarn.lock
       - name: Install dependencies
         run: yarn install
       - name: format
@@ -103,14 +103,14 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: templates/nodejs
+        working-directory: minimal-templates/nodejs
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
           cache: yarn
-          cache-dependency-path: templates/nodejs/yarn.lock
+          cache-dependency-path: minimal-templates/nodejs/yarn.lock
       - name: Install dependencies
         run: yarn install
       - name: format
@@ -123,14 +123,14 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: templates/reactjs
+        working-directory: minimal-templates/reactjs
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
           cache: yarn
-          cache-dependency-path: templates/reactjs/yarn.lock
+          cache-dependency-path: minimal-templates/reactjs/yarn.lock
       - name: Install dependencies
         run: yarn install
       - name: format
@@ -148,25 +148,25 @@ jobs:
           node-version: "24"
       - uses: actions/cache@v4
         with:
-          path: templates/rails/node_modules
-          key: ${{ runner.os }}-yarn-templates/rails-${{ hashFiles('templates/rails/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-templates/rails-
+          path: minimal-templates/rails/node_modules
+          key: ${{ runner.os }}-yarn-minimal-templates/rails-${{ hashFiles('minimal-templates/rails/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-minimal-templates/rails-
       - name: yarn format & lint
-        run: cd templates/rails && yarn install && yarn format
+        run: cd minimal-templates/rails && yarn install && yarn format
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.3.6
-          working-directory: templates/rails
+          working-directory: minimal-templates/rails
           bundler-cache: true
       - name: rubocop
         run: bundle exec rubocop
-        working-directory: templates/rails
+        working-directory: minimal-templates/rails
       - name: erb_lint
         run: bundle exec erb_lint app/views/**/*.erb
-        working-directory: templates/rails
+        working-directory: minimal-templates/rails
       - name: htmlbeautifier
         run: find app/views -name "*.erb" -exec bundle exec htmlbeautifier {} \;
-        working-directory: templates/rails
+        working-directory: minimal-templates/rails
   rails_api:
     needs: changes
     if: needs.changes.outputs.rails_api == 'true'
@@ -178,26 +178,26 @@ jobs:
           node-version: "24"
       - uses: actions/cache@v4
         with:
-          path: templates/rails-api/node_modules
-          key: ${{ runner.os }}-yarn-templates/rails-api-${{ hashFiles('templates/rails-api/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-templates/rails-api-
+          path: minimal-templates/rails-api/node_modules
+          key: ${{ runner.os }}-yarn-minimal-templates/rails-api-${{ hashFiles('minimal-templates/rails-api/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-minimal-templates/rails-api-
       - name: yarn format & lint
-        run: cd templates/rails-api && yarn install && yarn format
+        run: cd minimal-templates/rails-api && yarn install && yarn format
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.3.6
-          working-directory: templates/rails-api
+          working-directory: minimal-templates/rails-api
           bundler-cache: true
       - name: rubocop
         run: bundle exec rubocop
-        working-directory: templates/rails-api
+        working-directory: minimal-templates/rails-api
   laravel:
     needs: changes
     if: needs.changes.outputs.laravel == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: templates/laravel
+        working-directory: minimal-templates/laravel
     steps:
       - uses: actions/checkout@v4
       - name: Set up PHP
@@ -209,15 +209,15 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
-          path: templates/laravel/.composer-cache
-          key: ${{ runner.os }}-composer-${{ hashFiles('templates/laravel/composer.lock') }}
+          path: minimal-templates/laravel/.composer-cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('minimal-templates/laravel/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
         run: COMPOSER_CACHE_DIR=.composer-cache composer install --prefer-dist --no-progress
-        working-directory: templates/laravel
+        working-directory: minimal-templates/laravel
       - name: Laravel Pint (format & lint)
         run: ./vendor/bin/pint --test
-        working-directory: templates/laravel
+        working-directory: minimal-templates/laravel
   sinatra:
     needs: changes
     if: needs.changes.outputs.sinatra == 'true'
@@ -229,78 +229,78 @@ jobs:
           node-version: "24"
       - uses: actions/cache@v4
         with:
-          path: templates/sinatra/node_modules
-          key: ${{ runner.os }}-yarn-templates/sinatra-${{ hashFiles('templates/sinatra/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-templates/sinatra-
+          path: minimal-templates/sinatra/node_modules
+          key: ${{ runner.os }}-yarn-minimal-templates/sinatra-${{ hashFiles('minimal-templates/sinatra/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-minimal-templates/sinatra-
       - name: yarn format & lint
-        run: cd templates/sinatra && yarn install && yarn format
+        run: cd minimal-templates/sinatra && yarn install && yarn format
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.3.6
-          working-directory: templates/sinatra
+          working-directory: minimal-templates/sinatra
           bundler-cache: true
       - name: rubocop
         run: bundle exec rubocop
-        working-directory: templates/sinatra
+        working-directory: minimal-templates/sinatra
       - name: erb_lint
         run: bundle exec erb_lint app/views/**/*.erb
-        working-directory: templates/sinatra
+        working-directory: minimal-templates/sinatra
       - name: htmlbeautifier
         run: find app/views -name "*.erb" -exec bundle exec htmlbeautifier {} \;
-        working-directory: templates/sinatra
+        working-directory: minimal-templates/sinatra
   csharp:
     needs: changes
     if: needs.changes.outputs.csharp == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: templates/csharp
+        working-directory: minimal-templates/csharp
     steps:
       - uses: actions/checkout@v4
       - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
-          global-json-file: templates/csharp/global.json
+          global-json-file: minimal-templates/csharp/global.json
       - name: Restore
         run: dotnet restore
-        working-directory: templates/csharp
+        working-directory: minimal-templates/csharp
       - name: Build
         run: dotnet build --no-restore
-        working-directory: templates/csharp
+        working-directory: minimal-templates/csharp
   go:
     needs: changes
     if: needs.changes.outputs.go == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: templates/go
+        working-directory: minimal-templates/go
     steps:
       - uses: actions/checkout@v4
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: templates/go/.go-version
+          go-version-file: minimal-templates/go/.go-version
       - name: Download Go modules
         run: go mod download
-        working-directory: templates/go
+        working-directory: minimal-templates/go
       - name: Tidy Go modules
         run: go mod tidy
-        working-directory: templates/go
+        working-directory: minimal-templates/go
       - name: golangci-lint
         run: |
           go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
           "$(go env GOPATH)/bin/golangci-lint" run
-        working-directory: templates/go
+        working-directory: minimal-templates/go
       - name: Build
         run: go build ./...
-        working-directory: templates/go
+        working-directory: minimal-templates/go
   rust:
     needs: changes
     if: needs.changes.outputs.rust == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: templates/rust
+        working-directory: minimal-templates/rust
     steps:
       - uses: actions/checkout@v4
       - name: Install Rust toolchain
@@ -310,36 +310,36 @@ jobs:
       - name: Cache cargo
         uses: actions/cache@v4
         with:
-          path: templates/rust/target
-          key: ${{ runner.os }}-cargo-rust-${{ hashFiles('templates/rust/Cargo.lock', 'templates/rust/Cargo.toml') }}
+          path: minimal-templates/rust/target
+          key: ${{ runner.os }}-cargo-rust-${{ hashFiles('minimal-templates/rust/Cargo.lock', 'minimal-templates/rust/Cargo.toml') }}
           restore-keys: ${{ runner.os }}-cargo-rust-
       - name: Check format
         run: cargo fmt --all -- --check
-        working-directory: templates/rust
+        working-directory: minimal-templates/rust
       - name: Clippy
         run: cargo clippy --all-targets -- -D warnings
-        working-directory: templates/rust
+        working-directory: minimal-templates/rust
       - name: Build
         run: cargo build
-        working-directory: templates/rust
+        working-directory: minimal-templates/rust
   django:
     needs: changes
     if: needs.changes.outputs.django == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: templates/django
+        working-directory: minimal-templates/django
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version-file: templates/django/.python-version
+          python-version-file: minimal-templates/django/.python-version
       - name: Cache pip
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('templates/django/requirements*.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('minimal-templates/django/requirements*.txt') }}
           restore-keys: ${{ runner.os }}-pip-
       - name: Install dependencies
         run: |
@@ -347,14 +347,14 @@ jobs:
           . .venv/bin/activate
           pip install -r requirements.txt
           pip install ruff black
-        working-directory: templates/django
+        working-directory: minimal-templates/django
       - name: Ruff
         run: |
           . .venv/bin/activate
           ruff check .
-        working-directory: templates/django
+        working-directory: minimal-templates/django
       - name: Black
         run: |
           . .venv/bin/activate
           black --check .
-        working-directory: templates/django
+        working-directory: minimal-templates/django

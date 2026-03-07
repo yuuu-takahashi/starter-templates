@@ -162,7 +162,7 @@ export async function run(): Promise<void> {
     const context = prepareTemplateContext(config, stackSection);
     const content = template(context);
     const normalized = content.replace(/\n{3,}/g, "\n\n").trimEnd() + "\n";
-    const outPath = join(ROOT, "templates", config.id, "README.md");
+    const outPath = join(ROOT, TEMPLATES_DIR, config.id, "README.md");
     writeFileSync(outPath, normalized, "utf8");
     console.log("Generated:", outPath);
   }
