@@ -25,11 +25,12 @@ function ask(rl: readline.Interface, question: string): Promise<string> {
   });
 }
 
-/** ディレクトリの中身を削除する（.git は残す）。ディレクトリ自体は残す。 */
+/** ディレクトリの中身を削除する（.git, .claude は残す）。ディレクトリ自体は残す。 */
 function clearDir(dir: string): void {
+  const preserve = new Set([".git", ".claude"]);
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   for (const ent of entries) {
-    if (ent.name === ".git") continue;
+    if (preserve.has(ent.name)) continue;
     const p = path.join(dir, ent.name);
     if (ent.isDirectory()) {
       fs.rmSync(p, { recursive: true });
@@ -43,6 +44,7 @@ function copyTemplate(sourceDir: string, destDir: string): void {
   const exclude = new Set([
     "node_modules",
     ".git",
+    ".claude",
     "vendor",
     "__pycache__",
     ".venv",
