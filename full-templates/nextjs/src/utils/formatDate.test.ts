@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest';
-
 import { formatDate, formatDateTime } from '@/utils/formatDate';
+import { describe, expect, it } from 'vitest';
 
 describe('formatDate関数', () => {
   it('日付が正しくフォーマットされる', () => {

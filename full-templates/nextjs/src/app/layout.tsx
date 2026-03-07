@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 
-import { GoogleAnalytics } from '@next/third-parties/google';
-import { ReactNode } from 'react';
-import '@/styles/globals.css';
 import { validateEnv } from '@/config/env';
 import { defaultMetadata } from '@/config/metadata';
+import '@/styles/globals.css';
+import { GoogleAnalytics } from '@next/third-parties/google';
+import { ReactNode } from 'react';
 
 const GA_ID = '';
 

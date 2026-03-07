@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest';
-
 import { sum } from '@/utils/sum';
+import { describe, expect, it } from 'vitest';
 
 describe('sum関数', () => {
   it('1 + 2 が 3 になることを確認', () => {

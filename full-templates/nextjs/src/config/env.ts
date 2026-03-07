@@ -19,7 +19,7 @@ interface PublicConfig {
 const env = process.env;
 
 export const publicConfig: PublicConfig = {
-  APP_URL: env.NEXT_PUBLIC_APP_URL || '',
+  APP_URL: env.NEXT_PUBLIC_APP_URL ?? '',
 };
 
 // ============================================
@@ -35,11 +35,11 @@ interface ServerConfig {
 }
 
 export const serverConfig: ServerConfig = {
-  ENV: env.APP_ENV || 'development',
+  ENV: env.APP_ENV ?? 'development',
   IS_DEVELOPMENT: env.APP_ENV === 'development',
   IS_PRODUCTION: env.APP_ENV === 'production',
   IS_TEST: env.NODE_ENV === 'test',
-  LOG_LEVEL: env.LOG_LEVEL || 'info',
+  LOG_LEVEL: env.LOG_LEVEL ?? 'info',
 };
 
 // ============================================
