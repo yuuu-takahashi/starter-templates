@@ -97,6 +97,7 @@ export const STACK_FIREWALL_DOMAINS: Readonly<Record<string, string[]>> = {
   react: [],
   rails: ['rubygems.org', 'gems.rubygems.org'],
   'rails-api': ['rubygems.org', 'gems.rubygems.org'],
+  ruby: ['rubygems.org', 'gems.rubygems.org'],
   sinatra: ['rubygems.org', 'gems.rubygems.org'],
   laravel: ['packagist.org', 'repo.packagist.org'],
   django: ['pypi.org', 'files.pythonhosted.org'],

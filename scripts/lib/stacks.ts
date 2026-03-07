@@ -145,6 +145,17 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
     monorepoPrefix: false,
   },
   {
+    dir: `${td}/ruby`,
+    id: 'ruby',
+    runtime: 'ruby',
+    codeCheckWorkflow: 'code-check-ruby.yml',
+    gitignore: '.gitignore.ruby',
+    devcontainerDockerfile: 'Dockerfile.ruby',
+    hasNpm: true,
+    hasGemfile: true,
+    monorepoPrefix: false,
+  },
+  {
     dir: `${td}/csharp`,
     id: 'csharp',
     runtime: 'dotnet',

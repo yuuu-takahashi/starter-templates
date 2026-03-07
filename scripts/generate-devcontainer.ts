@@ -315,6 +315,31 @@ const STACKS: Stack[] = [
     },
   },
   {
+    dir: `${TEMPLATES_DIR}/ruby`,
+    config: {
+      name: 'template-ruby',
+      build: {
+        dockerfile: 'Dockerfile',
+        context: '..',
+        args: BUILD_ARGS_DEVCONTAINER,
+      },
+      workspaceFolder: '/workspace',
+      workspaceMount: WORKSPACE_MOUNT,
+      remoteUser: 'node',
+      mounts: CLAUDE_BASE_MOUNTS,
+      runArgs: RUN_ARGS_FIREWALL,
+      containerEnv: CONTAINER_ENV_FIREWALL,
+      postStartCommand: POST_START_FIREWALL,
+      waitFor: 'postStartCommand',
+      customizations: {
+        vscode: {
+          extensions: [...BASE_EXTENSIONS, ...RUBY_EXTENSIONS],
+          settings: { ...BASE_SETTINGS, ...RUBY_SETTINGS },
+        },
+      },
+    },
+  },
+  {
     dir: `${TEMPLATES_DIR}/rails-api`,
     config: {
       name: 'template-rails-api',

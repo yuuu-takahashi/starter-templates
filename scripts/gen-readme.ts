@@ -160,16 +160,9 @@ export async function run(): Promise<void> {
     extensions: Record<ExtensionSetKey, string[]>;
   };
 
-  const maxSelectNumber =
-    STACK_DEFINITIONS.length +
-    STACK_DEFINITIONS.filter((s) => s.fullDir != null).length;
-
   for (const config of TEMPLATE_README_CONFIGS) {
     const stackSection = buildStackSection(config, devcontainerDefaults);
-    const context = {
-      ...prepareTemplateContext(config, stackSection),
-      maxSelectNumber,
-    };
+    const context = prepareTemplateContext(config, stackSection);
     const content = template(context);
     const normalized = content.replace(/\n{3,}/g, "\n\n").trimEnd() + "\n";
     const outDir = config.id.endsWith("-full")

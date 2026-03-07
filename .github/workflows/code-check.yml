@@ -26,6 +26,7 @@ jobs:
       rails_api: ${{ steps.filter.outputs.rails_api }}
       laravel: ${{ steps.filter.outputs.laravel }}
       sinatra: ${{ steps.filter.outputs.sinatra }}
+      ruby: ${{ steps.filter.outputs.ruby }}
       csharp: ${{ steps.filter.outputs.csharp }}
       go: ${{ steps.filter.outputs.go }}
       rust: ${{ steps.filter.outputs.rust }}
@@ -51,6 +52,8 @@ jobs:
               - 'minimal-templates/laravel/**'
             sinatra:
               - 'minimal-templates/sinatra/**'
+            ruby:
+              - 'minimal-templates/ruby/**'
             csharp:
               - 'minimal-templates/csharp/**'
             go:
@@ -251,6 +254,30 @@ jobs:
       - name: htmlbeautifier
         run: find app/views -name "*.erb" -exec bundle exec htmlbeautifier {} \;
         working-directory: minimal-templates/sinatra
+  ruby:
+    needs: changes
+    if: needs.changes.outputs.ruby == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - uses: actions/cache@v4
+        with:
+          path: minimal-templates/ruby/node_modules
+          key: ${{ runner.os }}-yarn-minimal-templates/ruby-${{ hashFiles('minimal-templates/ruby/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-minimal-templates/ruby-
+      - name: yarn format & lint
+        run: cd minimal-templates/ruby && yarn install && yarn format
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3.6
+          working-directory: minimal-templates/ruby
+          bundler-cache: true
+      - name: rubocop
+        run: bundle exec rubocop
+        working-directory: minimal-templates/ruby
   csharp:
     needs: changes
     if: needs.changes.outputs.csharp == 'true'
