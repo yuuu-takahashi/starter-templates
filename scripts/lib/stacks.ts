@@ -4,8 +4,8 @@
  * TEMPLATE_DIRS / CODE_CHECK_SOURCE / ROOT_STACKS 等はすべてここから導出される。
  */
 
-/** テンプレートディレクトリ名（例: templates/nextjs の "templates" 部分） */
-export const TEMPLATES_DIR = 'templates';
+/** minimal-templates: 最低限。full-templates: 実用（OSS で直感的な対比） */
+export const TEMPLATES_DIR = 'minimal-templates';
 
 /** ランタイム種別（.xxx-version の配布先判定に使用） */
 export type Runtime =
@@ -19,7 +19,7 @@ export type Runtime =
 
 /** 1テンプレート分の定義。ここだけ編集すれば他定数は自動で整合する */
 export interface StackDefinition {
-  /** テンプレートディレクトリ（templates/ からの相対） */
+  /** テンプレートディレクトリ（minimal-templates/ からの相対） */
   dir: string;
   /** ルートワークフロー用 ID（path_filter のキー、ハイフンはアンダースコア） */
   id: string;
@@ -41,7 +41,7 @@ export interface StackDefinition {
   monorepoPrefix: boolean;
 }
 
-/** スタック名（dir の "templates/" 以降、例: nextjs, rails-api） */
+/** スタック名（dir の "minimal-templates/" 以降、例: nextjs, rails-api） */
 function slug(dir: string): string {
   return dir.replace(new RegExp(`^${TEMPLATES_DIR}/`), '');
 }
@@ -184,7 +184,7 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
 
 // ── 以下は STACK_DEFINITIONS から導出（手で直さない）────────────────────────────
 
-/** 全テンプレートのディレクトリ（templates/ からの相対パス） */
+/** 全テンプレートのディレクトリ（minimal-templates/ からの相対パス） */
 export const TEMPLATE_DIRS: readonly string[] = STACK_DEFINITIONS.map(
   (s) => s.dir,
 );

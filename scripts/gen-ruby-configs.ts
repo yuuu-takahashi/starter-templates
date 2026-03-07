@@ -7,15 +7,17 @@ import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import YAML from "yaml";
 import { ROOT, RSPEC_COMMON, SHARED_RUBOCOP, deepMerge } from "./lib/utils.js";
+import { TEMPLATES_DIR } from "./lib/stacks.js";
 
 export function run(): void {
   // ── .rspec（共通オプション + 各 template の --require）────────────────────
 
   const rspecCommonContent = readFileSync(RSPEC_COMMON, "utf8");
+  const td = TEMPLATES_DIR;
   const RSPEC_REQUIRES: Record<string, string[]> = {
-    "templates/rails": ["rails_helper"],
-    "templates/rails-api": ["rails_helper", "swagger_helper"],
-    "templates/sinatra": ["spec_helper"],
+    [`${td}/rails`]: ["rails_helper"],
+    [`${td}/rails-api`]: ["rails_helper", "swagger_helper"],
+    [`${td}/sinatra`]: ["spec_helper"],
   };
   for (const [dir, requires] of Object.entries(RSPEC_REQUIRES)) {
     const requireLines = requires.map((r) => `--require ${r}`).join("\n");
@@ -37,9 +39,9 @@ export function run(): void {
   const rubocopSinatraMerged = deepMerge(rubocopBase, rubocopSinatra);
 
   const RUBOCOP_OUT: Array<{ dir: string; content: string }> = [
-    { dir: "templates/rails", content: YAML.stringify(rubocopRailsMerged) },
-    { dir: "templates/sinatra", content: YAML.stringify(rubocopSinatraMerged) },
-    { dir: "templates/rails-api", content: rubocopRailsApi },
+    { dir: `${td}/rails`, content: YAML.stringify(rubocopRailsMerged) },
+    { dir: `${td}/sinatra`, content: YAML.stringify(rubocopSinatraMerged) },
+    { dir: `${td}/rails-api`, content: rubocopRailsApi },
   ];
   for (const { dir, content } of RUBOCOP_OUT) {
     const outPath = join(ROOT, dir, ".rubocop.yml");

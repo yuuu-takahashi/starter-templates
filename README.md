@@ -22,36 +22,36 @@
    番号でテンプレートを選び、作成先のパス（例: `../my-app`）を入力すると、選んだテンプレートがコピーされます。コピー先には **ESLint・Prettier・Dev Container・CI（GitHub Actions）** などが含まれており、表示されるコマンドで依存関係をインストールして開発を始めてください。
 
 3. **代替: テンプレートを直接使う**  
-   Dev Container で開く場合は、クローンしたリポジトリ内の `templates/<テンプレート名>` を開いてもかまいません。
+   Dev Container で開く場合は、クローンしたリポジトリ内の `minimal-templates/<テンプレート名>` を開いてもかまいません。
 
 ## テンプレートの種類
 
 | ディレクトリ | 用途 |
 | ----------- | ---- |
-| [templates/](templates/) | **シンプルなテンプレート** — 最小構成。スクリプトで自動生成され、共通設定の正本は [shared/](shared/) にあります。 |
-| [starters/](starters/) | **個人開発用テンプレート** — すぐ使える形に整えたテンプレート。手動管理。現在整備中です。 |
+| [minimal-templates/](minimal-templates/) | **最低限** — 最小構成。スクリプトで自動生成され、共通設定の正本は [shared/](shared/) にあります。 |
+| [full-templates/](full-templates/) | **実用** — すぐ使える形に整えたテンプレート。手動管理。現在整備中です。 |
 
-## テンプレート一覧（templates/）
+## テンプレート一覧（minimal-templates/）
 
-各テンプレートは [templates/](templates/) 配下にあります。**各フォルダはこのリポジトリから切り出して単体プロジェクトとして利用できます。**
+各テンプレートは [minimal-templates/](minimal-templates/) 配下にあります。**各フォルダはこのリポジトリから切り出して単体プロジェクトとして利用できます。**
 
 | テンプレート | 概要 |
 | ---------- | ---- |
-| [templates/nodejs](templates/nodejs) | Node.js |
-| [templates/nextjs](templates/nextjs) | Next.js（App Router） |
-| [templates/reactjs](templates/reactjs) | React + Vite |
-| [templates/rails](templates/rails) | Ruby on Rails |
-| [templates/rails-api](templates/rails-api) | Rails API |
-| [templates/laravel](templates/laravel) | Laravel（PHP） |
-| [templates/sinatra](templates/sinatra) | Sinatra |
-| [templates/csharp](templates/csharp) | ASP.NET Core Minimal API（C#） |
-| [templates/go](templates/go) | Go（Gin） |
-| [templates/rust](templates/rust) | Rust（Axum） |
-| [templates/django](templates/django) | Django（Python） |
+| [minimal-templates/nodejs](minimal-templates/nodejs) | Node.js |
+| [minimal-templates/nextjs](minimal-templates/nextjs) | Next.js（App Router） |
+| [minimal-templates/reactjs](minimal-templates/reactjs) | React + Vite |
+| [minimal-templates/rails](minimal-templates/rails) | Ruby on Rails |
+| [minimal-templates/rails-api](minimal-templates/rails-api) | Rails API |
+| [minimal-templates/laravel](minimal-templates/laravel) | Laravel（PHP） |
+| [minimal-templates/sinatra](minimal-templates/sinatra) | Sinatra |
+| [minimal-templates/csharp](minimal-templates/csharp) | ASP.NET Core Minimal API（C#） |
+| [minimal-templates/go](minimal-templates/go) | Go（Gin） |
+| [minimal-templates/rust](minimal-templates/rust) | Rust（Axum） |
+| [minimal-templates/django](minimal-templates/django) | Django（Python） |
 
 ## ファイルの正本について
 
-`templates/` 以下のファイルは**スクリプトで自動生成**されます。直接編集しても次回の生成で上書きされます。
+`minimal-templates/` 以下のファイルは**スクリプトで自動生成**されます。直接編集しても次回の生成で上書きされます。
 設定を変更する場合は [shared/](shared/) 配下のファイルを編集してください。
 
 ## スクリプト
@@ -90,7 +90,7 @@
 
 ### 正本のルール
 
-- **編集する場所**: `templates/` 以下のファイルはスクリプトで生成されるため、**直接編集しない**。設定を変える場合は [shared/](shared/) 配下の該当ファイルを編集する。
+- **編集する場所**: `minimal-templates/` 以下のファイルはスクリプトで生成されるため、**直接編集しない**。設定を変える場合は [shared/](shared/) 配下の該当ファイルを編集する。
 - **生成の実行順序**: `yarn generate:all` は `generate:configs` → `generate:deps` → `generate:ci` → `generate:devcontainer` の順で実行される。ルートの `code-check.yml` は各テンプレートの workflow を組み合わせて生成されるため、テンプレートの workflow を変えたあとに `generate:ci` が必要。
 
 ### スタック一覧の管理
@@ -119,7 +119,7 @@ starter-templates/
 │   ├── versions.json Node.js / Ruby バージョンの正本
 │   ├── vitest/       vitest.config.ts のソース
 │   └── workflows/    GitHub Actions ワークフローのソース
-├── templates/        シンプルなテンプレート（スクリプト生成・手動編集禁止）
+├── minimal-templates/ 最低限（スクリプト生成・手動編集禁止）
 │   ├── nextjs/
 │   ├── nodejs/
 │   ├── reactjs/
@@ -131,36 +131,36 @@ starter-templates/
 │   ├── go/
 │   ├── rust/
 │   └── django/
-└── starters/         個人開発用テンプレート（すぐ使える・手動管理）
+└── full-templates/   実用（すぐ使える・手動管理）
 ```
 
 ### 正本 vs 生成ファイル
 
-`templates/` 以下の多くはスクリプトで生成されます。**生成されるファイルは直接編集すると次回生成で上書きされます。** 一方、フレームワーク別（next.config.ts, vite.config.ts, Laravel の pint/phpunit, C# の .csproj/.sln 等）は **templates/<stack>/ 直下を正本として直接編集**します。
+`minimal-templates/` 以下の多くはスクリプトで生成されます。**生成されるファイルは直接編集すると次回生成で上書きされます。** 一方、フレームワーク別（next.config.ts, vite.config.ts, Laravel の pint/phpunit, C# の .csproj/.sln 等）は **minimal-templates/<stack>/ 直下を正本として直接編集**します。
 
 | ファイル | 正本（編集場所） | 生成スクリプト |
 | ------- | ------------- | ----------- |
-| `templates/*/package.json` | `shared/npm/<stack>.json` | `generate-deps.ts` |
-| `templates/*/Gemfile` | `shared/gemfile/Gemfile.<stack>` | `generate-deps.ts` |
-| `templates/csharp/global.json` の sdk.version | `shared/versions.json` の `dotnet` で上書き | `generate-deps.ts` |
-| `templates/nextjs/next.config.ts` | **templates/nextjs/** を直接編集 | — |
-| `templates/reactjs/vite.config.ts` | **templates/reactjs/** を直接編集 | — |
-| `templates/laravel/pint.json`, `phpunit.xml` | **templates/laravel/** を直接編集 | — |
-| `templates/csharp/*.csproj`, `global.json`, `*.sln` | **templates/csharp/** を直接編集 | — |
-| `templates/*/.editorconfig` | `shared/lint-format/editorconfig/.editorconfig` | `gen-common-files.ts` |
-| `templates/*/.gitignore` | `shared/gitignore/.gitignore.*` | `gen-common-files.ts` |
-| `templates/*/.node-version` | `shared/versions.json` | `gen-common-files.ts` |
-| `templates/*/.ruby-version` | `shared/versions.json` | `gen-common-files.ts` |
-| `templates/*/eslint.config.js` | `shared/lint-format/eslint/eslint.config.<stack>.js` | `gen-tool-configs.ts` |
-| `templates/*/.prettierrc.json` | `shared/lint-format/prettier/.prettierrc.ts` | `gen-tool-configs.ts` |
-| `templates/*/tsconfig*.json` | `shared/tsconfig/<stack>/tsconfig*.ts` | `gen-tool-configs.ts` |
-| `templates/*/vitest*.ts` | `shared/test/vitest/` | `gen-tool-configs.ts` |
-| `templates/*/.rspec` | `shared/test/rspec/rspec.common` | `gen-ruby-configs.ts` |
-| `templates/*/.rubocop.yml` | `shared/lint-format/rubocop/rubocop.*.yml` | `gen-ruby-configs.ts` |
-| `templates/*/.github/workflows/*.yml` | `shared/workflows/*.yml` | `gen-workflows.ts` |
-| `templates/*/.github/dependabot.yml` | `shared/workflows/dependabot.yml` | `gen-workflows.ts` |
-| `templates/*/README.md` | `scripts/template-readme-config.ts` | `gen-readme.ts` |
-| `templates/*/.devcontainer/` | `shared/devcontainer/`, `shared/docker/` | `generate-devcontainer.ts` |
+| `minimal-templates/*/package.json` | `shared/npm/<stack>.json` | `generate-deps.ts` |
+| `minimal-templates/*/Gemfile` | `shared/gemfile/Gemfile.<stack>` | `generate-deps.ts` |
+| `minimal-templates/csharp/global.json` の sdk.version | `shared/versions.json` の `dotnet` で上書き | `generate-deps.ts` |
+| `minimal-templates/nextjs/next.config.ts` | **minimal-templates/nextjs/** を直接編集 | — |
+| `minimal-templates/reactjs/vite.config.ts` | **minimal-templates/reactjs/** を直接編集 | — |
+| `minimal-templates/laravel/pint.json`, `phpunit.xml` | **minimal-templates/laravel/** を直接編集 | — |
+| `minimal-templates/csharp/*.csproj`, `global.json`, `*.sln` | **minimal-templates/csharp/** を直接編集 | — |
+| `minimal-templates/*/.editorconfig` | `shared/lint-format/editorconfig/.editorconfig` | `gen-common-files.ts` |
+| `minimal-templates/*/.gitignore` | `shared/gitignore/.gitignore.*` | `gen-common-files.ts` |
+| `minimal-templates/*/.node-version` | `shared/versions.json` | `gen-common-files.ts` |
+| `minimal-templates/*/.ruby-version` | `shared/versions.json` | `gen-common-files.ts` |
+| `minimal-templates/*/eslint.config.js` | `shared/lint-format/eslint/eslint.config.<stack>.js` | `gen-tool-configs.ts` |
+| `minimal-templates/*/.prettierrc.json` | `shared/lint-format/prettier/.prettierrc.ts` | `gen-tool-configs.ts` |
+| `minimal-templates/*/tsconfig*.json` | `shared/tsconfig/<stack>/tsconfig*.ts` | `gen-tool-configs.ts` |
+| `minimal-templates/*/vitest*.ts` | `shared/test/vitest/` | `gen-tool-configs.ts` |
+| `minimal-templates/*/.rspec` | `shared/test/rspec/rspec.common` | `gen-ruby-configs.ts` |
+| `minimal-templates/*/.rubocop.yml` | `shared/lint-format/rubocop/rubocop.*.yml` | `gen-ruby-configs.ts` |
+| `minimal-templates/*/.github/workflows/*.yml` | `shared/workflows/*.yml` | `gen-workflows.ts` |
+| `minimal-templates/*/.github/dependabot.yml` | `shared/workflows/dependabot.yml` | `gen-workflows.ts` |
+| `minimal-templates/*/README.md` | `scripts/template-readme-config.ts` | `gen-readme.ts` |
+| `minimal-templates/*/.devcontainer/` | `shared/devcontainer/`, `shared/docker/` | `generate-devcontainer.ts` |
 | `.github/workflows/code-check.yml` | `scripts/generate-root-workflow.ts` | `generate-root-workflow.ts` |
 
 ### スクリプト一覧（詳細）
@@ -188,12 +188,12 @@ starter-templates/
 - **バージョン（Node.js / Ruby）を変更する場合**: `shared/versions.json` を編集 → `yarn generate:configs`（必要に応じて `shared/docker/` も更新し `yarn generate:devcontainer`）
 - **Gemfile を更新する場合**: `shared/gemfile/Gemfile.<stack>` を編集 → `yarn generate:deps`
 - **Prettier / tsconfig などのツール設定を変更する場合**: `shared/lint-format/prettier/`, `shared/tsconfig/`, `shared/test/vitest/` 内の該当ファイルを編集 → `yarn generate:configs`
-- **Next.js / React / Laravel / C# のフレームワーク設定を変更する場合**: `templates/nextjs/`, `templates/reactjs/`, `templates/laravel/`, `templates/csharp/` 内の該当ファイルを直接編集（生成されない）
+- **Next.js / React / Laravel / C# のフレームワーク設定を変更する場合**: `minimal-templates/nextjs/`, `minimal-templates/reactjs/`, `minimal-templates/laravel/`, `minimal-templates/csharp/` 内の該当ファイルを直接編集（生成されない）
 - **README を更新する場合**: `scripts/template-readme-config.ts` を編集 → `yarn generate:configs`
 
 ### 新テンプレート追加手順
 
-例として `templates/mystack` を追加する場合：
+例として `minimal-templates/mystack` を追加する場合：
 
 1. **`shared/npm/mystack.json`** を作成（package.json のソース）
 2. **`shared/lint-format/eslint/eslint.config.mystack.js`** を作成（必要な場合）
@@ -202,5 +202,5 @@ starter-templates/
 5. **`scripts/template-readme-config.ts`** の `TEMPLATE_README_CONFIGS` にエントリを追加
 6. **`scripts/generate-devcontainer.ts`** の `STACKS` に devcontainer 用のエントリを追加（必要な場合）
 7. **`scripts/generate-root-workflow.ts`** は `stacks.ts` の `ROOT_STACKS` を参照するため、`stacks.ts` に追加すれば自動でルート CI に含まれる
-8. `templates/mystack/` に手動で管理する残りのファイルを配置
+8. `minimal-templates/mystack/` に手動で管理する残りのファイルを配置
 9. `yarn generate:all` を実行して動作確認

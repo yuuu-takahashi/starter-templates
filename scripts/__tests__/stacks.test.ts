@@ -3,6 +3,7 @@ import { existsSync } from "fs";
 import { join } from "path";
 import {
   TEMPLATE_DIRS,
+  TEMPLATES_DIR,
   CODE_CHECK_SOURCE,
   TEST_SOURCE,
   GITIGNORE_SOURCE,
@@ -69,7 +70,9 @@ describe("stacks.ts 整合性", () => {
   });
 
   it("MONOREPO_PREFIX_STACKS の各 slug は TEMPLATE_DIRS の dir から導出できる", () => {
-    const dirSlugs = new Set(TEMPLATE_DIRS.map((d) => d.replace(/^templates\//, "")));
+    const dirSlugs = new Set(
+      TEMPLATE_DIRS.map((d) => d.replace(new RegExp(`^${TEMPLATES_DIR}/`), ""))
+    );
     for (const slug of MONOREPO_PREFIX_STACKS) {
       expect(dirSlugs, `MONOREPO_PREFIX_STACKS の ${slug} が TEMPLATE_DIRS に存在しない`).toContain(
         slug
