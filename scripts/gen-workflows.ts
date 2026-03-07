@@ -13,7 +13,7 @@ import {
   FULL_CODE_CHECK_SOURCE,
   TEST_SOURCE,
   FULL_TEST_SOURCE,
-  FULL_LIGHTHOUSE_SOURCE,
+  FULL_CI_SOURCE,
 } from "./lib/stacks.js";
 
 export function run(): void {
@@ -58,14 +58,14 @@ export function run(): void {
     console.log("Generated:", outPath);
   }
 
-  // ── lighthouse.yml ─────────────────────────────────────────────────────────
+  // ── ci.yml ─────────────────────────────────────────────────────────────────
 
-  for (const [dir, srcName] of Object.entries(FULL_LIGHTHOUSE_SOURCE)) {
+  for (const [dir, srcName] of Object.entries(FULL_CI_SOURCE)) {
     const srcPath = join(WORKFLOWS_DIR, srcName);
     const content = GEN_HEADER.replace("<name>", srcName) + readFileSync(srcPath, "utf8");
     const outDir = join(ROOT, dir, ".github", "workflows");
     mkdirSync(outDir, { recursive: true });
-    const outPath = join(outDir, "lighthouse.yml");
+    const outPath = join(outDir, "ci.yml");
     writeFileSync(outPath, content, "utf8");
     console.log("Generated:", outPath);
   }

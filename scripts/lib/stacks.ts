@@ -41,8 +41,8 @@ export interface StackDefinition {
   fullNpmDiffSlug?: string;
   /** full-templates 用 code-check ワークフロー（未定義なら codeCheckWorkflow と同じ） */
   fullCodeCheckWorkflow?: string;
-  /** full-templates 用 lighthouse CI ワークフロー。shared/workflows/ 内のファイル名 */
-  lighthouseWorkflow?: string;
+  /** full-templates 用 CI ワークフロー（e2e + lighthouse）。shared/workflows/ 内のファイル名 */
+  ciWorkflow?: string;
   /** Gemfile を shared/gemfile/Gemfile.<slug> から生成する */
   hasGemfile: boolean;
   /** ルート CI でモノレポ向け path/working-directory 変換を適用する */
@@ -70,7 +70,7 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
     monorepoPrefix: false,
     fullNpmDiffSlug: 'nextjs-full',
     fullCodeCheckWorkflow: 'code-check-nextjs-full.yml',
-    lighthouseWorkflow: 'lighthouse-node.yml',
+    ciWorkflow: 'ci-nextjs-full.yml',
   },
   {
     dir: `${td}/nodejs`,
@@ -287,12 +287,12 @@ export const FULL_CODE_CHECK_SOURCE: Readonly<Record<string, string>> =
     ]),
   );
 
-/** lighthouse.yml を生成する full-templates/ とそのワークフロー名 */
-export const FULL_LIGHTHOUSE_SOURCE: Readonly<Record<string, string>> =
+/** ci.yml を生成する full-templates/ とそのワークフロー名 */
+export const FULL_CI_SOURCE: Readonly<Record<string, string>> =
   Object.fromEntries(
     STACK_DEFINITIONS.filter(
-      (s) => s.fullDir != null && s.lighthouseWorkflow != null,
-    ).map((s) => [s.fullDir!, s.lighthouseWorkflow!]),
+      (s) => s.fullDir != null && s.ciWorkflow != null,
+    ).map((s) => [s.fullDir!, s.ciWorkflow!]),
   );
 
 /** test.yml を生成する full-templates/ とそのワークフロー名 */
