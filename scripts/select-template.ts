@@ -99,15 +99,11 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  const destInput = await ask(rl, "作成先のパス (例: ../my-app): ");
+  const destInput = await ask(rl, "作成先のパス (未入力ならカレント直下のテンプレート名フォルダ): ");
   rl.close();
 
-  if (!destInput) {
-    console.error("作成先を入力してください。");
-    process.exit(1);
-  }
-
-  const destDir = path.resolve(process.cwd(), destInput);
+  const destPath = destInput || chosen.slug;
+  const destDir = path.resolve(process.cwd(), destPath);
   if (fs.existsSync(destDir) && fs.readdirSync(destDir).length > 0) {
     console.error(`作成先が既に存在するか、空ではありません: ${destDir}`);
     process.exit(1);
@@ -117,7 +113,7 @@ async function main(): Promise<void> {
   copyTemplate(sourceDir, destDir);
   console.log("完了しました。\n");
   console.log("次のコマンドでプロジェクトに移動してください:");
-  console.log(`  cd ${destInput}`);
+  console.log(`  cd ${destPath}`);
   console.log("\n依存関係のインストール:");
   if (chosen.slug === "rails" || chosen.slug === "rails-api" || chosen.slug === "sinatra") {
     console.log("  bundle install && yarn install");
