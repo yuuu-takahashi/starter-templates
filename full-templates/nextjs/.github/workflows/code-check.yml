@@ -40,3 +40,9 @@ jobs:
 
       - name: markuplint
         run: yarn markuplint
+
+      - name: type-check
+        run: yarn type-check
+
+      - name: knip
+        run: yarn knip

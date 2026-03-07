@@ -125,8 +125,11 @@ function prepareTemplateContext(
 
   const stackIndex = STACK_DEFINITIONS.findIndex((s) => slug(s.dir) === config.id);
   const stack = stackIndex >= 0 ? STACK_DEFINITIONS[stackIndex] : null;
-  const selectNumber = stackIndex >= 0 ? stackIndex + 1 : 0;
-  const selectLabel = stack ? TEMPLATE_LABELS[stack.id] ?? config.id : config.id;
+  const selectNumber =
+    config.selectNumber ?? (stackIndex >= 0 ? stackIndex + 1 : 0);
+  const selectLabel =
+    config.selectLabel ??
+    (stack ? TEMPLATE_LABELS[stack.id] ?? config.id : config.id);
 
   return {
     title: config.title,
@@ -157,12 +160,22 @@ export async function run(): Promise<void> {
     extensions: Record<ExtensionSetKey, string[]>;
   };
 
+  const maxSelectNumber =
+    STACK_DEFINITIONS.length +
+    STACK_DEFINITIONS.filter((s) => s.fullDir != null).length;
+
   for (const config of TEMPLATE_README_CONFIGS) {
     const stackSection = buildStackSection(config, devcontainerDefaults);
-    const context = prepareTemplateContext(config, stackSection);
+    const context = {
+      ...prepareTemplateContext(config, stackSection),
+      maxSelectNumber,
+    };
     const content = template(context);
     const normalized = content.replace(/\n{3,}/g, "\n\n").trimEnd() + "\n";
-    const outPath = join(ROOT, TEMPLATES_DIR, config.id, "README.md");
+    const outDir = config.id.endsWith("-full")
+      ? join(ROOT, "full-templates", config.id.replace(/-full$/, ""))
+      : join(ROOT, TEMPLATES_DIR, config.id);
+    const outPath = join(outDir, "README.md");
     writeFileSync(outPath, normalized, "utf8");
     console.log("Generated:", outPath);
   }

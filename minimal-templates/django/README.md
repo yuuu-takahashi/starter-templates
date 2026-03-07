@@ -37,7 +37,7 @@ yarn create-project
   2. Node.js (nodejs)
   3. React + Vite (reactjs)
   ...
-番号を入力 (1–11): 
+番号を入力 (1–12): 
 ```
 
 プロジェクト作成後、VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択して起動してください。
