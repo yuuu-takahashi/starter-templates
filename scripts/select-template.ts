@@ -38,6 +38,20 @@ function ask(rl: readline.Interface, question: string): Promise<string> {
   });
 }
 
+/** ディレクトリの中身を削除する（.git は残す）。ディレクトリ自体は残す。 */
+function clearDir(dir: string): void {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const ent of entries) {
+    if (ent.name === ".git") continue;
+    const p = path.join(dir, ent.name);
+    if (ent.isDirectory()) {
+      fs.rmSync(p, { recursive: true });
+    } else {
+      fs.unlinkSync(p);
+    }
+  }
+}
+
 function copyTemplate(sourceDir: string, destDir: string): void {
   const exclude = new Set([
     "node_modules",
@@ -101,23 +115,39 @@ async function main(): Promise<void> {
 
   const destInput = await ask(
     rl,
-    "作成先のパス (未入力ならこのフォルダをルートとしてテンプレートで入れ替え): "
+    "作成先のパス (未入力ならこのリポジトリをテンプレートで完全に入れ替え): "
   );
   rl.close();
 
-  const useCurrentDir = !destInput.trim();
-  const destPath = useCurrentDir ? "." : destInput.trim();
-  const destDir = path.resolve(process.cwd(), destPath);
+  const pathEmpty = !destInput.trim();
+  const cwd = process.cwd();
+  const insideRepo = cwd === REPO_ROOT || cwd.startsWith(REPO_ROOT + path.sep);
 
-  if (!useCurrentDir && fs.existsSync(destDir) && fs.readdirSync(destDir).length > 0) {
+  let destDir: string;
+  let destPath: string;
+  let replaceCurrentDir = false;
+
+  if (pathEmpty) {
+    replaceCurrentDir = true;
+    destPath = ".";
+    destDir = insideRepo ? REPO_ROOT : cwd;
+  } else {
+    destPath = destInput.trim();
+    destDir = path.resolve(cwd, destPath);
+  }
+
+  if (replaceCurrentDir) {
+    console.log("\nこのリポジトリを選択したテンプレートで完全に入れ替えます...");
+    clearDir(destDir);
+  } else if (fs.existsSync(destDir) && fs.readdirSync(destDir).length > 0) {
     console.error(`作成先が既に存在するか、空ではありません: ${destDir}`);
     process.exit(1);
   }
 
-  console.log(`\n${chosen.label} を ${destDir} にコピーしています...`);
+  console.log(`${chosen.label} を ${destDir} にコピーしています...`);
   copyTemplate(sourceDir, destDir);
   console.log("完了しました。\n");
-  if (useCurrentDir) {
+  if (replaceCurrentDir) {
     console.log("このディレクトリがプロジェクトルートです。");
   } else {
     console.log("次のコマンドでプロジェクトに移動してください:");
