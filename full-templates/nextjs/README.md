@@ -44,7 +44,7 @@
 - secretlint — シークレット検出
 - markdownlint-cli2 — Markdown リンター
 - markuplint — HTML/マークアップリンター
-- Storybook 関連（@storybook/nextjs-vite, storybook, @storybook/addon-* など）— コンポーネント開発・カタログ
+- Storybook 関連（@storybook/nextjs-vite, storybook, @storybook/addon-\* など）— コンポーネント開発・カタログ
 - @lhci/cli — Lighthouse CI
 
 ### Dev Container でインストールされる主な拡張機能

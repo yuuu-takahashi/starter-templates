@@ -3,8 +3,7 @@ import type { Metadata } from 'next';
 import { publicConfig } from '@/config/env';
 
 const SITE_CONFIG = {
-  description:
-    'Next.js 15 App Routerを使用したSSR構成のWebアプリケーションテンプレート',
+  description: 'Next.js 15 App Routerを使用したSSR構成のWebアプリケーションテンプレート',
   name: 'Next.js Starter Template',
   ogImage: {
     height: 630,
