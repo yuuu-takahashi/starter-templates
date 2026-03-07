@@ -21,7 +21,7 @@ jobs:
     outputs:
       nextjs: ${{ steps.filter.outputs.nextjs }}
       nodejs: ${{ steps.filter.outputs.nodejs }}
-      reactjs: ${{ steps.filter.outputs.reactjs }}
+      react: ${{ steps.filter.outputs.react }}
       rails: ${{ steps.filter.outputs.rails }}
       rails_api: ${{ steps.filter.outputs.rails_api }}
       laravel: ${{ steps.filter.outputs.laravel }}
@@ -41,8 +41,8 @@ jobs:
               - 'minimal-templates/nextjs/**'
             nodejs:
               - 'minimal-templates/nodejs/**'
-            reactjs:
-              - 'minimal-templates/reactjs/**'
+            react:
+              - 'minimal-templates/react/**'
             rails:
               - 'minimal-templates/rails/**'
             rails_api:
@@ -120,20 +120,20 @@ jobs:
         run: yarn format
       - name: lint
         run: yarn lint
-  reactjs:
+  react:
     needs: changes
-    if: needs.changes.outputs.reactjs == 'true'
+    if: needs.changes.outputs.react == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: minimal-templates/reactjs
+        working-directory: minimal-templates/react
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
           cache: yarn
-          cache-dependency-path: minimal-templates/reactjs/yarn.lock
+          cache-dependency-path: minimal-templates/react/yarn.lock
       - name: Install dependencies
         run: yarn install
       - name: format

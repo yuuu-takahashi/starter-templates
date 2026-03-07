@@ -94,7 +94,7 @@ export const COMMON_FIREWALL_DOMAINS: readonly string[] = [
 export const STACK_FIREWALL_DOMAINS: Readonly<Record<string, string[]>> = {
   nextjs: [],
   nodejs: [],
-  reactjs: [],
+  react: [],
   rails: ['rubygems.org', 'gems.rubygems.org'],
   'rails-api': ['rubygems.org', 'gems.rubygems.org'],
   sinatra: ['rubygems.org', 'gems.rubygems.org'],

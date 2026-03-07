@@ -85,8 +85,8 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
     monorepoPrefix: false,
   },
   {
-    dir: `${td}/reactjs`,
-    id: 'reactjs',
+    dir: `${td}/react`,
+    id: 'react',
     runtime: 'node',
     codeCheckWorkflow: 'code-check-node.yml',
     testWorkflow: 'test-node.yml',

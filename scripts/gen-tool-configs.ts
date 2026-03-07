@@ -33,7 +33,7 @@ export const generateESLint = async (): Promise<void> => {
   const td = TEMPLATES_DIR;
   const ESLINT_SOURCE: Array<{ dir: string; source: string }> = [
     { dir: `${td}/nodejs`, source: 'eslint.config.nodejs.js' },
-    { dir: `${td}/reactjs`, source: 'eslint.config.react.js' },
+    { dir: `${td}/react`, source: 'eslint.config.react.js' },
     { dir: `${td}/nextjs`, source: 'eslint.config.nextjs.js' },
     { dir: `${td}/rails`, source: 'eslint.config.rails.js' },
     { dir: `${td}/rails-api`, source: 'eslint.config.rails.js' },
@@ -122,9 +122,9 @@ export const generateTsconfig = async (): Promise<void> => {
   const td = TEMPLATES_DIR;
 
   // React configs
-  const reactRootPath = join(SHARED_TSCONFIG, 'reactjs', 'tsconfig.root.ts');
-  const reactAppPath = join(SHARED_TSCONFIG, 'reactjs', 'tsconfig.app.ts');
-  const reactNodePath = join(SHARED_TSCONFIG, 'reactjs', 'tsconfig.node.ts');
+  const reactRootPath = join(SHARED_TSCONFIG, 'react', 'tsconfig.root.ts');
+  const reactAppPath = join(SHARED_TSCONFIG, 'react', 'tsconfig.app.ts');
+  const reactNodePath = join(SHARED_TSCONFIG, 'react', 'tsconfig.node.ts');
   ensureFileExists(reactRootPath, 'tsconfig-react');
   ensureFileExists(reactAppPath, 'tsconfig-react');
   ensureFileExists(reactNodePath, 'tsconfig-react');
@@ -134,25 +134,25 @@ export const generateTsconfig = async (): Promise<void> => {
   const reactNode = await import(pathToFileURL(reactNodePath).href);
 
   writeFileSync(
-    join(ROOT, td, 'reactjs', 'tsconfig.json'),
+    join(ROOT, td, 'react', 'tsconfig.json'),
     JSON.stringify(reactRoot.default, null, 2),
     'utf8',
   );
-  logger.generated(join(ROOT, td, 'reactjs', 'tsconfig.json'));
+  logger.generated(join(ROOT, td, 'react', 'tsconfig.json'));
 
   writeFileSync(
-    join(ROOT, td, 'reactjs', 'tsconfig.app.json'),
+    join(ROOT, td, 'react', 'tsconfig.app.json'),
     JSON.stringify(reactApp.default, null, 2),
     'utf8',
   );
-  logger.generated(join(ROOT, td, 'reactjs', 'tsconfig.app.json'));
+  logger.generated(join(ROOT, td, 'react', 'tsconfig.app.json'));
 
   writeFileSync(
-    join(ROOT, td, 'reactjs', 'tsconfig.node.json'),
+    join(ROOT, td, 'react', 'tsconfig.node.json'),
     JSON.stringify(reactNode.default, null, 2),
     'utf8',
   );
-  logger.generated(join(ROOT, td, 'reactjs', 'tsconfig.node.json'));
+  logger.generated(join(ROOT, td, 'react', 'tsconfig.node.json'));
 
   // Next.js configs
   const nextjsTsMinimalPath = join(SHARED_TSCONFIG, 'nextjs', 'tsconfig.minimal.ts');

@@ -6,7 +6,7 @@ export const TEMPLATE_LABELS: Record<string, string> = {
   nextjs: "Next.js (App Router)",
   nextjs_full: "Next.js (App Router) - 実用",
   nodejs: "Node.js",
-  reactjs: "React + Vite",
+  react: "React + Vite",
   rails: "Ruby on Rails",
   rails_api: "Rails API",
   laravel: "Laravel (PHP)",
