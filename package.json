@@ -11,8 +11,9 @@
     "generate:deps": "tsx scripts/generate-deps.ts",
     "generate:all": "yarn generate:configs && yarn generate:deps && yarn generate:ci && yarn generate:devcontainer",
     "test": "vitest run",
-    "lint": "eslint scripts/",
+    "lint": "eslint scripts/ && yarn lint:md",
     "lint:fix": "eslint scripts/ --fix",
+    "lint:md": "markdownlint '**/*.md' --ignore node_modules",
     "format": "prettier --write \"scripts/**/*.ts\""
   },
   "devDependencies": {
@@ -21,10 +22,12 @@
     "@types/node": "^22.0.0",
     "eslint": "^9",
     "eslint-config-prettier": "^10",
+    "handlebars": "^4.7.8",
     "prettier": "^3.4.2",
     "tsx": "^4.0.0",
     "typescript": "^5.0.0",
     "typescript-eslint": "^8",
+    "markdownlint-cli": "^0.48.0",
     "vitest": "^3.0.0",
     "yaml": "^2.6.1"
   }

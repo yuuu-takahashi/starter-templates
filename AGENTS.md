@@ -9,7 +9,7 @@
 - 依存関係生成: `yarn generate:deps`
 - Dev Container 生成: `yarn generate:devcontainer`
 - CI ワークフロー生成: `yarn generate:ci`
-- Lint: `yarn lint`
+- Lint: `yarn lint`（ESLint + markdownlint）
 - フォーマット: `yarn format`
 
 ## プロジェクト構造
@@ -17,6 +17,7 @@
 | パス | 役割 |
 | ---- | ---- |
 | `shared/` | **正本** — 編集対象。ESLint / Prettier / devcontainer / workflows などのソース |
+| `shared/readme/README.md.hbs` | 各テンプレートの README.md 用 Handlebars テンプレート |
 | `templates/` | **生成物** — スクリプトで上書きされる。直接編集禁止 |
 | `scripts/` | コード生成スクリプト（TypeScript） |
 | `scripts/lib/stacks.ts` | テンプレート・スタック一覧の一元管理 |
@@ -31,6 +32,7 @@
 ## コードスタイル
 
 - `scripts/` 配下の TypeScript は ESLint + Prettier で統一
+- Markdown は markdownlint でチェック
 - 既存のスクリプトパターン（`gen-*.ts`, `generate-*.ts`）に合わせる
 - `shared/` 内のソースは各言語の慣習に従う（JS/TS, Ruby, PHP など）
 

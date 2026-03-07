@@ -1,18 +1,20 @@
 /**
  * Generates README.md for each template.
  * Run via generate-configs.ts
+ * Template: shared/readme/README.md.hbs
  */
 
 import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
+import Handlebars from "handlebars";
 import {
   TEMPLATE_README_CONFIGS,
-  getGeneratedReadmeContent,
-  SHARED_README_SECTION_STACK,
   type TemplateReadmeConfig,
   type ExtensionSetKey,
 } from "./template-readme-config.js";
 import { ROOT, SHARED_NPM, SHARED_GEMFILE } from "./lib/utils.js";
+
+const README_TEMPLATE_PATH = join(ROOT, "shared", "readme", "README.md.hbs");
 
 // ── 説明マップ ─────────────────────────────────────────────────────────────────
 
@@ -254,10 +256,43 @@ function buildStackSection(
   }
 
   if (parts.length === 0) return undefined;
-  return SHARED_README_SECTION_STACK + "\n\n" + parts.join("\n").replace(/\n{3,}/g, "\n\n").trimEnd();
+  return parts.join("\n").replace(/\n{3,}/g, "\n\n").trimEnd();
+}
+
+function prepareTemplateContext(
+  config: TemplateReadmeConfig,
+  stackSection: string | undefined
+): Record<string, unknown> {
+  const setupSteps = config.setupSteps.map((step, i) => ({
+    num: i + 1,
+    label: step.label,
+    commands: step.commands,
+    hasCommands: step.commands.length > 0,
+  }));
+
+  return {
+    title: config.title,
+    description: config.description,
+    id: config.id,
+    stackSection: stackSection ?? "",
+    treeExclude: config.treeExclude ?? "",
+    setupSteps,
+    previewLine: config.previewUrl
+      ? `ブラウザで <${config.previewUrl}> を開き、表示確認`
+      : "",
+    devGuide: config.devGuide,
+    hasDevGuide: config.devGuide.length > 0,
+    extraSections: config.extraSections ?? "",
+  };
 }
 
 export async function run(): Promise<void> {
+  const templateSource = readFileSync(README_TEMPLATE_PATH, "utf8");
+  const template = Handlebars.compile(templateSource, {
+    noEscape: true,
+    strict: true,
+  });
+
   const DEFAULTS_PATH = join(ROOT, "shared", "devcontainer", "defaults.json");
   const devcontainerDefaults = JSON.parse(readFileSync(DEFAULTS_PATH, "utf8")) as {
     extensions: Record<ExtensionSetKey, string[]>;
@@ -265,8 +300,11 @@ export async function run(): Promise<void> {
 
   for (const config of TEMPLATE_README_CONFIGS) {
     const stackSection = buildStackSection(config, devcontainerDefaults);
+    const context = prepareTemplateContext(config, stackSection);
+    const content = template(context);
+    const normalized = content.replace(/\n{3,}/g, "\n\n").trimEnd() + "\n";
     const outPath = join(ROOT, "templates", config.id, "README.md");
-    writeFileSync(outPath, getGeneratedReadmeContent(config, { stackSection }), "utf8");
+    writeFileSync(outPath, normalized, "utf8");
     console.log("Generated:", outPath);
   }
 }
