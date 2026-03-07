@@ -37,8 +37,8 @@ export interface StackDefinition {
   devcontainerDockerfile: string | null;
   /** package.json を shared/npm/<slug>.json から生成する */
   hasNpm: boolean;
-  /** full-templates 用 npm ソースファイルのスラグ。未定義なら dir スラグと同じ */
-  fullNpmSlug?: string;
+  /** full-templates 用 npm 差分ファイルのスラグ。shared/npm/<slug>.diff.json を base にマージする */
+  fullNpmDiffSlug?: string;
   /** Gemfile を shared/gemfile/Gemfile.<slug> から生成する */
   hasGemfile: boolean;
   /** ルート CI でモノレポ向け path/working-directory 変換を適用する */
@@ -64,7 +64,7 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
     hasNpm: true,
     hasGemfile: false,
     monorepoPrefix: false,
-    fullNpmSlug: 'nextjs-full',
+    fullNpmDiffSlug: 'nextjs-full',
   },
   {
     dir: `${td}/nodejs`,
