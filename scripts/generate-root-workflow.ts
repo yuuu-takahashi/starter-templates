@@ -224,6 +224,7 @@ const buildRootWorkflow = (): Record<string, WorkflowJob> => {
         },
       },
       { name: 'Install dependencies', run: 'yarn install' },
+      { name: 'Lint', run: 'yarn lint' },
       { name: 'Run tests', run: 'yarn test' },
       { name: 'Run generate:all', run: 'yarn generate:all' },
       { name: 'Check for uncommitted changes', run: 'git diff --exit-code' },

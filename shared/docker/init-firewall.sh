@@ -64,16 +64,9 @@ while read -r cidr; do
   ipset add -exist allowed-domains "$cidr"
 done < <(echo "$gh_ranges" | jq -r '(.web + .api + .git)[]' | aggregate -q)
 
-# Resolve and add other allowed domains
+# Resolve and add other allowed domains (list injected per-template by generate-devcontainer.ts)
 for domain in \
-  "registry.npmjs.org" \
-  "api.anthropic.com" \
-  "sentry.io" \
-  "statsig.anthropic.com" \
-  "statsig.com" \
-  "marketplace.visualstudio.com" \
-  "vscode.blob.core.windows.net" \
-  "update.code.visualstudio.com"; do
+  __ALLOWED_FIREWALL_DOMAINS__; do
   echo "Resolving $domain..."
   ips=$(dig +noall +answer A "$domain" | awk '$4 == "A" {print $5}')
   if [ -z "$ips" ]; then

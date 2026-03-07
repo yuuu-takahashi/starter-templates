@@ -31,6 +31,11 @@ describe("generate-devcontainer が参照する共有ファイル", () => {
     const content = readFileSync(INIT_FIREWALL_PATH, "utf8");
     expect(content.startsWith("#!/bin/bash")).toBe(true);
   });
+
+  it("init-firewall.sh にドメインリスト用プレースホルダーが含まれる", () => {
+    const content = readFileSync(INIT_FIREWALL_PATH, "utf8");
+    expect(content).toContain("__ALLOWED_FIREWALL_DOMAINS__");
+  });
 });
 
 describe("DEVCONTAINER_DOCKERFILE_MAP とテンプレート整合性", () => {

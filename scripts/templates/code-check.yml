@@ -2,14 +2,11 @@ name: Code Check
 
 on:
   pull_request:
-  push:
-    branches:
-      - main
 
 defaults:
   run:
     shell: bash
 
 concurrency:
-  group: "${{ github.workflow }}-${{ github.head_ref || github.ref_name }}"
+  group: '${{ github.workflow }}-${{ github.head_ref || github.ref_name }}'
   cancel-in-progress: true

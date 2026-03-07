@@ -10,24 +10,10 @@ import * as path from "node:path";
 import * as readline from "node:readline";
 import { fileURLToPath } from "node:url";
 import { STACK_DEFINITIONS } from "./lib/stacks.js";
+import { TEMPLATE_LABELS } from "./lib/template-labels.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..");
-
-/** テンプレート表示名（id → ラベル） */
-const TEMPLATE_LABELS: Record<string, string> = {
-  nextjs: "Next.js (App Router)",
-  nodejs: "Node.js",
-  reactjs: "React + Vite",
-  rails: "Ruby on Rails",
-  rails_api: "Rails API",
-  laravel: "Laravel (PHP)",
-  sinatra: "Sinatra",
-  csharp: "ASP.NET Core (C#)",
-  go: "Go (Gin)",
-  rust: "Rust (Axum)",
-  django: "Django (Python)",
-};
 
 function slug(dir: string): string {
   return dir.replace(/^templates\//, "");
@@ -39,11 +25,12 @@ function ask(rl: readline.Interface, question: string): Promise<string> {
   });
 }
 
-/** ディレクトリの中身を削除する（.git は残す）。ディレクトリ自体は残す。 */
+/** ディレクトリの中身を削除する（.git, .claude は残す）。ディレクトリ自体は残す。 */
 function clearDir(dir: string): void {
+  const preserve = new Set([".git", ".claude"]);
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   for (const ent of entries) {
-    if (ent.name === ".git") continue;
+    if (preserve.has(ent.name)) continue;
     const p = path.join(dir, ent.name);
     if (ent.isDirectory()) {
       fs.rmSync(p, { recursive: true });
@@ -57,6 +44,7 @@ function copyTemplate(sourceDir: string, destDir: string): void {
   const exclude = new Set([
     "node_modules",
     ".git",
+    ".claude",
     "vendor",
     "__pycache__",
     ".venv",
