@@ -14,6 +14,7 @@
 
 ### Dev Container でインストールされる主な拡張機能
 
+- eamodio.gitlens — Git 履歴・差分の強力な可視化
 - esbenp.prettier-vscode — コードフォーマット（Prettier）
 - rust-lang.rust-analyzer — Rust 言語サポート（補完・ナビゲーション・型チェック等）
 

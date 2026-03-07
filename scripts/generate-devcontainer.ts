@@ -11,7 +11,7 @@
 
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import { DEVCONTAINER_DOCKERFILE_MAP } from './lib/stacks.js';
+import { DEVCONTAINER_DOCKERFILE_MAP, TEMPLATES_DIR } from './lib/stacks.js';
 import { ROOT } from './lib/utils.js';
 
 // ── Shared devcontainer defaults (extensions + settings) ───────────────────────
@@ -165,7 +165,7 @@ const NODE_TERMINAL_SETTINGS = {
 
 const STACKS: Stack[] = [
   {
-    dir: 'templates/nextjs',
+    dir: `${TEMPLATES_DIR}/nextjs`,
     config: {
       name: 'template-nextjs',
       build: { dockerfile: 'Dockerfile', context: '..', args: NODE_BUILD_ARGS },
@@ -195,7 +195,7 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: 'templates/nodejs',
+    dir: `${TEMPLATES_DIR}/nodejs`,
     config: {
       name: 'template-nodejs',
       build: { dockerfile: 'Dockerfile', context: '..', args: NODE_BUILD_ARGS },
@@ -220,7 +220,7 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: 'templates/reactjs',
+    dir: `${TEMPLATES_DIR}/reactjs`,
     config: {
       name: 'template-reactjs',
       build: { dockerfile: 'Dockerfile', context: '..', args: NODE_BUILD_ARGS },
@@ -250,7 +250,7 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: 'templates/sinatra',
+    dir: `${TEMPLATES_DIR}/sinatra`,
     config: {
       name: 'template-sinatra',
       dockerComposeFile: './docker-compose.yml',
@@ -276,7 +276,7 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: 'templates/rails-api',
+    dir: `${TEMPLATES_DIR}/rails-api`,
     config: {
       name: 'template-rails-api',
       dockerComposeFile: './docker-compose.yml',
@@ -298,7 +298,7 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: 'templates/rails',
+    dir: `${TEMPLATES_DIR}/rails`,
     config: {
       name: 'template-rails',
       dockerComposeFile: './docker-compose.yml',
@@ -331,7 +331,7 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: 'templates/csharp',
+    dir: `${TEMPLATES_DIR}/csharp`,
     config: {
       name: 'template-csharp',
       build: {
@@ -356,7 +356,7 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: 'templates/go',
+    dir: `${TEMPLATES_DIR}/go`,
     config: {
       name: 'template-go',
       build: {
@@ -381,7 +381,7 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: 'templates/rust',
+    dir: `${TEMPLATES_DIR}/rust`,
     config: {
       name: 'template-rust',
       build: {
@@ -406,7 +406,7 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: 'templates/laravel',
+    dir: `${TEMPLATES_DIR}/laravel`,
     config: {
       name: 'template-laravel',
       build: {
@@ -435,7 +435,7 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: 'templates/django',
+    dir: `${TEMPLATES_DIR}/django`,
     config: {
       name: 'template-django',
       build: {
@@ -551,7 +551,7 @@ for (const { dir, config } of STACKS) {
 }
 
 const rubyDbComposeContent = readFileSync(RUBY_DB_COMPOSE_SRC, 'utf8');
-for (const dir of ['templates/sinatra', 'templates/rails-api']) {
+for (const dir of [`${TEMPLATES_DIR}/sinatra`, `${TEMPLATES_DIR}/rails-api`]) {
   const outPath = join(ROOT, dir, '.devcontainer', 'docker-compose.yml');
   writeFileSync(outPath, YAML_HEADER_RUBY_DB + rubyDbComposeContent, 'utf8');
   console.log('Generated:', outPath);
@@ -560,7 +560,7 @@ for (const dir of ['templates/sinatra', 'templates/rails-api']) {
 const railsComposeContent = readFileSync(RAILS_COMPOSE_SRC, 'utf8');
 const railsComposeOut = join(
   ROOT,
-  'templates/rails',
+  `${TEMPLATES_DIR}/rails`,
   '.devcontainer',
   'docker-compose.yml',
 );

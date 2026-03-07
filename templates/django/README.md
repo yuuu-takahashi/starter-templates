@@ -13,6 +13,7 @@
 
 ### Dev Container でインストールされる主な拡張機能
 
+- eamodio.gitlens — Git 履歴・差分の強力な可視化
 - esbenp.prettier-vscode — コードフォーマット（Prettier）
 - ms-python.python — Python 言語サポート（IntelliSense・デバッグ・テスト等）
 - ms-python.vscode-pylance — Python の型チェック・補完（Pylance）

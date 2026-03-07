@@ -9,6 +9,7 @@
 
 ### Dev Container でインストールされる主な拡張機能
 
+- eamodio.gitlens — Git 履歴・差分の強力な可視化
 - esbenp.prettier-vscode — コードフォーマット（Prettier）
 - ms-dotnettools.csdevkit — C# Dev Kit（Solution Explorer・テスト・NuGet 等）
 - ms-dotnettools.csharp — C# 言語サポート（IntelliSense・リファクタ等）

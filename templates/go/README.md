@@ -13,6 +13,7 @@
 
 ### Dev Container でインストールされる主な拡張機能
 
+- eamodio.gitlens — Git 履歴・差分の強力な可視化
 - esbenp.prettier-vscode — コードフォーマット（Prettier）
 - golang.go — Go 言語サポート（gopls・IntelliSense・テスト・デバッグ等）
 

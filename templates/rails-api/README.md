@@ -38,6 +38,7 @@
 ### Dev Container でインストールされる主な拡張機能
 
 - Shopify.ruby-extensions-pack — Ruby 開発ツール一式（Ruby LSP など）
+- eamodio.gitlens — Git 履歴・差分の強力な可視化
 - esbenp.prettier-vscode — コードフォーマット（Prettier）
 
 ## ディレクトリ構成
