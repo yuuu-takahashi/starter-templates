@@ -64,16 +64,17 @@ cd starter-templates
 yarn create-project
 ```
 
-次のような番号付きのテンプレート一覧が表示されます。Next.js (App Router) を選ぶなら `1` を選択し、作成先パスの入力を求められたら未入力でこのリポジトリを入れ替え、または別のパスを指定してください。**実用テンプレート（本 README）は `full-templates/nextjs` にあります。** 最低限の構成は `minimal-templates/nextjs` です。
+次のような番号付きのテンプレート一覧が表示されます。**実用テンプレート（本 README）を選ぶなら `2`（Next.js (App Router) - 実用）を選択**し、作成先パスの入力を求められたら未入力でこのリポジトリを入れ替え、または別のパスを指定してください。最低限の構成は `1`（Next.js (App Router)）です。
 
 ```text
 テンプレートを選んでください:
 
   1. Next.js (App Router) (nextjs)
-  2. Node.js (nodejs)
-  3. React + Vite (reactjs)
+  2. Next.js (App Router) - 実用 (nextjs-full)
+  3. Node.js (nodejs)
+  4. React + Vite (reactjs)
   ...
-番号を入力 (1–11):
+番号を入力 (1–12):
 ```
 
 プロジェクト作成後、VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択して起動してください。`full-templates/nextjs` をそのまま使う場合は、このディレクトリを Dev Container で開いてください。
