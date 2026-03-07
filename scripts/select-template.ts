@@ -99,12 +99,17 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  const destInput = await ask(rl, "作成先のパス (未入力ならカレント直下のテンプレート名フォルダ): ");
+  const destInput = await ask(
+    rl,
+    "作成先のパス (未入力ならこのフォルダをルートとしてテンプレートで入れ替え): "
+  );
   rl.close();
 
-  const destPath = destInput || chosen.slug;
+  const useCurrentDir = !destInput.trim();
+  const destPath = useCurrentDir ? "." : destInput.trim();
   const destDir = path.resolve(process.cwd(), destPath);
-  if (fs.existsSync(destDir) && fs.readdirSync(destDir).length > 0) {
+
+  if (!useCurrentDir && fs.existsSync(destDir) && fs.readdirSync(destDir).length > 0) {
     console.error(`作成先が既に存在するか、空ではありません: ${destDir}`);
     process.exit(1);
   }
@@ -112,8 +117,12 @@ async function main(): Promise<void> {
   console.log(`\n${chosen.label} を ${destDir} にコピーしています...`);
   copyTemplate(sourceDir, destDir);
   console.log("完了しました。\n");
-  console.log("次のコマンドでプロジェクトに移動してください:");
-  console.log(`  cd ${destPath}`);
+  if (useCurrentDir) {
+    console.log("このディレクトリがプロジェクトルートです。");
+  } else {
+    console.log("次のコマンドでプロジェクトに移動してください:");
+    console.log(`  cd ${destPath}`);
+  }
   console.log("\n依存関係のインストール:");
   if (chosen.slug === "rails" || chosen.slug === "rails-api" || chosen.slug === "sinatra") {
     console.log("  bundle install && yarn install");
