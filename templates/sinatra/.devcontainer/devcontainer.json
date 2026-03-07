@@ -6,16 +6,25 @@
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
   "remoteUser": "node",
+  "mounts": [
+    "source=${localWorkspaceFolderBasename}-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
+    "source=${localWorkspaceFolderBasename}-claude-config-${devcontainerId},target=/home/node/.claude,type=volume"
+  ],
   "runArgs": [
     "--cap-add=NET_ADMIN",
     "--cap-add=NET_RAW"
   ],
+  "containerEnv": {
+    "CLAUDE_CONFIG_DIR": "/home/node/.claude",
+    "POWERLEVEL9K_DISABLE_GITSTATUS": "true"
+  },
   "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
   "waitFor": "postStartCommand",
   "customizations": {
     "vscode": {
       "extensions": [
         "esbenp.prettier-vscode",
+        "eamodio.gitlens",
         "Shopify.ruby-extensions-pack",
         "aliariff.vscode-erb-beautify"
       ],
@@ -26,7 +35,8 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-          "source.fixAll": "explicit"
+          "source.fixAll": "explicit",
+          "source.fixAll.eslint": "explicit"
         },
         "[ruby]": {
           "editor.defaultFormatter": "Shopify.ruby-lsp"
@@ -43,6 +53,7 @@
     "cursor": {
       "extensions": [
         "esbenp.prettier-vscode",
+        "eamodio.gitlens",
         "Shopify.ruby-extensions-pack",
         "aliariff.vscode-erb-beautify"
       ],
@@ -53,7 +64,8 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-          "source.fixAll": "explicit"
+          "source.fixAll": "explicit",
+          "source.fixAll.eslint": "explicit"
         },
         "[ruby]": {
           "editor.defaultFormatter": "Shopify.ruby-lsp"
