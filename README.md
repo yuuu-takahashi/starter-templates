@@ -2,6 +2,29 @@
 
 各フレームワークのスターターテンプレートをまとめたモノレポです。
 
+## 使い方（新規プロジェクトを始めるとき）
+
+1. **リポジトリをクローンする**
+
+   ```bash
+   git clone git@github.com:yuuu-takahashi/starter-templates.git
+   cd starter-templates
+   ```
+
+2. **テンプレートを選んでプロジェクトを作る**
+
+   ```bash
+   yarn create-project
+   ```
+
+   番号でテンプレートを選び、作成先のパス（例: `../my-app`）を入力すると、選んだテンプレートがコピーされます。
+
+3. **選んだテンプレートがそのプロジェクトのルールになる**  
+   コピー先には **ESLint・Prettier・Dev Container・CI（GitHub Actions）** などが含まれており、それらがそのプロジェクトのルールになります。  
+   表示される次のコマンドで依存関係をインストールして開発を始めてください。
+
+   Dev Container で開く場合は、クローンしたリポジトリ内の `templates/<テンプレート名>` を開いてもかまいません。
+
 ## テンプレートの種類
 
 | ディレクトリ | 用途 |
@@ -36,6 +59,7 @@
 
 | コマンド | 役割 |
 | ------- | ---- |
+| `yarn create-project` | テンプレートを対話で選び、指定先にコピーする（新規プロジェクト用） |
 | `yarn generate:all` | 全スクリプトをまとめて実行 |
 | `yarn generate:configs` | 設定ファイルを生成（ESLint / Prettier / tsconfig / workflow など） |
 | `yarn generate:deps` | `package.json` と `Gemfile` を生成 |

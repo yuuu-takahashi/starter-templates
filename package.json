@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "create-project": "tsx scripts/select-template.ts",
     "generate:ci": "tsx scripts/generate-root-workflow.ts",
     "generate:devcontainer": "tsx scripts/generate-devcontainer.ts",
     "devcontainer": "devcontainer",
