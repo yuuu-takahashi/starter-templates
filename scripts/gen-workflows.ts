@@ -70,17 +70,19 @@ export function run(): void {
     console.log("Generated:", outPath);
   }
 
-  // ── ci-e2e-nextjs.yml (reusable, full-templates with CI only) ───────────────
+  // ── ci-e2e-nextjs.yml / ci-lighthouse-nextjs.yml (reusable, full-templates with CI only) ──
 
-  const CI_E2E_NEXTJS = "ci-e2e-nextjs.yml";
+  const CI_REUSABLE_WORKFLOWS = ["ci-e2e-nextjs.yml", "ci-lighthouse-nextjs.yml"];
   for (const dir of Object.keys(FULL_CI_SOURCE)) {
-    const content =
-      GEN_HEADER.replace("<name>", CI_E2E_NEXTJS) +
-      readFileSync(join(WORKFLOWS_DIR, CI_E2E_NEXTJS), "utf8");
     const outDir = join(ROOT, dir, ".github", "workflows");
     mkdirSync(outDir, { recursive: true });
-    writeFileSync(join(outDir, CI_E2E_NEXTJS), content, "utf8");
-    console.log("Generated:", join(outDir, CI_E2E_NEXTJS));
+    for (const srcName of CI_REUSABLE_WORKFLOWS) {
+      const content =
+        GEN_HEADER.replace("<name>", srcName) +
+        readFileSync(join(WORKFLOWS_DIR, srcName), "utf8");
+      writeFileSync(join(outDir, srcName), content, "utf8");
+      console.log("Generated:", join(outDir, srcName));
+    }
   }
 
   // ── .github/actions (full-templates with CI only) ──────────────────────────
