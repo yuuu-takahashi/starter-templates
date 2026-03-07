@@ -2,10 +2,6 @@ name: Static Analysis
 
 on:
   pull_request:
-  push:
-    branches: [main]
-    paths:
-      - ".github/**"
 
 defaults:
   run:
