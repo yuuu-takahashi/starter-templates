@@ -3,7 +3,7 @@
  * Run via generate-configs.ts
  */
 
-import { readFileSync, writeFileSync, promises as fsPromises } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import {
   ROOT,
@@ -26,7 +26,7 @@ import {
 import { ensureFileExists, GenerationError } from "./lib/errors.js";
 import { logger } from "./lib/logger.js";
 
-export function run(): void {
+export const run = (): void => {
   try {
     // ── .editorconfig（shared からコピー）──────────────────────────────────────────
 
@@ -128,4 +128,4 @@ export function run(): void {
     }
     process.exit(1);
   }
-}
+};

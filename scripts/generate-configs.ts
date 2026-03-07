@@ -16,7 +16,7 @@ import { run as genWorkflows } from "./gen-workflows.js";
 import { run as genReadme } from "./gen-readme.js";
 import { logger } from "./lib/logger.js";
 
-async function run(): Promise<void> {
+const run = async (): Promise<void> => {
   logger.info('🔄 Starting configuration generation...\n');
 
   try {
@@ -45,6 +45,6 @@ async function run(): Promise<void> {
     logger.error('Configuration generation failed', error instanceof Error ? error : undefined);
     process.exit(1);
   }
-}
+};
 
 run();

@@ -15,7 +15,7 @@ export class GenerationError extends Error {
   }
 }
 
-export function ensureFileExists(filePath: string, operation: string): void {
+export const ensureFileExists = (filePath: string, operation: string): void => {
   if (!existsSync(filePath)) {
     throw new GenerationError(
       operation,
@@ -23,9 +23,9 @@ export function ensureFileExists(filePath: string, operation: string): void {
       `File not found: ${filePath}`
     );
   }
-}
+};
 
-export function ensureDirectoryExists(dirPath: string, operation: string): void {
+export const ensureDirectoryExists = (dirPath: string, operation: string): void => {
   if (!existsSync(dirPath)) {
     throw new GenerationError(
       operation,
@@ -33,9 +33,9 @@ export function ensureDirectoryExists(dirPath: string, operation: string): void 
       `Directory not found: ${dirPath}`
     );
   }
-}
+};
 
-export function ensureDirectoryIsDir(dirPath: string, operation: string): void {
+export const ensureDirectoryIsDir = (dirPath: string, operation: string): void => {
   const stats = statSync(dirPath);
   if (!stats.isDirectory()) {
     throw new GenerationError(
@@ -44,4 +44,4 @@ export function ensureDirectoryIsDir(dirPath: string, operation: string): void {
       `Not a directory: ${dirPath}`
     );
   }
-}
+};
