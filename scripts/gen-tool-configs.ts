@@ -17,6 +17,7 @@ import {
 } from './lib/utils.js';
 
 const SHARED_MARKUPLINT = join(ROOT, 'shared', 'lint-format', 'markuplint');
+const SHARED_MARKDOWNLINT = join(ROOT, 'shared', 'lint-format', 'markdownlint');
 const SHARED_LIGHTHOUSE = join(ROOT, 'shared', 'lighthouse');
 const SHARED_KNIP = join(ROOT, 'shared', 'knip');
 const SHARED_PLAYWRIGHT = join(ROOT, 'shared', 'playwright');
@@ -161,6 +162,19 @@ export async function run(): Promise<void> {
     writeFileSync(
       outPath,
       readFileSync(join(SHARED_MARKUPLINT, '.markuplintrc.react.json'), 'utf8'),
+      'utf8',
+    );
+    console.log('Generated:', outPath);
+  }
+
+  // ── Markdownlint (.markdownlint.json) ───────────────────────────────────────
+
+  const MARKDOWNLINT_DIRS = ['full-templates/nextjs'];
+  for (const dir of MARKDOWNLINT_DIRS) {
+    const outPath = join(ROOT, dir, '.markdownlint.json');
+    writeFileSync(
+      outPath,
+      readFileSync(join(SHARED_MARKDOWNLINT, '.markdownlint.json'), 'utf8'),
       'utf8',
     );
     console.log('Generated:', outPath);
