@@ -76,6 +76,18 @@ export const COMMON_FIREWALL_DOMAINS: readonly string[] = [
   'vuejs.org',
   'getcomposer.org',
   'github.io',
+  // インフラ・クラウド
+  'docs.aws.amazon.com',
+  'aws.amazon.com',
+  'console.aws.amazon.com',
+  'registry.terraform.io',
+  'developer.hashicorp.com',
+  'cloud.google.com',
+  'azure.microsoft.com',
+  'kubernetes.io',
+  'kamal-deploy.org',
+  'conoha.jp',
+  'www.conoha.jp',
 ];
 
 // ── STACK（スタック別：パッケージレジストリ等）─────────────────────────────

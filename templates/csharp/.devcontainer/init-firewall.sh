@@ -116,6 +116,17 @@ for domain in \
   "vuejs.org" \
   "getcomposer.org" \
   "github.io" \
+  "docs.aws.amazon.com" \
+  "aws.amazon.com" \
+  "console.aws.amazon.com" \
+  "registry.terraform.io" \
+  "developer.hashicorp.com" \
+  "cloud.google.com" \
+  "azure.microsoft.com" \
+  "kubernetes.io" \
+  "kamal-deploy.org" \
+  "conoha.jp" \
+  "www.conoha.jp" \
   "api.nuget.org" \
   "nuget.org" \
   "globalcdn.nuget.org"; do
