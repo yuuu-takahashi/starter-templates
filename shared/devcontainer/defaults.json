@@ -1,4 +1,7 @@
 {
+  "featuresFullOnly": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
   "extensions": {
     "base": ["esbenp.prettier-vscode", "eamodio.gitlens"],
     "node": ["dbaeumer.vscode-eslint", "anthropic.claude-code"],
