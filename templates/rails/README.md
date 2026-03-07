@@ -66,12 +66,6 @@
 - streetsidesoftware.code-spell-checker — スペルチェック
 - yzhang.markdown-all-in-one — Markdown 編集支援
 
-## ディレクトリ構成
-
-```bash
-tree -I 'vendor|node_modules|tmp'
-```
-
 ## 開発環境構築
 
 ### このテンプレートを取得する方法
@@ -82,6 +76,20 @@ cd starter-templates
 yarn create-project
 ```
 
+次のような番号付きのテンプレート一覧が表示されます。Ruby on Rails を選ぶなら `4` を選択し、作成先パスの入力を求められたら未入力でこのリポジトリを入れ替え、または別のパスを指定してください。
+
+```text
+テンプレートを選んでください:
+
+  1. Next.js (App Router) (nextjs)
+  2. Node.js (nodejs)
+  3. React + Vite (reactjs)
+  ...
+番号を入力 (1–11): 
+```
+
+プロジェクト作成後、VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択して起動してください。
+
 ### 必要なツール
 
 - [VS Code](https://code.visualstudio.com/) または [Cursor](https://www.cursor.com/)
@@ -90,21 +98,13 @@ yarn create-project
 
 ### 開発環境の準備
 
-1. リポジトリをクローンし、テンプレートディレクトリに移動
-
-   ```bash
-   git clone git@github.com:yuuu-takahashi/starter-templates.git
-   cd starter-templates/templates/rails
-   ```
-
-2. VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動
-3. データベース準備
+1. データベース準備
 
    ```bash
    bin/rails db:prepare
    ```
 
-4. 開発サーバー起動
+2. 開発サーバー起動
 
    ```bash
    bin/dev

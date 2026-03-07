@@ -10,24 +10,10 @@ import * as path from "node:path";
 import * as readline from "node:readline";
 import { fileURLToPath } from "node:url";
 import { STACK_DEFINITIONS } from "./lib/stacks.js";
+import { TEMPLATE_LABELS } from "./lib/template-labels.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..");
-
-/** テンプレート表示名（id → ラベル） */
-const TEMPLATE_LABELS: Record<string, string> = {
-  nextjs: "Next.js (App Router)",
-  nodejs: "Node.js",
-  reactjs: "React + Vite",
-  rails: "Ruby on Rails",
-  rails_api: "Rails API",
-  laravel: "Laravel (PHP)",
-  sinatra: "Sinatra",
-  csharp: "ASP.NET Core (C#)",
-  go: "Go (Gin)",
-  rust: "Rust (Axum)",
-  django: "Django (Python)",
-};
 
 function slug(dir: string): string {
   return dir.replace(/^templates\//, "");

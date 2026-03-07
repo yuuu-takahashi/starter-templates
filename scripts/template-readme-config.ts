@@ -5,8 +5,6 @@
  * 共通の文面はテンプレート内で一元管理し、テンプレートごとの差分は config のみで指定する。
  */
 
-import { TEMPLATES_DIR } from './lib/stacks.js';
-
 // ── 型定義 ───────────────────────────────────────────────────────────────────
 
 export type TemplateReadmeStep = {
@@ -37,7 +35,6 @@ export type TemplateReadmeConfig = {
   title: string;
   description: string;
   repoSlug: string;
-  treeExclude?: string;
   /** shared/npm/${npmStack}.json のパッケージを「主なライブラリ」に記載 */
   npmStack?: string;
   /** shared/gemfile/Gemfile.${gemfileStack} の gem を「主な Gem」に記載 */
@@ -52,14 +49,6 @@ export type TemplateReadmeConfig = {
   extraSections?: string;
 };
 
-const cloneStep = (templateId: string): TemplateReadmeStep => ({
-  label: 'リポジトリをクローンし、テンプレートディレクトリに移動',
-  commands: [
-    'git clone git@github.com:yuuu-takahashi/starter-templates.git',
-    `cd starter-templates/${TEMPLATES_DIR}/${templateId}`,
-  ],
-});
-
 export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
   {
     id: 'nodejs',
@@ -68,15 +57,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     repoSlug: 'template-nodejs',
     npmStack: 'nodejs',
     extensionSets: ['base', 'node'],
-    treeExclude: 'node_modules',
-    setupSteps: [
-      cloneStep('nodejs'),
-      {
-        label:
-          'VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動',
-        commands: [],
-      },
-    ],
+    setupSteps: [],
     devGuide: [
       { title: 'コードの静的解析と修正', commands: 'yarn format\nyarn lint' },
     ],
@@ -88,14 +69,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     repoSlug: 'template-nextjs',
     npmStack: 'nextjs',
     extensionSets: ['base', 'node'],
-    treeExclude: 'vendor|node_modules',
     setupSteps: [
-      cloneStep('nextjs'),
-      {
-        label:
-          'VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動',
-        commands: [],
-      },
       { label: 'パッケージをインストール', commands: ['yarn'] },
       { label: '開発サーバー起動', commands: ['yarn dev'] },
     ],
@@ -114,14 +88,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     repoSlug: 'template-reactjs',
     npmStack: 'reactjs',
     extensionSets: ['base', 'node'],
-    treeExclude: 'vendor|node_modules',
     setupSteps: [
-      cloneStep('reactjs'),
-      {
-        label:
-          'VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動',
-        commands: [],
-      },
       { label: 'パッケージをインストール', commands: ['yarn'] },
       { label: '開発サーバー起動', commands: ['yarn dev'] },
     ],
@@ -140,14 +107,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     npmStack: 'rails',
     gemfileStack: 'rails',
     extensionSets: ['base', 'ruby', 'erb', 'node', 'tooling'],
-    treeExclude: 'vendor|node_modules|tmp',
     setupSteps: [
-      cloneStep('rails'),
-      {
-        label:
-          'VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動',
-        commands: [],
-      },
       { label: 'データベース準備', commands: ['bin/rails db:prepare'] },
       { label: '開発サーバー起動', commands: ['bin/dev'] },
     ],
@@ -168,14 +128,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
       'このリポジトリは Laravel（PHP）のテンプレートプロジェクトです。',
     repoSlug: 'template-laravel',
     extensionSets: ['base', 'php', 'tooling'],
-    treeExclude: 'vendor|node_modules|storage',
     setupSteps: [
-      cloneStep('laravel'),
-      {
-        label:
-          'VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動',
-        commands: [],
-      },
       {
         label: '環境変数と依存関係のセットアップ',
         commands: [
@@ -208,14 +161,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     npmStack: 'rails-api',
     gemfileStack: 'rails-api',
     extensionSets: ['base', 'ruby'],
-    treeExclude: 'vendor|node_modules|tmp',
     setupSteps: [
-      cloneStep('rails-api'),
-      {
-        label:
-          'VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動（環境変数は docker-compose で設定済み）',
-        commands: [],
-      },
       { label: 'データベース準備', commands: ['bin/rails db:prepare'] },
       { label: '開発サーバー起動', commands: ['bin/rails s'] },
     ],
@@ -239,14 +185,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
       'このリポジトリは ASP.NET Core Minimal API（C#）のテンプレートプロジェクトです。',
     repoSlug: 'template-csharp',
     extensionSets: ['base', 'csharp'],
-    treeExclude: 'bin|obj',
     setupSteps: [
-      cloneStep('csharp'),
-      {
-        label:
-          'VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動',
-        commands: [],
-      },
       { label: 'パッケージの復元', commands: ['dotnet restore'] },
       { label: '開発サーバー起動', commands: ['dotnet run'] },
     ],
@@ -263,14 +202,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     repoSlug: 'template-go',
     extensionSets: ['base', 'go'],
     stackLibs: ['gin — 軽量 Web フレームワーク（Sinatra 的）'],
-    treeExclude: 'bin|vendor',
     setupSteps: [
-      cloneStep('go'),
-      {
-        label:
-          'VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動',
-        commands: [],
-      },
       { label: '依存関係の取得（go.sum の生成）', commands: ['go mod tidy'] },
       { label: '開発サーバー起動', commands: ['go run .'] },
     ],
@@ -290,14 +222,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
       'axum — 軽量 Web フレームワーク（Sinatra 的）',
       'tokio — 非同期ランタイム',
     ],
-    treeExclude: 'target',
     setupSteps: [
-      cloneStep('rust'),
-      {
-        label:
-          'VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動',
-        commands: [],
-      },
       { label: '開発サーバー起動', commands: ['cargo run'] },
     ],
     previewUrl: 'http://localhost:8080',
@@ -318,14 +243,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     repoSlug: 'template-django',
     extensionSets: ['base', 'python'],
     stackLibs: ['Django — Python Web フレームワーク'],
-    treeExclude: '__pycache__|.venv|*.pyc',
     setupSteps: [
-      cloneStep('django'),
-      {
-        label:
-          'VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動',
-        commands: [],
-      },
       {
         label: '仮想環境と依存関係のインストール',
         commands: [
@@ -370,14 +288,7 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     npmStack: 'sinatra',
     gemfileStack: 'sinatra',
     extensionSets: ['base', 'ruby', 'erb'],
-    treeExclude: 'vendor|node_modules',
     setupSteps: [
-      cloneStep('sinatra'),
-      {
-        label:
-          'VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動（環境変数は docker-compose で設定済み）',
-        commands: [],
-      },
       {
         label: 'データベース準備',
         commands: ['bundle exec rake db:setup', 'bundle exec rake db:seed'],

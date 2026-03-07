@@ -25,12 +25,6 @@
 - eamodio.gitlens — Git 履歴・差分の強力な可視化
 - esbenp.prettier-vscode — コードフォーマット（Prettier）
 
-## ディレクトリ構成
-
-```bash
-tree -I 'node_modules'
-```
-
 ## 開発環境構築
 
 ### このテンプレートを取得する方法
@@ -41,6 +35,20 @@ cd starter-templates
 yarn create-project
 ```
 
+次のような番号付きのテンプレート一覧が表示されます。Node.js を選ぶなら `2` を選択し、作成先パスの入力を求められたら未入力でこのリポジトリを入れ替え、または別のパスを指定してください。
+
+```text
+テンプレートを選んでください:
+
+  1. Next.js (App Router) (nextjs)
+  2. Node.js (nodejs)
+  3. React + Vite (reactjs)
+  ...
+番号を入力 (1–11): 
+```
+
+プロジェクト作成後、VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択して起動してください。
+
 ### 必要なツール
 
 - [VS Code](https://code.visualstudio.com/) または [Cursor](https://www.cursor.com/)
@@ -48,15 +56,6 @@ yarn create-project
 - VS Code の場合: [Dev Containers拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
 ### 開発環境の準備
-
-1. リポジトリをクローンし、テンプレートディレクトリに移動
-
-   ```bash
-   git clone git@github.com:yuuu-takahashi/starter-templates.git
-   cd starter-templates/templates/nodejs
-   ```
-
-2. VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動
 
 ## 開発作業ガイド
 

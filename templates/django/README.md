@@ -18,12 +18,6 @@
 - ms-python.python — Python 言語サポート（IntelliSense・デバッグ・テスト等）
 - ms-python.vscode-pylance — Python の型チェック・補完（Pylance）
 
-## ディレクトリ構成
-
-```bash
-tree -I '__pycache__|.venv|*.pyc'
-```
-
 ## 開発環境構築
 
 ### このテンプレートを取得する方法
@@ -34,6 +28,20 @@ cd starter-templates
 yarn create-project
 ```
 
+次のような番号付きのテンプレート一覧が表示されます。Django (Python) を選ぶなら `11` を選択し、作成先パスの入力を求められたら未入力でこのリポジトリを入れ替え、または別のパスを指定してください。
+
+```text
+テンプレートを選んでください:
+
+  1. Next.js (App Router) (nextjs)
+  2. Node.js (nodejs)
+  3. React + Vite (reactjs)
+  ...
+番号を入力 (1–11): 
+```
+
+プロジェクト作成後、VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択して起動してください。
+
 ### 必要なツール
 
 - [VS Code](https://code.visualstudio.com/) または [Cursor](https://www.cursor.com/)
@@ -42,28 +50,20 @@ yarn create-project
 
 ### 開発環境の準備
 
-1. リポジトリをクローンし、テンプレートディレクトリに移動
-
-   ```bash
-   git clone git@github.com:yuuu-takahashi/starter-templates.git
-   cd starter-templates/templates/django
-   ```
-
-2. VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択し、起動
-3. 仮想環境と依存関係のインストール
+1. 仮想環境と依存関係のインストール
 
    ```bash
    python -m venv .venv
    . .venv/bin/activate && pip install -r requirements.txt
    ```
 
-4. マイグレーション（任意）
+2. マイグレーション（任意）
 
    ```bash
    . .venv/bin/activate && python manage.py migrate
    ```
 
-5. 開発サーバー起動
+3. 開発サーバー起動
 
    ```bash
    . .venv/bin/activate && python manage.py runserver
