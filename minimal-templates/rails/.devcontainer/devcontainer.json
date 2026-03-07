@@ -39,14 +39,18 @@
       ],
       "settings": {
         "editor.tabSize": 2,
-        "files.trimTrailingWhitespace": true,
-        "files.insertFinalNewline": true,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
           "source.fixAll": "explicit",
           "source.fixAll.eslint": "explicit"
         },
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "files.encoding": "utf8",
+        "files.eol": "\n",
         "[ruby]": {
           "editor.defaultFormatter": "Shopify.ruby-lsp"
         },
@@ -80,14 +84,18 @@
       ],
       "settings": {
         "editor.tabSize": 2,
-        "files.trimTrailingWhitespace": true,
-        "files.insertFinalNewline": true,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
           "source.fixAll": "explicit",
           "source.fixAll.eslint": "explicit"
         },
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "files.encoding": "utf8",
+        "files.eol": "\n",
         "[ruby]": {
           "editor.defaultFormatter": "Shopify.ruby-lsp"
         },

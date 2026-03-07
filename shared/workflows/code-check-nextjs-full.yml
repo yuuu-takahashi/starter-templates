@@ -39,3 +39,12 @@ jobs:
 
       - name: markuplint
         run: yarn markuplint
+
+      - name: markdownlint
+        run: yarn markdownlint
+
+      - name: type-check
+        run: yarn type-check
+
+      - name: knip
+        run: yarn knip

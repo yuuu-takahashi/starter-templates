@@ -47,6 +47,10 @@ export type TemplateReadmeConfig = {
   previewUrl?: string;
   devGuide: TemplateReadmeDevGuide[];
   extraSections?: string;
+  /** create-project の選択番号（full-templates 用など）。未指定時は minimal の並びから算出 */
+  selectNumber?: number;
+  /** create-project の表示名（full-templates 用など） */
+  selectLabel?: string;
 };
 
 export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
@@ -79,6 +83,30 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
       { title: 'カバレッジレポートの生成', commands: 'yarn test:coverage' },
       { title: 'コードの静的解析と修正', commands: 'yarn format\nyarn lint' },
     ],
+  },
+  {
+    id: 'nextjs-full',
+    title: 'template-nextjs',
+    description:
+      'このリポジトリは Next.js のテンプレートプロジェクトです。Storybook・E2E（Playwright）・Lighthouse CI などを含む実用向け構成です。',
+    repoSlug: 'template-nextjs',
+    npmStack: 'nextjs',
+    extensionSets: ['base', 'node'],
+    setupSteps: [
+      { label: 'パッケージをインストール', commands: ['yarn'] },
+      { label: '開発サーバー起動', commands: ['yarn dev'] },
+    ],
+    previewUrl: 'http://localhost:3000',
+    devGuide: [
+      { title: 'テストの実行', commands: 'yarn test' },
+      { title: 'カバレッジレポートの生成', commands: 'yarn test:coverage' },
+      { title: 'コードの静的解析と修正', commands: 'yarn format\nyarn lint' },
+      { title: 'Storybook の起動', commands: 'yarn storybook' },
+      { title: 'E2E テスト（Playwright）', commands: 'yarn test:e2e' },
+      { title: '型チェック', commands: 'yarn type-check' },
+    ],
+    selectNumber: 2,
+    selectLabel: 'Next.js (App Router) - 実用',
   },
   {
     id: 'reactjs',

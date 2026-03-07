@@ -24,6 +24,9 @@ import { ROOT } from './lib/utils.js';
 
 const DEFAULTS_PATH = join(ROOT, 'shared', 'devcontainer', 'defaults.json');
 const DEFAULTS = JSON.parse(readFileSync(DEFAULTS_PATH, 'utf8')) as {
+  features?: Record<string, Record<string, unknown>>;
+  /** full-templates のみに適用する features（例: github-cli） */
+  featuresFullOnly?: Record<string, Record<string, unknown>>;
   extensions: {
     base: string[];
     node: string[];
@@ -89,6 +92,7 @@ interface DevcontainerConfig {
   forwardPorts?: number[];
   portsAttributes?: Record<string, { label: string; onAutoForward: string }>;
   postCreateCommand?: string | string[];
+  features?: Record<string, Record<string, unknown>>;
   customizations: {
     vscode: VscodeCustomization;
     cursor: VscodeCustomization;
@@ -599,10 +603,23 @@ for (const [dir, dockerfileName] of Object.entries({
   writeInitFirewall(outDir, dir);
 }
 
+const DEVCONTAINER_FEATURES = DEFAULTS.features ?? {};
+const DEVCONTAINER_FEATURES_FULL_ONLY = DEFAULTS.featuresFullOnly ?? {};
+const isFullTemplate = (d: string) => d.startsWith('full-templates/');
+
 for (const { dir, config } of STACKS) {
   const outPath = join(ROOT, dir, '.devcontainer', 'devcontainer.json');
+  const features =
+    Object.keys(DEVCONTAINER_FEATURES).length > 0 ||
+    Object.keys(DEVCONTAINER_FEATURES_FULL_ONLY).length > 0
+      ? {
+          ...DEVCONTAINER_FEATURES,
+          ...(isFullTemplate(dir) ? DEVCONTAINER_FEATURES_FULL_ONLY : {}),
+        }
+      : undefined;
   const configWithCursor = {
     ...config,
+    ...(features && Object.keys(features).length > 0 && { features }),
     customizations: {
       vscode: config.customizations.vscode,
       cursor: config.customizations.vscode,
