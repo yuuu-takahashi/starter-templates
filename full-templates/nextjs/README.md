@@ -1,329 +1,148 @@
-# Next.js Starter Template
+<!-- Format aligned with minimal-templates/nextjs/README.md — edit shared/readme for generated templates -->
 
-[Next.js 15](https://nextjs.org/)のApp Routerを使用したSSR（Server-Side Rendering）構成のWebアプリケーション開発を素早く立ち上げることを目的としたテンプレートプロジェクトです。
+# template-nextjs
 
-以下の特徴を持つWebアプリケーションを素早く立ち上げることを目的としています：
+このリポジトリは Next.js のテンプレートプロジェクトです。Storybook・E2E（Playwright）・Lighthouse CI などを含む実用向け構成です。
+このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。VS Code・Cursor のどちらでも利用できます。
 
-- Next.js 15 App Routerによる最新のSSR/SSG/SPA対応
-- TypeScriptによる型安全な開発環境
-- Dev Containerによる一貫した開発環境
-- Storybook統合によるコンポーネント駆動開発
+## 主なライブラリ・Gem・拡張機能
 
-## Features
+### 主な npm パッケージ
 
-- ✅ **Next.js 15 App Router** - 最新のApp Routerによるルーティングとレンダリング
-- ✅ **TypeScript** - 型安全性を確保した開発環境
-- ✅ **Vanilla Extract** - CSS-in-JSによる型安全なスタイリング
-- ✅ **Storybook** - コンポーネントの開発・テスト・ドキュメント化
-- ✅ **Dev Container** - Dockerベースの一貫した開発環境
-- ✅ **Vitest + Testing Library** - モダンなテスト環境
-- ✅ **ESLint + Prettier** - コード品質の自動チェックとフォーマット
-- ✅ **豊富なコンポーネントライブラリ** - Button、Input、Select、DatePickerなど20以上の基本コンポーネント
-- ✅ **レンダリングモード切り替え** - SSR/SSG/SPAの設定方法を提供
+（本番依存）
 
-## ディレクトリ構成
+- next — React フルスタックフレームワーク
+- react — UI ライブラリ
+- react-dom — React の DOM レンダラー
+- @next/third-parties — Next.js サードパーティ統合
+- @sentry/nextjs — Sentry エラートラッキング
 
+（開発依存）
+
+- @eslint/eslintrc — ESLint の設定ユーティリティ
+- @testing-library/jest-dom — DOM のカスタムマッチャー
+- @vitejs/plugin-react — Vite 向け React プラグイン
+- @vitest/coverage-v8 — V8 ベースのカバレッジプロバイダー
+- @types/node — Node.js の TypeScript 型定義
+- @types/react — React の TypeScript 型定義
+- @types/react-dom — React DOM の TypeScript 型定義
+- eslint — JavaScript / TypeScript の静的解析
+- eslint-config-next — Next.js 推奨 ESLint 設定
+- eslint-config-prettier — Prettier と競合する ESLint ルールを無効化
+- eslint-plugin-jsx-a11y — JSX のアクセシビリティチェック
+- eslint-plugin-unused-imports — 未使用 import の検出・削除
+- happy-dom — テスト用の軽量 DOM 実装
+- prettier — コードフォーマッター
+- ts-node — TypeScript を直接実行
+- typescript — TypeScript コンパイラ
+- vitest — Vite ベースのテストフレームワーク
+- @playwright/test — E2E テスト
+- @dotenvx/dotenvx — 環境変数ロード
+- husky — Git フック
+- lint-staged — ステージファイルへのリンター実行
+- knip — 未使用ファイル・export の検出
+- secretlint — シークレット検出
+- markdownlint-cli2 — Markdown リンター
+- markuplint — HTML/マークアップリンター
+- Storybook 関連（@storybook/nextjs-vite, storybook, @storybook/addon-* など）— コンポーネント開発・カタログ
+- @lhci/cli — Lighthouse CI
+
+### Dev Container でインストールされる主な拡張機能
+
+- anthropic.claude-code
+- dbaeumer.vscode-eslint — ESLint の静的解析
+- eamodio.gitlens — Git 履歴・差分の強力な可視化
+- esbenp.prettier-vscode — コードフォーマット（Prettier）
+
+## 開発環境構築
+
+### このテンプレートを取得する方法
+
+```bash
+git clone git@github.com:yuuu-takahashi/starter-templates.git
+cd starter-templates
+yarn create-project
 ```
-template-nextjs-my-starter/
-├── .devcontainer/          # Dev Container設定
-├── .github/                # GitHub Actions設定
-│   └── workflows/          # CI/CDワークフロー
-├── config/                 # 設定ファイル
-├── docs/                   # ドキュメント
-├── public/                 # 静的ファイル
-├── src/
-│   ├── app/               # Next.js App Router
-│   │   ├── (site)/       # サイトページ
-│   │   ├── up/           # ヘルスチェックエンドポイント
-│   │   └── layout.tsx    # ルートレイアウト
-│   ├── components/       # Reactコンポーネント
-│   │   ├── base/         # 基本コンポーネント（Button、Input、Selectなど）
-│   │   ├── layouts/      # レイアウトコンポーネント
-│   │   └── pages/        # ページコンポーネント
-│   ├── config/           # 設定ファイル（環境変数、メタデータなど）
-│   ├── styles/           # グローバルスタイル定義
-│   └── utils/            # ユーティリティ関数
-├── .storybook/           # Storybook設定
-├── next.config.ts        # Next.js設定
-├── package.json          # 依存関係
-├── tsconfig.json         # TypeScript設定
-└── vitest.config.ts      # Vitest設定
+
+次のような番号付きのテンプレート一覧が表示されます。Next.js (App Router) を選ぶなら `1` を選択し、作成先パスの入力を求められたら未入力でこのリポジトリを入れ替え、または別のパスを指定してください。**実用テンプレート（本 README）は `full-templates/nextjs` にあります。** 最低限の構成は `minimal-templates/nextjs` です。
+
+```text
+テンプレートを選んでください:
+
+  1. Next.js (App Router) (nextjs)
+  2. Node.js (nodejs)
+  3. React + Vite (reactjs)
+  ...
+番号を入力 (1–11):
 ```
 
-## Getting Started
+プロジェクト作成後、VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択して起動してください。`full-templates/nextjs` をそのまま使う場合は、このディレクトリを Dev Container で開いてください。
 
-### 前提条件
+### 必要なツール
 
-- [VS Code](https://code.visualstudio.com/)
+- [VS Code](https://code.visualstudio.com/) または [Cursor](https://www.cursor.com/)
 - [Docker](https://www.docker.com/ja-jp/)
-- VS Codeの[Dev Containers拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+- VS Code の場合: [Dev Containers拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
-### セットアップ手順
+### 開発環境の準備
 
-1. **リポジトリのクローン**
+1. パッケージをインストール
 
-```bash
-git clone <your-repository-url>
-cd template-nextjs-my-starter
-```
+   ```bash
+   yarn
+   ```
 
-2. **Dev Containerで起動**
-
-VS Codeの左下「><」アイコンをクリックし、「Remote-Containers: Reopen in Container」を選択してコンテナを起動します。
-
-3. **依存関係のインストール**
-
-```bash
-yarn install
-```
-
-4. **環境変数の設定**
-
-```bash
-cp .env.example .env.local
-```
-
-5. **環境変数の編集**
-
-`.env.local` を開き、必要な値を設定してください。
-
-6. **開発サーバーの起動**
-
-```bash
-yarn dev
-```
-
-ブラウザで <http://localhost:3000> を開き、表示を確認してください。
-
-Storybookは <http://localhost:6006> で起動します。
-
-## Environment Variables
-
-環境変数は、以下の4つのカテゴリに分類されます：
-
-### 分類
-
-| 種類      | タイミング   | 使用場所       | 公開されるか | 機密情報 | 例                             |
-| --------- | ------------ | -------------- | ------------ | -------- | ------------------------------ |
-| **種類0** | ビルド時     | ビルドツール   | ❌           | ❌       | `NODE_ENV`                     |
-| **種類1** | ビルド時     | クライアント側 | ✅           | ❌       | `NEXT_PUBLIC_APP_URL`          |
-| **種類2** | ランタイム時 | サーバー側     | ❌           | ❌       | `APP_ENV`, `LOG_LEVEL`         |
-| **種類3** | ランタイム時 | サーバー側     | ❌           | ✅       | `API_KEY`, `DATABASE_PASSWORD` |
-
-### 主要な環境変数
-
-| 変数名                | 説明                  | 種類  | 必須 | デフォルト値             |
-| --------------------- | --------------------- | ----- | ---- | ------------------------ |
-| `NEXT_PUBLIC_APP_URL` | アプリケーションのURL | 種類1 | ✅   | `http://localhost:3000/` |
-| `APP_ENV`             | アプリケーション環境  | 種類2 | ❌   | `development`            |
-
-### セットアップ
-
-1. `.env.example`をコピーして`.env.local`を作成
+2. 環境変数（任意）
 
    ```bash
    cp .env.example .env.local
    ```
 
-2. `.env.local`を編集して実際の値を設定
+   `.env.local` を編集して必要な値を設定してください。
 
-詳細は以下のドキュメントを参照してください：
+3. 開発サーバー起動
 
-- [環境変数管理ガイド](./docs/environment-variables.md) - 詳細な説明と実装例
-- [.env.example](./.env.example) - 環境変数のテンプレート
+   ```bash
+   yarn dev
+   ```
 
-## Scripts
+ブラウザで <http://localhost:3000> を開き、表示確認。Storybook は `yarn storybook` で <http://localhost:6006> で起動します。
 
-| コマンド               | 説明                             |
-| ---------------------- | -------------------------------- |
-| `yarn dev`             | 開発サーバーとStorybookを起動    |
-| `yarn build`           | 開発環境用にビルド               |
-| `yarn build:prod`      | 本番環境用にビルド               |
-| `yarn start`           | 開発環境用サーバーを起動         |
-| `yarn start:prod`      | 本番環境用サーバーを起動         |
-| `yarn test`            | テストを実行                     |
-| `yarn lint`            | ESLintでコードをチェック         |
-| `yarn lint:fix`        | ESLintでコードを自動修正         |
-| `yarn lint:tsc`        | TypeScriptの型チェック           |
-| `yarn format`          | Prettierでフォーマットをチェック |
-| `yarn format:fix`      | Prettierでフォーマットを自動修正 |
-| `yarn storybook`       | Storybookを起動                  |
-| `yarn build-storybook` | Storybookをビルド                |
+## 開発作業ガイド
 
-## 技術選定の背景
-
-### なぜ Next.js 15 App Router か？
-
-- 最新のReact Server Componentsを活用できる
-- ファイルベースルーティングによる直感的な開発体験
-- SSR/SSG/SPAの柔軟な切り替えが可能
-- 優れたパフォーマンスとSEO対応
-
-### なぜ TypeScript か？
-
-- 型安全性によるバグの早期発見
-- IDEの優れた補完機能
-- リファクタリングの安全性向上
-- チーム開発でのコード品質向上
-
-### なぜ Vanilla Extract か？
-
-- TypeScriptによる型安全なスタイリング
-- ゼロランタイムのCSS-in-JS
-- ビルド時の最適化による高いパフォーマンス
-- CSS Modulesのようなスコープ化
-
-### なぜ Dev Container か？
-
-- 環境の一貫性確保
-- セットアップ時間の短縮
-- チーム全体での環境統一
-- 依存関係の管理が容易
-
-詳細は [docs/concept.md](./docs/concept.md) を参照してください。
-
-## Testing
-
-### テストの実行
+- テストの実行
 
 ```bash
-# 全テストの実行
 yarn test
-
-# カバレッジレポート（Vitestに統合済み）
-yarn test --coverage
 ```
 
-### テスト戦略
-
-- **単体テスト**: Vitest + Testing Library
-- **コンポーネントテスト**: Storybook + Vitest統合
-- **E2Eテスト**: Playwright（オプション）
-- **カバレッジ目標**: 80%以上（推奨）
-
-## レンダリングモードの設定
-
-このプロジェクトはデフォルトでSSR（Server-Side Rendering）構成になっていますが、SSG（Static Site Generation）やSPA（Single Page Application）に変更することも可能です。
-
-### SSR（Server-Side Rendering）- デフォルト設定
-
-リクエストごとにサーバーでHTMLを生成するモードです。
-
-#### 設定方法
-
-`next.config.ts` に以下を設定：
-
-```typescript
-const nextConfig: NextConfig = {
-  output: 'standalone',
-};
-```
-
-#### 特徴
-
-- リクエストごとにサーバーでHTMLを生成
-- 動的なコンテンツに対応可能
-- API RoutesやServer Actionsが使用可能
-- サーバーが必要（`next start`で起動）
-
-#### ビルドと起動
+- カバレッジレポートの生成
 
 ```bash
-yarn build:prod
-yarn start:prod
+yarn test:coverage
 ```
 
-### SSG（Static Site Generation）
-
-ビルド時にすべてのページを静的HTMLとして生成するモードです。
-
-#### 設定方法
-
-1. `next.config.ts` を以下のように変更：
-
-```typescript
-const nextConfig: NextConfig = {
-  output: 'export',
-  images: {
-    unoptimized: true, // 静的エクスポート時は画像最適化を無効化
-  },
-};
-```
-
-2. 動的機能を無効化：
-
-- API Routes（`app/**/route.ts`）は使用不可
-- Server Actionsは使用不可
-- `generateStaticParams`を使用して動的ルートを事前生成
-
-#### 特徴
-
-- ビルド時にすべてのページを静的HTMLとして生成
-- サーバー不要（静的ホスティングサービスで配信可能）
-- 高速なページ表示
-- 動的なコンテンツには対応不可
-
-#### ビルドとデプロイ
+- コードの静的解析と修正
 
 ```bash
-yarn build:prod
-# out/ ディレクトリに静的ファイルが生成される
-# これを静的ホスティングサービス（Vercel、Netlify、GitHub Pagesなど）にデプロイ
+yarn format
+yarn lint
 ```
 
-### SPA（Single Page Application）
-
-クライアントサイドのみで動作するシングルページアプリケーションです。
-
-#### 設定方法
-
-1. `next.config.ts` を以下のように変更：
-
-```typescript
-const nextConfig: NextConfig = {
-  output: 'export',
-  trailingSlash: true,
-  images: {
-    unoptimized: true,
-  },
-};
-```
-
-2. ルーティングをクライアントサイドのみに制限：
-
-- すべてのページで`'use client'`ディレクティブを使用
-- API Routesは使用不可
-- ルーティングはNext.jsの`useRouter`を使用
-
-#### 特徴
-
-- クライアントサイドのみで動作
-- サーバー不要（静的ホスティングサービスで配信可能）
-- ページ遷移が高速
-- SEOには不利（必要に応じてメタタグを動的に設定）
-
-#### ビルドとデプロイ
+- Storybook の起動
 
 ```bash
-yarn build:prod
-# out/ ディレクトリに静的ファイルが生成される
-# これを静的ホスティングサービスにデプロイ
+yarn storybook
 ```
 
-### 各モードの比較
+- E2E テスト（Playwright）
 
-| モード | サーバー | 動的コンテンツ  | SEO  | パフォーマンス | 使用例                             |
-| ------ | -------- | --------------- | ---- | -------------- | ---------------------------------- |
-| SSR    | 必要     | 対応可能        | 良好 | 中〜高         | ブログ、ECサイト                   |
-| SSG    | 不要     | 対応不可        | 良好 | 最高           | コーポレートサイト、ポートフォリオ |
-| SPA    | 不要     | 対応可能（CSR） | 低   | 高             | ダッシュボード、管理画面           |
+```bash
+yarn test:e2e
+```
 
-## ヘルスチェック
+- 型チェック
 
-アプリケーションの稼働状況は以下で確認できます：
-
-<http://localhost:3000/up>
-
-## License
-
-このプロジェクトはMITライセンスの下で公開されています。
+```bash
+yarn type-check
+```

@@ -28,7 +28,7 @@
     "@playwright/test": "^1.49.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-perfectionist": "^2.15.0",
+    "eslint-plugin-perfectionist": "^4.10.1",
     "eslint-plugin-storybook": "^0.11.0",
     "eslint-plugin-unused-imports": "^4.1.5",
     "husky": "^9.1.7",
