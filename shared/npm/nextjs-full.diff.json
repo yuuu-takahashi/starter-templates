@@ -68,6 +68,7 @@
     "markuplint": "^4.0.0",
     "@markuplint/react-spec": "^4.0.0",
     "@markuplint/jsx-parser": "^4.0.0",
+    "vite": "^6.0.0",
     "vitest-axe": "^0.1.0",
     "webpack-bundle-analyzer": "^5.2.0"
   },
