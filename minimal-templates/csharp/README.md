@@ -31,7 +31,7 @@ yarn create-project
 
   1. Next.js (App Router) (nextjs)
   2. Node.js (nodejs)
-  3. React + Vite (reactjs)
+  3. React + Vite (react)
   ...
 番号を入力 (1–12): 
 ```

@@ -77,7 +77,7 @@
 | ---------- | ---- |
 | [minimal-templates/nodejs](minimal-templates/nodejs) | Node.js |
 | [minimal-templates/nextjs](minimal-templates/nextjs) | Next.js（App Router） |
-| [minimal-templates/reactjs](minimal-templates/reactjs) | React + Vite |
+| [minimal-templates/react](minimal-templates/react) | React + Vite |
 | [minimal-templates/rails](minimal-templates/rails) | Ruby on Rails |
 | [minimal-templates/rails-api](minimal-templates/rails-api) | Rails API |
 | [minimal-templates/laravel](minimal-templates/laravel) | Laravel（PHP） |

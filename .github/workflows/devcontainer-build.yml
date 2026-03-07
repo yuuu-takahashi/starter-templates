@@ -21,7 +21,7 @@ jobs:
     outputs:
       nextjs: ${{ steps.filter.outputs.nextjs }}
       nodejs: ${{ steps.filter.outputs.nodejs }}
-      reactjs: ${{ steps.filter.outputs.reactjs }}
+      react: ${{ steps.filter.outputs.react }}
       rails: ${{ steps.filter.outputs.rails }}
       rails_api: ${{ steps.filter.outputs.rails_api }}
       laravel: ${{ steps.filter.outputs.laravel }}
@@ -41,8 +41,8 @@ jobs:
               - 'minimal-templates/nextjs/.devcontainer/**'
             nodejs:
               - 'minimal-templates/nodejs/.devcontainer/**'
-            reactjs:
-              - 'minimal-templates/reactjs/.devcontainer/**'
+            react:
+              - 'minimal-templates/react/.devcontainer/**'
             rails:
               - 'minimal-templates/rails/.devcontainer/**'
             rails_api:
@@ -81,15 +81,15 @@ jobs:
         with:
           dockerfile: minimal-templates/nodejs/.devcontainer/Dockerfile
           failure-threshold: error
-  reactjs:
+  react:
     needs: changes
-    if: needs.changes.outputs.reactjs == 'true'
+    if: needs.changes.outputs.react == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: minimal-templates/reactjs/.devcontainer/Dockerfile
+          dockerfile: minimal-templates/react/.devcontainer/Dockerfile
           failure-threshold: error
   rails:
     needs: changes

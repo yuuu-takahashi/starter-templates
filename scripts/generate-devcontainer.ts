@@ -259,9 +259,9 @@ const STACKS: Stack[] = [
     },
   },
   {
-    dir: `${TEMPLATES_DIR}/reactjs`,
+    dir: `${TEMPLATES_DIR}/react`,
     config: {
-      name: 'template-reactjs',
+      name: 'template-react',
       build: { dockerfile: 'Dockerfile', context: '..', args: NODE_BUILD_ARGS },
       workspaceFolder: '/workspace',
       workspaceMount: WORKSPACE_MOUNT,

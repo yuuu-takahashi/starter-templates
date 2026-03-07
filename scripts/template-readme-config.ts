@@ -109,12 +109,12 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
     selectLabel: 'Next.js (App Router) - 実用',
   },
   {
-    id: 'reactjs',
-    title: 'template-reactjs',
+    id: 'react',
+    title: 'template-react',
     description:
       'このリポジトリは React + Vite のテンプレートプロジェクトです。',
-    repoSlug: 'template-reactjs',
-    npmStack: 'reactjs',
+    repoSlug: 'template-react',
+    npmStack: 'react',
     extensionSets: ['base', 'node'],
     setupSteps: [
       { label: 'パッケージをインストール', commands: ['yarn'] },
