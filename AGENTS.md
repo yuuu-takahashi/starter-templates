@@ -1,6 +1,6 @@
 # starter-templates
 
-各フレームワークのスターターテンプレートをまとめたモノレポです。`minimal-templates/` 配下はスクリプトで自動生成されるため、**設定変更は `shared/` を編集してください**。
+各フレームワークのスターターテンプレートをまとめたモノレポです。`minimal-templates/` と `full-templates/` 配下はスクリプトで自動生成されるため、**設定変更は `shared/` を編集してください**。
 
 ## Build & Test コマンド
 
@@ -19,15 +19,15 @@
 | `shared/` | **正本** — 編集対象。ESLint / Prettier / devcontainer / workflows などのソース |
 | `shared/readme/README.md.hbs` | 各テンプレートの README.md 用 Handlebars テンプレート |
 | `minimal-templates/` | **最低限** — スクリプトで上書きされる。直接編集禁止 |
-| `full-templates/` | **実用** — すぐ使える形に整えたテンプレート。手動管理 |
+| `full-templates/` | **実用** — スクリプトで上書きされる。直接編集禁止 |
 | `scripts/` | コード生成スクリプト（TypeScript） |
 | `scripts/lib/stacks.ts` | テンプレート・スタック一覧の一元管理 |
 
 ## 編集ルール
 
-- **NEVER** `minimal-templates/*/` 内の生成対象ファイルを直接編集する（次回 `yarn generate:*` で上書きされる）
+- **NEVER** `minimal-templates/*/` と `full-templates/*/` 内の生成対象ファイルを直接編集する（次回 `yarn generate:*` で上書きされる）
 - 設定変更は `shared/` 配下の該当ファイルを編集する
-- Next.js / React / Laravel / C# のフレームワーク固有設定は `minimal-templates/<stack>/` 直下を直接編集可能（生成されない部分のみ）
+- Next.js / React / Laravel / C# のフレームワーク固有設定は `minimal-templates/<stack>/` と `full-templates/<stack>/` 直下を直接編集可能（生成されない部分のみ）
 - 新規テンプレート追加時は `scripts/lib/stacks.ts` にエントリを追加する
 
 ## コードスタイル

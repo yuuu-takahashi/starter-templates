@@ -39,6 +39,10 @@ export interface StackDefinition {
   hasNpm: boolean;
   /** full-templates 用 npm 差分ファイルのスラグ。shared/npm/<slug>.diff.json を base にマージする */
   fullNpmDiffSlug?: string;
+  /** full-templates 用 code-check ワークフロー（未定義なら codeCheckWorkflow と同じ） */
+  fullCodeCheckWorkflow?: string;
+  /** full-templates 用 lighthouse CI ワークフロー。shared/workflows/ 内のファイル名 */
+  lighthouseWorkflow?: string;
   /** Gemfile を shared/gemfile/Gemfile.<slug> から生成する */
   hasGemfile: boolean;
   /** ルート CI でモノレポ向け path/working-directory 変換を適用する */
@@ -65,6 +69,8 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
     hasGemfile: false,
     monorepoPrefix: false,
     fullNpmDiffSlug: 'nextjs-full',
+    fullCodeCheckWorkflow: 'code-check-nextjs-full.yml',
+    lighthouseWorkflow: 'lighthouse-node.yml',
   },
   {
     dir: `${td}/nodejs`,
@@ -272,13 +278,21 @@ export const FULL_TEMPLATE_DIRS: readonly string[] = STACK_DEFINITIONS.filter(
   (s) => s.fullDir != null,
 ).map((s) => s.fullDir!);
 
-/** code-check.yml の元ワークフロー名（full-templates/ 用） */
+/** code-check.yml の元ワークフロー名（full-templates/ 用。fullCodeCheckWorkflow が定義されていればそれを優先） */
 export const FULL_CODE_CHECK_SOURCE: Readonly<Record<string, string>> =
   Object.fromEntries(
     STACK_DEFINITIONS.filter((s) => s.fullDir != null).map((s) => [
       s.fullDir!,
-      s.codeCheckWorkflow,
+      s.fullCodeCheckWorkflow ?? s.codeCheckWorkflow,
     ]),
+  );
+
+/** lighthouse.yml を生成する full-templates/ とそのワークフロー名 */
+export const FULL_LIGHTHOUSE_SOURCE: Readonly<Record<string, string>> =
+  Object.fromEntries(
+    STACK_DEFINITIONS.filter(
+      (s) => s.fullDir != null && s.lighthouseWorkflow != null,
+    ).map((s) => [s.fullDir!, s.lighthouseWorkflow!]),
   );
 
 /** test.yml を生成する full-templates/ とそのワークフロー名 */

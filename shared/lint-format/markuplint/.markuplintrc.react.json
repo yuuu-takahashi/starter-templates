@@ -1,0 +1,10 @@
+{
+  "$schema": "https://markuplint.dev/schema.json",
+  "extends": ["markuplint:recommended"],
+  "parser": {
+    ".tsx$": "@markuplint/react-parser"
+  },
+  "specs": {
+    ".tsx$": "@markuplint/react-spec"
+  }
+}

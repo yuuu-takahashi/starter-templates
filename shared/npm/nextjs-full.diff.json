@@ -14,6 +14,9 @@
     "knip:fix": "knip --fix",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "lhci": "lhci autorun",
+    "markuplint": "markuplint 'src/**/*.tsx'",
+    "markuplint:fix": "markuplint --fix 'src/**/*.tsx'",
     "prepare": "husky"
   },
   "dependencies": {
@@ -35,9 +38,19 @@
     "@storybook/addon-onboarding": "^8.6.0",
     "@storybook/addon-vitest": "^8.6.0",
     "@storybook/nextjs-vite": "^8.6.0",
-    "storybook": "^8.6.0"
+    "storybook": "^8.6.0",
+    "@lhci/cli": "^0.14.0",
+    "markuplint": "^4.0.0",
+    "@markuplint/react-spec": "^4.0.0",
+    "@markuplint/react-parser": "^4.0.0"
   },
   "lint-staged": {
-    "TODO(human): lint-staged のファイルパターンと実行コマンドを定義してください": ""
+    "src/**/*.{js,jsx,ts,tsx,css.ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "**/*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
   }
 }

@@ -16,6 +16,9 @@ import {
   SHARED_VITEST,
 } from './lib/utils.js';
 
+const SHARED_MARKUPLINT = join(ROOT, 'shared', 'lint-format', 'markuplint');
+const SHARED_LIGHTHOUSE = join(ROOT, 'shared', 'lighthouse');
+
 export async function run(): Promise<void> {
   // ── ESLint ─────────────────────────────────────────────────────────────────
 
@@ -120,5 +123,31 @@ export async function run(): Promise<void> {
       'utf8',
     );
     console.log('Generated:', join(ROOT, tsconfigDir, 'tsconfig.json'));
+  }
+
+  // ── Markuplint (.markuplintrc.json) ────────────────────────────────────────
+
+  const MARKUPLINT_REACT_DIRS = ['full-templates/nextjs'];
+  for (const dir of MARKUPLINT_REACT_DIRS) {
+    const outPath = join(ROOT, dir, '.markuplintrc.json');
+    writeFileSync(
+      outPath,
+      readFileSync(join(SHARED_MARKUPLINT, '.markuplintrc.react.json'), 'utf8'),
+      'utf8',
+    );
+    console.log('Generated:', outPath);
+  }
+
+  // ── Lighthouse CI (.lighthouserc.js) ──────────────────────────────────────
+
+  const LIGHTHOUSE_DIRS = ['full-templates/nextjs'];
+  for (const dir of LIGHTHOUSE_DIRS) {
+    const outPath = join(ROOT, dir, '.lighthouserc.js');
+    writeFileSync(
+      outPath,
+      readFileSync(join(SHARED_LIGHTHOUSE, '.lighthouserc.js'), 'utf8'),
+      'utf8',
+    );
+    console.log('Generated:', outPath);
   }
 }
