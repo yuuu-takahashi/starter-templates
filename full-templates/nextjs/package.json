@@ -61,6 +61,8 @@
     "typescript": "^5",
     "vitest": "^3.0.5",
     "@dotenvx/dotenvx": "^1.0.0",
+    "@vanilla-extract/next-plugin": "^2.4.14",
+    "@vanilla-extract/vite-plugin": "^5.1.0",
     "@playwright/test": "^1.49.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
