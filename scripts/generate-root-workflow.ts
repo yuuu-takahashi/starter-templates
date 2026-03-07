@@ -292,6 +292,7 @@ const buildDevcontainerWorkflow = (): Record<string, WorkflowJob> => {
           uses: "hadolint/hadolint-action@v3.1.0",
           with: {
             dockerfile: `${stack.dir}/.devcontainer/Dockerfile`,
+            "failure-threshold": "error",
           },
         },
       ],

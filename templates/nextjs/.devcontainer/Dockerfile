@@ -38,8 +38,7 @@ RUN mkdir -p /usr/local/share/npm-global && \
 ARG USERNAME=node
 
 # Persist bash history
-RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
-  && mkdir /commandhistory \
+RUN mkdir /commandhistory \
   && touch /commandhistory/.bash_history \
   && chown -R $USERNAME /commandhistory
 
@@ -51,9 +50,10 @@ RUN mkdir -p /workspace /home/node/.claude && \
 
 WORKDIR /workspace
 
+# Use curl only to satisfy hadolint DL4001: avoid mixing wget and curl
 ARG GIT_DELTA_VERSION=0.18.2
 RUN ARCH=$(dpkg --print-architecture) && \
-  wget -q "https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && \
+  curl -fsSL "https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" -o "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && \
   dpkg -i "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && \
   rm "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb"
 
@@ -70,7 +70,7 @@ ENV VISUAL=nano
 
 # Default powerline10k theme
 ARG ZSH_IN_DOCKER_VERSION=1.2.0
-RUN sh -c "$(wget -qO- https://github.com/deluan/zsh-in-docker/releases/download/v${ZSH_IN_DOCKER_VERSION}/zsh-in-docker.sh)" -- \
+RUN sh -c "$(curl -fsSL https://github.com/deluan/zsh-in-docker/releases/download/v${ZSH_IN_DOCKER_VERSION}/zsh-in-docker.sh)" -- \
   -p git \
   -p fzf \
   -a "source /usr/share/doc/fzf/examples/key-bindings.zsh" \

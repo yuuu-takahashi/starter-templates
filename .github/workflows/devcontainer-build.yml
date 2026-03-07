@@ -70,6 +70,7 @@ jobs:
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: templates/nextjs/.devcontainer/Dockerfile
+          failure-threshold: error
   nodejs:
     needs: changes
     if: needs.changes.outputs.nodejs == 'true'
@@ -79,6 +80,7 @@ jobs:
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: templates/nodejs/.devcontainer/Dockerfile
+          failure-threshold: error
   reactjs:
     needs: changes
     if: needs.changes.outputs.reactjs == 'true'
@@ -88,6 +90,7 @@ jobs:
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: templates/reactjs/.devcontainer/Dockerfile
+          failure-threshold: error
   rails:
     needs: changes
     if: needs.changes.outputs.rails == 'true'
@@ -97,6 +100,7 @@ jobs:
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: templates/rails/.devcontainer/Dockerfile
+          failure-threshold: error
   rails_api:
     needs: changes
     if: needs.changes.outputs.rails_api == 'true'
@@ -106,6 +110,7 @@ jobs:
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: templates/rails-api/.devcontainer/Dockerfile
+          failure-threshold: error
   laravel:
     needs: changes
     if: needs.changes.outputs.laravel == 'true'
@@ -115,6 +120,7 @@ jobs:
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: templates/laravel/.devcontainer/Dockerfile
+          failure-threshold: error
   sinatra:
     needs: changes
     if: needs.changes.outputs.sinatra == 'true'
@@ -124,6 +130,7 @@ jobs:
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: templates/sinatra/.devcontainer/Dockerfile
+          failure-threshold: error
   csharp:
     needs: changes
     if: needs.changes.outputs.csharp == 'true'
@@ -133,6 +140,7 @@ jobs:
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: templates/csharp/.devcontainer/Dockerfile
+          failure-threshold: error
   go:
     needs: changes
     if: needs.changes.outputs.go == 'true'
@@ -142,6 +150,7 @@ jobs:
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: templates/go/.devcontainer/Dockerfile
+          failure-threshold: error
   rust:
     needs: changes
     if: needs.changes.outputs.rust == 'true'
@@ -151,6 +160,7 @@ jobs:
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: templates/rust/.devcontainer/Dockerfile
+          failure-threshold: error
   django:
     needs: changes
     if: needs.changes.outputs.django == 'true'
@@ -160,3 +170,4 @@ jobs:
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: templates/django/.devcontainer/Dockerfile
+          failure-threshold: error
