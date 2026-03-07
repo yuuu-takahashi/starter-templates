@@ -13,8 +13,22 @@ const SHARED_README_DEV_CONTAINER_NOTE =
 
 const SHARED_README_SECTION_DIRECTORY = '## ディレクトリ構成';
 const SHARED_README_SECTION_SETUP = '## 開発環境構築';
+const SHARED_README_SECTION_GET_TEMPLATE = '### このテンプレートを取得する方法';
 const SHARED_README_SECTION_REQUIRED_TOOLS = '### 必要なツール';
 const SHARED_README_SECTION_PREPARE = '### 開発環境の準備';
+
+const SHARED_README_GET_TEMPLATE_BODY = (templateId: string) =>
+  [
+    '**推奨** — [starter-templates](https://github.com/yuuu-takahashi/starter-templates) をクローンし、`yarn create-project` でこのテンプレートを選んで作成先にコピー:',
+    '',
+    '```bash',
+    'git clone git@github.com:yuuu-takahashi/starter-templates.git',
+    'cd starter-templates',
+    'yarn create-project',
+    '```',
+    '',
+    `**代替** — リポジトリをクローンし、\`templates/${templateId}\` に直接移動して使う。`,
+  ].join('\n');
 const SHARED_README_SECTION_DEV_GUIDE = '## 開発作業ガイド';
 
 const SHARED_README_REQUIRED_TOOLS_LIST = [
@@ -449,6 +463,10 @@ function renderReadme(c: TemplateReadmeConfig, stackSection?: string): string {
   }
 
   lines.push(SHARED_README_SECTION_SETUP);
+  lines.push('');
+  lines.push(SHARED_README_SECTION_GET_TEMPLATE);
+  lines.push('');
+  lines.push(SHARED_README_GET_TEMPLATE_BODY(c.id));
   lines.push('');
   lines.push(SHARED_README_SECTION_REQUIRED_TOOLS);
   lines.push('');

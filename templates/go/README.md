@@ -25,6 +25,18 @@ tree -I 'bin|vendor'
 
 ## 開発環境構築
 
+### このテンプレートを取得する方法
+
+**推奨** — [starter-templates](https://github.com/yuuu-takahashi/starter-templates) をクローンし、`yarn create-project` でこのテンプレートを選んで作成先にコピー:
+
+```bash
+git clone git@github.com:yuuu-takahashi/starter-templates.git
+cd starter-templates
+yarn create-project
+```
+
+**代替** — リポジトリをクローンし、`templates/go` に直接移動して使う。
+
 ### 必要なツール
 
 - [VS Code](https://code.visualstudio.com/) または [Cursor](https://www.cursor.com/)
