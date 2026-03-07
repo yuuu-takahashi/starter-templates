@@ -2,7 +2,7 @@
   "$schema": "https://markuplint.dev/schema.json",
   "extends": ["markuplint:recommended"],
   "parser": {
-    ".tsx$": "@markuplint/react-parser"
+    ".tsx$": "@markuplint/jsx-parser"
   },
   "specs": {
     ".tsx$": "@markuplint/react-spec"
