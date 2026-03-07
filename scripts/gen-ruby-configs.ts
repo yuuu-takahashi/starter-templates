@@ -33,14 +33,17 @@ export function run(): void {
 
   const rubocopRails = YAML.parse(readFileSync(join(SHARED_RUBOCOP, "rubocop.rails.yml"), "utf8")) as Record<string, unknown>;
   const rubocopSinatra = YAML.parse(readFileSync(join(SHARED_RUBOCOP, "rubocop.sinatra.yml"), "utf8")) as Record<string, unknown>;
+  const rubocopRuby = YAML.parse(readFileSync(join(SHARED_RUBOCOP, "rubocop.ruby.yml"), "utf8")) as Record<string, unknown>;
   const rubocopRailsApi = readFileSync(join(SHARED_RUBOCOP, "rubocop.rails_api.yml"), "utf8");
 
   const rubocopRailsMerged = deepMerge(rubocopBase, rubocopRails);
   const rubocopSinatraMerged = deepMerge(rubocopBase, rubocopSinatra);
+  const rubocopRubyMerged = deepMerge(rubocopBase, rubocopRuby);
 
   const RUBOCOP_OUT: Array<{ dir: string; content: string }> = [
     { dir: `${td}/rails`, content: YAML.stringify(rubocopRailsMerged) },
     { dir: `${td}/sinatra`, content: YAML.stringify(rubocopSinatraMerged) },
+    { dir: `${td}/ruby`, content: YAML.stringify(rubocopRubyMerged) },
     { dir: `${td}/rails-api`, content: rubocopRailsApi },
   ];
   for (const { dir, content } of RUBOCOP_OUT) {

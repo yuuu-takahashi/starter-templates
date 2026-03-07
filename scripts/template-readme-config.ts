@@ -341,4 +341,17 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
       },
     ],
   },
+  {
+    id: 'ruby',
+    title: 'template-ruby',
+    description: 'このリポジトリはRubyのテンプレートプロジェクトです。',
+    repoSlug: 'template-ruby',
+    npmStack: 'ruby',
+    gemfileStack: 'ruby',
+    extensionSets: ['base', 'ruby'],
+    setupSteps: [],
+    devGuide: [
+      { title: 'コードの静的解析と修正', commands: 'yarn format\nbundle exec rubocop -A' },
+    ],
+  },
 ];

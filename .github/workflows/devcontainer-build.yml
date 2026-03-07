@@ -26,6 +26,7 @@ jobs:
       rails_api: ${{ steps.filter.outputs.rails_api }}
       laravel: ${{ steps.filter.outputs.laravel }}
       sinatra: ${{ steps.filter.outputs.sinatra }}
+      ruby: ${{ steps.filter.outputs.ruby }}
       csharp: ${{ steps.filter.outputs.csharp }}
       go: ${{ steps.filter.outputs.go }}
       rust: ${{ steps.filter.outputs.rust }}
@@ -51,6 +52,8 @@ jobs:
               - 'minimal-templates/laravel/.devcontainer/**'
             sinatra:
               - 'minimal-templates/sinatra/.devcontainer/**'
+            ruby:
+              - 'minimal-templates/ruby/.devcontainer/**'
             csharp:
               - 'minimal-templates/csharp/.devcontainer/**'
             go:
@@ -130,6 +133,16 @@ jobs:
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: minimal-templates/sinatra/.devcontainer/Dockerfile
+          failure-threshold: error
+  ruby:
+    needs: changes
+    if: needs.changes.outputs.ruby == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: minimal-templates/ruby/.devcontainer/Dockerfile
           failure-threshold: error
   csharp:
     needs: changes

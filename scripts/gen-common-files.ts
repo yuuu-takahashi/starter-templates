@@ -76,12 +76,17 @@ export const run = (): void => {
     }
 
     // ── .node-version（shared/versions.json から生成）──────────────────────────────
+    // runtime === 'node' のスタックのほか、hasNpm: true のスタックにも配布
 
     const fullNodeVersionDirs = STACK_DEFINITIONS.filter(
-      (s) => s.fullDir != null && s.runtime === "node",
+      (s) => s.fullDir != null && (s.runtime === "node" || s.hasNpm),
     ).map((s) => s.fullDir!);
 
-    for (const dir of [...NODE_VERSION_DIRS, ...fullNodeVersionDirs]) {
+    const npmNodeVersionDirs = STACK_DEFINITIONS.filter(
+      (s) => s.hasNpm && s.runtime !== "node",
+    ).map((s) => s.dir);
+
+    for (const dir of [...NODE_VERSION_DIRS, ...npmNodeVersionDirs, ...fullNodeVersionDirs]) {
       const outPath = join(ROOT, dir, ".node-version");
       writeFileSync(outPath, VERSIONS.node + "\n", "utf8");
       logger.generated(outPath);

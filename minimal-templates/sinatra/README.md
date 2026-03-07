@@ -49,7 +49,7 @@ cd starter-templates
 yarn create-project
 ```
 
-次のような番号付きのテンプレート一覧が表示されます。Sinatra を選ぶなら `7` を選択し、作成先パスの入力を求められたら未入力でこのリポジトリを入れ替え、または別のパスを指定してください。
+番号付きのテンプレート一覧が表示されるので、Sinatra（7）を選び、作成先パスを聞かれたら未入力でこのリポジトリを入れ替えるか、別のパスを指定してください。
 
 ```text
 テンプレートを選んでください:
@@ -58,7 +58,6 @@ yarn create-project
   2. Node.js (nodejs)
   3. React + Vite (react)
   ...
-番号を入力 (1–12): 
 ```
 
 プロジェクト作成後、VS Code / Cursor の左下「><」アイコンをクリックし、「Reopen in Container」を選択して起動してください。
