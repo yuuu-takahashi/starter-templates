@@ -1,0 +1,60 @@
+/**
+ * Playwright E2E テスト設定（Next.js テンプレート用）
+ *
+ * @see https://playwright.dev/docs/test-configuration
+ */
+
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './tests/e2e/specs',
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+
+  reporter:
+    process.env.CI
+      ? [
+          ['list'],
+          ['html', { open: 'never', outputFolder: 'playwright-report' }],
+          ['json', { outputFile: 'test-results/results.json' }],
+          ['github'],
+        ]
+      : [['list'], ['html', { open: 'on-failure', outputFolder: 'playwright-report' }]],
+
+  use: {
+    baseURL: 'http://localhost:3000',
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'off',
+    headless: process.env.PLAYWRIGHT_HEADLESS !== 'false',
+    ...(process.env.PLAYWRIGHT_HEADLESS === 'false' && {
+      slowMo: parseInt(process.env.PLAYWRIGHT_SLOWMO || '100', 10),
+      devtools: process.env.PLAYWRIGHT_DEVTOOLS === 'true',
+    }),
+    navigationTimeout: 30 * 1000,
+    actionTimeout: 10 * 1000,
+  },
+
+  timeout: 30 * 1000,
+  expect: {
+    timeout: 5 * 1000,
+  },
+
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+  ],
+
+  webServer: {
+    command: 'yarn dev',
+    url: 'http://localhost:3000',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
+    stdout: 'ignore',
+    stderr: 'pipe',
+  },
+});

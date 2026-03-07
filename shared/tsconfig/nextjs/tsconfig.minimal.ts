@@ -1,9 +1,9 @@
 /**
- * Next テンプレート用 tsconfig。generate-configs で tsconfig.json を生成。
+ * Next テンプレート用 tsconfig（minimal 用・シンプル版）
  */
 export default {
   compilerOptions: {
-    target: "ES2020",
+    target: "ES2017",
     lib: ["dom", "dom.iterable", "esnext"],
     allowJs: true,
     skipLibCheck: true,
@@ -17,7 +17,6 @@ export default {
     jsx: "preserve",
     incremental: true,
     plugins: [{ name: "next" }],
-    types: ["@testing-library/jest-dom", "vitest/globals"],
     paths: {
       "@/*": ["./src/*"],
     },

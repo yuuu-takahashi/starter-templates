@@ -1,26 +1,70 @@
 // @ts-nocheck — vitest/config resolved at runtime after npm install.
 
+import path from 'node:path';
+
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
-import path from 'path';
 
 export default defineConfig({
-  plugins: [react()],
-  test: {
-    environment: 'happy-dom',
-    globals: true,
-    include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
-    setupFiles: ['./vitest.setup.ts'],
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'lcov'],
-      include: ['src/**/*.ts', 'src/**/*.tsx'],
-      exclude: ['**/*.test.{ts,tsx}', '**/node_modules/**'],
-    },
+  esbuild: {
+    jsx: 'automatic',
   },
+  plugins: [
+    react(),
+    {
+      // 'use client' ディレクティブを無視するプラグイン（Next.js App Router 対応）
+      name: 'remove-use-client',
+      enforce: 'pre' as const,
+      transform(code: string, id: string) {
+        if (id.includes('.tsx') || id.includes('.ts')) {
+          const newCode = code.replace(/['"]use client['"];?\s*/g, '');
+          if (newCode !== code) {
+            return { code: newCode, map: null };
+          }
+        }
+        return null;
+      },
+    },
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+  },
+  test: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+    css: true,
+    env: {
+      NODE_ENV: 'test',
+    },
+    environment: 'jsdom',
+    globals: true,
+    include: ['src/**/*.test.{ts,tsx}'],
+    setupFiles: ['./vitest.setup.ts'],
+
+    // カバレッジ設定
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html', 'lcov'],
+      exclude: [
+        'node_modules/',
+        'tests/',
+        '.next/',
+        '**/*.d.ts',
+        '**/*.config.ts',
+        '**/*.config.js',
+        '**/index.ts',
+        'src/mocks/**',
+      ],
+      lines: 70,
+      functions: 70,
+      branches: 70,
+      statements: 70,
+    },
+
+    testTimeout: 10000,
+    hookTimeout: 10000,
   },
 });

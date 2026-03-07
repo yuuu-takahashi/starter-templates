@@ -1,0 +1,15 @@
+/**
+ * MSW (Mock Service Worker) サーバー環境用セットアップ
+ *
+ * Node.js 環境（SSR / テスト）でAPIリクエストをインターセプト
+ * - テスト環境（Vitest）で動作
+ * - 開発環境のSSR（Next.js Server Components）で動作
+ *
+ * handlers は shared/test/mocks/handlers.ts で定義
+ */
+
+import { setupServer } from 'msw/node';
+
+import { handlers } from './handlers';
+
+export const server = setupServer(...handlers);

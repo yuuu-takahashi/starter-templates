@@ -2,16 +2,21 @@
 module.exports = {
   ci: {
     collect: {
-      startServerCommand: 'yarn start',
-      startServerReadyPattern: 'started server on',
-      url: ['http://localhost:3000'],
-      numberOfRuns: 3,
+      url: ['http://localhost:3000/'],
+      startServerCommand: 'yarn start:lhci',
+      numberOfRuns: 1,
+    },
+    assert: {
+      assertions: {
+        'categories:performance': ['warn', { minScore: 0.5 }],
+        'categories:accessibility': ['warn', { minScore: 0.8 }],
+        'categories:best-practices': ['warn', { minScore: 0.7 }],
+        'categories:seo': ['warn', { minScore: 0.8 }],
+      },
     },
     upload: {
-      target: 'temporary-public-storage',
+      target: 'filesystem',
+      outputDir: '.lighthouseci',
     },
-    // TODO(human): Define your score thresholds and assertion rules
-    // See: https://github.com/GoogleChrome/lighthouse-ci/blob/main/docs/configuration.md#assert
-    assert: {},
   },
-}
+};
