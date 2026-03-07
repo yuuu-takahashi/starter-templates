@@ -4,6 +4,44 @@
 
 ## 使い方
 
+### ローカル環境の準備（ローカルで実行する場合）
+
+このリポジトリで `yarn create-project` や `yarn generate:all` などを**ローカルで実行する**には、Node.js と Yarn が必要です。Dev Container で開く場合は不要です。
+
+- **Node.js**（推奨: v22 以上。テンプレートは Node 24 を想定）
+
+  - [nodejs.org](https://nodejs.org/ja/) から LTS をインストールする
+  - または [nodenv](https://github.com/nodenv/nodenv) を使う場合:
+
+    ```bash
+    # nodenv の例（rbenv と同じ思想。Rails などと合わせて使いやすい）
+    nodenv install 24
+    nodenv local 24
+    ```
+
+- **Yarn**
+
+  Node.js に同梱の **Corepack** で有効化する方法（推奨）:
+
+  ```bash
+  corepack enable
+  yarn --version   # 利用可能か確認
+  ```
+
+  または npm でグローバルにインストール:
+
+  ```bash
+  npm install -g yarn
+  ```
+
+- **依存関係のインストール**
+
+  リポジトリのルートで:
+
+  ```bash
+  yarn install
+  ```
+
 ### 新規プロジェクトを作る
 
 1. **リポジトリをクローンする**
