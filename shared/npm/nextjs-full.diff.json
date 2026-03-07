@@ -41,7 +41,6 @@
     "@storybook/addon-a11y": "^8.6.0",
     "@storybook/addon-docs": "^8.6.0",
     "@storybook/addon-onboarding": "^8.6.0",
-    "@storybook/addon-vitest": "^8.6.0",
     "@storybook/nextjs-vite": "^8.6.0",
     "storybook": "^8.6.0",
     "@lhci/cli": "^0.14.0",
