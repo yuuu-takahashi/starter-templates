@@ -28,6 +28,8 @@ jobs:
           cache: 'yarn'
 
       - name: Install dependencies
+        env:
+          HUSKY: '0'
         run: yarn install
 
       - name: format

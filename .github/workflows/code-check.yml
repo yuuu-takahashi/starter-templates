@@ -376,6 +376,8 @@ jobs:
           cache: yarn
           cache-dependency-path: full-templates/nextjs/yarn.lock
       - name: Install dependencies
+        env:
+          HUSKY: "0"
         run: yarn install
       - name: format
         run: yarn format
