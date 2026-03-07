@@ -14,6 +14,7 @@
     "lint": "eslint scripts/ && yarn lint:md",
     "lint:fix": "eslint scripts/ --fix",
     "lint:md": "markdownlint '**/*.md' --ignore node_modules",
+    "lint:md:fix": "markdownlint '**/*.md' --ignore node_modules --fix",
     "format": "prettier --write \"scripts/**/*.ts\""
   },
   "devDependencies": {
