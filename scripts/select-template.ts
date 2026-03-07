@@ -5,6 +5,7 @@
  */
 
 import * as fs from "node:fs";
+import * as os from "node:os";
 import * as path from "node:path";
 import * as readline from "node:readline";
 import { fileURLToPath } from "node:url";
@@ -137,15 +138,25 @@ async function main(): Promise<void> {
   }
 
   if (replaceCurrentDir) {
-    console.log("\nこのリポジトリを選択したテンプレートで完全に入れ替えます...");
-    clearDir(destDir);
-  } else if (fs.existsSync(destDir) && fs.readdirSync(destDir).length > 0) {
-    console.error(`作成先が既に存在するか、空ではありません: ${destDir}`);
-    process.exit(1);
+    console.log("\nテンプレートを一時保存しています...");
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), `starter-templates-${chosen.slug}-`));
+    try {
+      copyTemplate(sourceDir, tempDir);
+      console.log("このリポジトリをクリアしています（.git を残す）...");
+      clearDir(destDir);
+      console.log(`${chosen.label} をルートにコピーしています...`);
+      copyTemplate(tempDir, destDir);
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  } else {
+    if (fs.existsSync(destDir) && fs.readdirSync(destDir).length > 0) {
+      console.error(`作成先が既に存在するか、空ではありません: ${destDir}`);
+      process.exit(1);
+    }
+    console.log(`\n${chosen.label} を ${destDir} にコピーしています...`);
+    copyTemplate(sourceDir, destDir);
   }
-
-  console.log(`${chosen.label} を ${destDir} にコピーしています...`);
-  copyTemplate(sourceDir, destDir);
   console.log("完了しました。\n");
   if (replaceCurrentDir) {
     console.log("このディレクトリがプロジェクトルートです。");
