@@ -10,9 +10,11 @@ import { join } from 'path';
 import YAML from 'yaml';
 import {
   ROOT_STACKS,
+  FULL_ROOT_STACKS,
   MONOREPO_PREFIX_STACKS,
   TEMPLATES_DIR,
   TEST_SOURCE,
+  FULL_TEST_SOURCE,
   STACK_DEFINITIONS,
 } from './lib/stacks.js';
 import { ROOT, VERSIONS } from './lib/utils.js';
@@ -191,7 +193,8 @@ const mergeFormatAndLintSteps = (
 const buildRootWorkflow = (): Record<string, WorkflowJob> => {
   const jobs: Record<string, WorkflowJob> = {};
 
-  const filtersBlock = STACKS.map(
+  const ALL_STACKS = [...STACKS, ...FULL_ROOT_STACKS];
+  const filtersBlock = ALL_STACKS.map(
     (s) => `${s.id}:\n  - '${s.pathFilter}'`,
   ).join('\n');
 
@@ -199,7 +202,7 @@ const buildRootWorkflow = (): Record<string, WorkflowJob> => {
     'runs-on': 'ubuntu-latest',
     permissions: { contents: 'read', 'pull-requests': 'read' },
     outputs: Object.fromEntries(
-      STACKS.map((s) => [s.id, '${{ steps.filter.outputs.' + s.id + ' }}']),
+      ALL_STACKS.map((s) => [s.id, '${{ steps.filter.outputs.' + s.id + ' }}']),
     ),
     steps: [
       { uses: 'actions/checkout@v4' },
@@ -231,7 +234,7 @@ const buildRootWorkflow = (): Record<string, WorkflowJob> => {
     ],
   };
 
-  for (const stack of STACKS) {
+  for (const stack of ALL_STACKS) {
     const workflow = readWorkflow(stack.dir);
     const workflowJobs = workflow.jobs ?? {};
     const jobIds = Object.keys(workflowJobs);
@@ -267,7 +270,8 @@ const buildRootWorkflow = (): Record<string, WorkflowJob> => {
 const buildTestWorkflow = (): Record<string, WorkflowJob> => {
   const jobs: Record<string, WorkflowJob> = {};
 
-  const testStacks = STACKS.filter((s) => TEST_SOURCE[s.dir]);
+  const ALL_TEST_SOURCE = { ...TEST_SOURCE, ...FULL_TEST_SOURCE };
+  const testStacks = [...STACKS, ...FULL_ROOT_STACKS].filter((s) => ALL_TEST_SOURCE[s.dir]);
   const filtersBlock = testStacks
     .map((s) => `${s.id}:\n  - '${s.pathFilter}'`)
     .join('\n');
@@ -289,7 +293,7 @@ const buildTestWorkflow = (): Record<string, WorkflowJob> => {
   };
 
   for (const stack of testStacks) {
-    const workflowFile = TEST_SOURCE[stack.dir];
+    const workflowFile = ALL_TEST_SOURCE[stack.dir];
     const workflow = readSharedWorkflow(workflowFile);
     const workflowJob = workflow.jobs?.test;
     if (!workflowJob) continue;
@@ -320,7 +324,11 @@ const buildTestWorkflow = (): Record<string, WorkflowJob> => {
 const buildDevcontainerWorkflow = (): Record<string, WorkflowJob> => {
   const jobs: Record<string, WorkflowJob> = {};
 
-  const filtersBlock = STACK_DEFINITIONS.map(
+  const ALL_DEVCONTAINER_STACKS = [
+    ...STACK_DEFINITIONS.map((s) => ({ id: s.id, dir: s.dir })),
+    ...FULL_ROOT_STACKS.map((s) => ({ id: s.id, dir: s.dir })),
+  ];
+  const filtersBlock = ALL_DEVCONTAINER_STACKS.map(
     (s) => `${s.id}:\n  - '${s.dir}/.devcontainer/**'`,
   ).join('\n');
 
@@ -328,7 +336,7 @@ const buildDevcontainerWorkflow = (): Record<string, WorkflowJob> => {
     'runs-on': 'ubuntu-latest',
     permissions: { contents: 'read', 'pull-requests': 'read' },
     outputs: Object.fromEntries(
-      STACK_DEFINITIONS.map((s) => [
+      ALL_DEVCONTAINER_STACKS.map((s) => [
         s.id,
         '${{ steps.filter.outputs.' + s.id + ' }}',
       ]),
@@ -343,7 +351,7 @@ const buildDevcontainerWorkflow = (): Record<string, WorkflowJob> => {
     ],
   };
 
-  for (const stack of STACK_DEFINITIONS) {
+  for (const stack of ALL_DEVCONTAINER_STACKS) {
     jobs[stack.id] = {
       needs: 'changes',
       if: `needs.changes.outputs.${stack.id} == 'true'`,

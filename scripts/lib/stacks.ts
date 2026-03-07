@@ -323,3 +323,13 @@ export const ROOT_STACKS: readonly RootStackEntry[] = STACK_DEFINITIONS.map(
     runtime: s.runtime,
   }),
 );
+
+/** full-templates/ の CI エントリ（id は full_<id> でプレフィックス） */
+export const FULL_ROOT_STACKS: readonly RootStackEntry[] = STACK_DEFINITIONS
+  .filter((s) => s.fullDir != null)
+  .map((s) => ({
+    id: `full_${s.id}`,
+    dir: s.fullDir!,
+    pathFilter: `${s.fullDir}/**`,
+    runtime: s.runtime,
+  }));

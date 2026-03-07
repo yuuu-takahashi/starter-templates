@@ -30,6 +30,7 @@ jobs:
       go: ${{ steps.filter.outputs.go }}
       rust: ${{ steps.filter.outputs.rust }}
       django: ${{ steps.filter.outputs.django }}
+      full_nextjs: ${{ steps.filter.outputs.full_nextjs }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -58,6 +59,8 @@ jobs:
               - 'minimal-templates/rust/**'
             django:
               - 'minimal-templates/django/**'
+            full_nextjs:
+              - 'full-templates/nextjs/**'
   generate_check:
     runs-on: ubuntu-latest
     steps:
@@ -358,3 +361,23 @@ jobs:
           . .venv/bin/activate
           black --check .
         working-directory: minimal-templates/django
+  full_nextjs:
+    needs: changes
+    if: needs.changes.outputs.full_nextjs == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: full-templates/nextjs
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: yarn
+          cache-dependency-path: full-templates/nextjs/yarn.lock
+      - name: Install dependencies
+        run: yarn install
+      - name: format
+        run: yarn format
+      - name: lint
+        run: yarn lint
