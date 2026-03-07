@@ -7,6 +7,8 @@ ENV TZ="$TZ"
 
 ARG CLAUDE_CODE_VERSION=latest
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Install common dev tools + iptables/ipset (reference: anthropics/claude-code)
 RUN apt-get update && apt-get install -y --no-install-recommends \
   curl \

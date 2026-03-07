@@ -6,3 +6,5 @@
 *.log
 .dockerignore
 Dockerfile*
+docker-compose*.yml
+compose*.yml

@@ -7,6 +7,8 @@ ENV TZ="$TZ"
 
 ARG CLAUDE_CODE_VERSION=latest
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Install basic development tools and iptables/ipset (reference: anthropics/claude-code .devcontainer)
 RUN apt-get update && apt-get install -y --no-install-recommends \
   less \
@@ -82,7 +84,7 @@ RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 # Application dependencies (template context)
 USER root
 COPY package.json yarn.lock ./
-RUN yarn install
+RUN yarn install && yarn cache clean
 
 COPY . .
 

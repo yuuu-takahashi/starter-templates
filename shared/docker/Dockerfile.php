@@ -5,7 +5,9 @@ ENV TZ="$TZ"
 
 ARG CLAUDE_CODE_VERSION=latest
 
-# PHP extensions and base deps
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# PHP extensions, base deps, and common dev tools + iptables/ipset (reference: anthropics/claude-code)
 RUN apt-get update && apt-get install -y --no-install-recommends \
   git \
   unzip \
@@ -13,11 +15,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libpng-dev \
   libonig-dev \
   curl \
-  && docker-php-ext-install zip pdo_mysql mbstring exif pcntl bcmath gd \
-  && rm -rf /var/lib/apt/lists/*
-
-# Common dev tools + iptables/ipset (reference: anthropics/claude-code)
-RUN apt-get update && apt-get install -y --no-install-recommends \
   openssh-client \
   tree \
   less \
@@ -36,11 +33,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   jq \
   nano \
   vim \
+  && docker-php-ext-install zip pdo_mysql mbstring exif pcntl bcmath gd \
   && curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
   && apt-get install -y nodejs \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.8 /usr/bin/composer /usr/bin/composer
 RUN npm install -g yarn
 
 RUN mkdir -p /usr/local/share/npm-global && useradd -m -s /bin/zsh node 2>/dev/null || true && chown -R node:node /usr/local/share
