@@ -31,7 +31,7 @@ export async function run(): Promise<void> {
     { dir: `${td}/nextjs`, source: 'eslint.config.nextjs.js' },
     { dir: `${td}/rails`, source: 'eslint.config.rails.js' },
     { dir: `${td}/rails-api`, source: 'eslint.config.rails.js' },
-    { dir: 'full-templates/nextjs', source: 'eslint.config.nextjs.js' },
+    { dir: 'full-templates/nextjs', source: 'eslint.config.nextjs-full.js' },
   ];
   for (const { dir, source } of ESLINT_SOURCE) {
     const stack = source.replace('eslint.config.', '').replace('.js', '');
