@@ -124,7 +124,6 @@ for domain in \
   "cloud.google.com" \
   "azure.microsoft.com" \
   "kubernetes.io" \
-  "kamal-deploy.org" \
   "conoha.jp" \
   "www.conoha.jp" \
   "crates.io" \
