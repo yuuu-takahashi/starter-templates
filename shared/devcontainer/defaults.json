@@ -20,6 +20,10 @@
       "github.vscode-github-actions",
       "yzhang.markdown-all-in-one",
       "DavidAnson.vscode-markdownlint"
+    ],
+    "markdownPreview": [
+      "yzhang.markdown-all-in-one",
+      "bierner.markdown-mermaid"
     ]
   },
   "settings": {

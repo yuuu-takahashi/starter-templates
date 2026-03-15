@@ -85,7 +85,6 @@ export const COMMON_FIREWALL_DOMAINS: readonly string[] = [
   'cloud.google.com',
   'azure.microsoft.com',
   'kubernetes.io',
-  'kamal-deploy.org',
   'conoha.jp',
   'www.conoha.jp',
 ];

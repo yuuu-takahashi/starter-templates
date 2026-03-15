@@ -100,7 +100,9 @@ const transformStepsForMonorepo = (
       }
     }
     if (s.run) {
-      s.run = s.run.replace(/\$\{NODE_VERSION\}/g, VERSIONS.node);
+      // Extract major version for NodeSource setup script (e.g., "24" from "24.11.0")
+      const majorVersion = VERSIONS.node.split('.')[0];
+      s.run = s.run.replace(/\$\{NODE_VERSION\}/g, majorVersion);
       if (!s['working-directory']) s['working-directory'] = dir;
     }
     result.push(s);

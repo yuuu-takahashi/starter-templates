@@ -43,6 +43,18 @@ export const serverConfig: ServerConfig = {
 };
 
 // ============================================
+// 種類3: シークレット設定値
+// ============================================
+// 機密情報：本番環境では環境変数経由で設定、開発環境では .env.local に記載
+interface SecretConfig {
+  SENTRY_DSN: string;
+}
+
+export const secretConfig: SecretConfig = {
+  SENTRY_DSN: env.SENTRY_DSN ?? '',
+};
+
+// ============================================
 // バリデーション
 // ============================================
 const requiredPublicEnvVars = ['NEXT_PUBLIC_APP_URL'] as const;
