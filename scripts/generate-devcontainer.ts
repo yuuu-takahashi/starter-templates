@@ -38,6 +38,7 @@ const DEFAULTS = JSON.parse(readFileSync(DEFAULTS_PATH, 'utf8')) as {
     go: string[];
     rust: string[];
     tooling: string[];
+    markdownPreview: string[];
   };
   settings: {
     base: Record<string, unknown>;
@@ -56,6 +57,7 @@ const RUST_EXTENSIONS = DEFAULTS.extensions.rust;
 const PHP_EXTENSIONS = DEFAULTS.extensions.php;
 const PYTHON_EXTENSIONS = DEFAULTS.extensions.python;
 const TOOLING_EXTENSIONS = DEFAULTS.extensions.tooling;
+const MARKDOWN_PREVIEW_EXTENSIONS = DEFAULTS.extensions.markdownPreview;
 
 type VscodeSettings = Record<string, unknown>;
 
@@ -218,7 +220,11 @@ const STACKS: Stack[] = [
       waitFor: 'postStartCommand',
       customizations: {
         vscode: {
-          extensions: [...BASE_EXTENSIONS, ...NODE_EXTENSIONS],
+          extensions: [
+            ...BASE_EXTENSIONS,
+            ...NODE_EXTENSIONS,
+            ...MARKDOWN_PREVIEW_EXTENSIONS,
+          ],
           settings: {
             ...BASE_SETTINGS,
             ...NODE_TERMINAL_SETTINGS,
