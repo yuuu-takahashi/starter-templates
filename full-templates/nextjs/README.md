@@ -142,7 +142,7 @@ yarn type-check
    SENTRY_DSN=https://your-key@your-org.ingest.sentry.io/your-project-id
    ```
 
-   本番環境では `.kamal/secrets` に設定してください。
+   本番環境では `.env.production` に設定してください。
 
 3. **Sentry の有効化**
 
