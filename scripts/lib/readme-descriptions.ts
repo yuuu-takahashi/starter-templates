@@ -6,10 +6,8 @@ import { readFileSync } from "fs";
 import { join } from "path";
 import { SHARED_README } from "./paths.js";
 
-const README_BASE = SHARED_README;
-
 function loadJson<T>(filename: string): T {
-  const raw = readFileSync(join(README_BASE, filename), "utf8");
+  const raw = readFileSync(join(SHARED_README, filename), "utf8");
   return JSON.parse(raw) as T;
 }
 
