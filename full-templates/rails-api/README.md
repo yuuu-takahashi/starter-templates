@@ -2,7 +2,7 @@
 
 # template-rails-api
 
-このリポジトリは Ruby on Rails（API）のテンプレートプロジェクトです。
+このリポジトリは Ruby on Rails（API）のテンプレートプロジェクトです。GitHub Actions CI/CD（コードチェック、テスト）などの本番環境対応設定を含みます。
 このプロジェクトは、[Dev Container](https://code.visualstudio.com/docs/devcontainers/containers)での利用を想定した構成になっています。VS Code・Cursor のどちらでも利用できます。
 
 ## 主なライブラリ・Gem・拡張機能
@@ -37,9 +37,18 @@
 
 ### Dev Container でインストールされる主な拡張機能
 
+- DavidAnson.vscode-markdownlint — Markdown の構文チェック
+- Gruntfuggly.todo-tree — TODO / FIXME コメントの一覧表示
 - Shopify.ruby-extensions-pack — Ruby 開発ツール一式（Ruby LSP など）
+- anthropic.claude-code
+- dbaeumer.vscode-eslint — ESLint の静的解析
+- donjayamanne.githistory — Git ログの可視化
 - eamodio.gitlens — Git 履歴・差分の強力な可視化
 - esbenp.prettier-vscode — コードフォーマット（Prettier）
+- github.vscode-github-actions — GitHub Actions のサポート
+- mhutchie.git-graph — Git ツリーのグラフ表示
+- streetsidesoftware.code-spell-checker — スペルチェック
+- yzhang.markdown-all-in-one — Markdown 編集支援
 
 ## 開発環境構築
 
@@ -51,7 +60,7 @@ cd starter-templates
 yarn create-project
 ```
 
-番号付きのテンプレート一覧が表示されるので、Rails API（5）を選び、作成先パスを聞かれたら未入力でこのリポジトリを入れ替えるか、別のパスを指定してください。
+番号付きのテンプレート一覧が表示されるので、Rails API - 実用（6）を選び、作成先パスを聞かれたら未入力でこのリポジトリを入れ替えるか、別のパスを指定してください。
 
 ```text
 テンプレートを選んでください:
@@ -106,4 +115,10 @@ bundle exec rake rswag:specs:swaggerize
 yarn format
 yarn lint
 bundle exec rubocop -A
+```
+
+- セキュリティスキャン
+
+```bash
+bundle exec brakeman
 ```

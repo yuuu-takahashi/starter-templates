@@ -32,6 +32,7 @@ jobs:
       rust: ${{ steps.filter.outputs.rust }}
       django: ${{ steps.filter.outputs.django }}
       full_nextjs: ${{ steps.filter.outputs.full_nextjs }}
+      full_rails_api: ${{ steps.filter.outputs.full_rails_api }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -64,6 +65,8 @@ jobs:
               - 'minimal-templates/django/**'
             full_nextjs:
               - 'full-templates/nextjs/**'
+            full_rails_api:
+              - 'full-templates/rails-api/**'
   generate_check:
     runs-on: ubuntu-latest
     steps:
@@ -418,3 +421,27 @@ jobs:
         run: yarn type-check
       - name: knip
         run: yarn knip
+  full_rails_api:
+    needs: changes
+    if: needs.changes.outputs.full_rails_api == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.11.0
+      - uses: actions/cache@v4
+        with:
+          path: full-templates/rails-api/node_modules
+          key: ${{ runner.os }}-yarn-full-templates/rails-api-${{ hashFiles('full-templates/rails-api/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-full-templates/rails-api-
+      - name: yarn format & lint
+        run: cd full-templates/rails-api && yarn install && yarn format
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3.6
+          working-directory: full-templates/rails-api
+          bundler-cache: true
+      - name: rubocop
+        run: bundle exec rubocop
+        working-directory: full-templates/rails-api
