@@ -110,6 +110,7 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
   },
   {
     dir: `${td}/rails-api`,
+    fullDir: 'full-templates/rails-api',
     id: 'rails_api',
     runtime: 'ruby',
     codeCheckWorkflow: 'code-check-ruby.yml',
