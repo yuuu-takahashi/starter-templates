@@ -6,8 +6,8 @@
 import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import YAML from "yaml";
-import { ROOT, RSPEC_COMMON, SHARED_RUBOCOP, deepMerge } from "./lib/utils.js";
-import { TEMPLATES_DIR } from "./lib/stacks.js";
+import { ROOT, RSPEC_COMMON, SHARED_RUBOCOP, deepMerge } from "../lib/utils.js";
+import { TEMPLATES_DIR } from "../lib/stacks.js";
 
 export function run(): void {
   // ── .rspec（共通オプション + 各 template の --require）────────────────────

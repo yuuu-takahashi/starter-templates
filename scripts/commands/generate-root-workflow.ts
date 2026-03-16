@@ -16,8 +16,8 @@ import {
   TEST_SOURCE,
   FULL_TEST_SOURCE,
   STACK_DEFINITIONS,
-} from './lib/stacks.js';
-import { ROOT, VERSIONS } from './lib/utils.js';
+} from '../lib/stacks.js';
+import { ROOT, VERSIONS } from '../lib/utils.js';
 
 const STACKS = ROOT_STACKS;
 

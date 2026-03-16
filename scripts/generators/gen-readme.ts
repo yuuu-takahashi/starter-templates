@@ -11,15 +11,15 @@ import {
   TEMPLATE_README_CONFIGS,
   type TemplateReadmeConfig,
   type ExtensionSetKey,
-} from "./template-readme-config.js";
-import { STACK_DEFINITIONS, TEMPLATES_DIR } from "./lib/stacks.js";
-import { TEMPLATE_LABELS } from "./lib/template-labels.js";
+} from "../commands/template-readme-config.js";
+import { STACK_DEFINITIONS, TEMPLATES_DIR } from "../lib/stacks.js";
+import { TEMPLATE_LABELS } from "../lib/template-labels.js";
 import {
   NPM_DESCRIPTIONS,
   GEM_DESCRIPTIONS,
   EXTENSION_DESCRIPTIONS,
-} from "./lib/readme-descriptions.js";
-import { ROOT, SHARED_NPM, SHARED_GEMFILE } from "./lib/utils.js";
+} from "../lib/readme-descriptions.js";
+import { ROOT, SHARED_NPM, SHARED_GEMFILE } from "../lib/utils.js";
 
 function slug(dir: string): string {
   return dir.replace(new RegExp(`^${TEMPLATES_DIR}/`), "");

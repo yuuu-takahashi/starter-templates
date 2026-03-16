@@ -1,6 +1,6 @@
 /**
  * 各テンプレートの README.md 生成用メタデータ。
- * scripts/generate-configs.ts → gen-readme.ts で各 templates/<id>/README.md を生成。
+ * scripts/commands/generate-configs.ts → gen-readme.ts で各 templates/<id>/README.md を生成。
  * テンプレート: shared/templates/readme/README.md.hbs
  * 共通の文面はテンプレート内で一元管理し、テンプレートごとの差分は config のみで指定する。
  */
