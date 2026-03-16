@@ -22,7 +22,7 @@ import { ROOT } from '../lib/utils.js';
 // ── Shared devcontainer defaults (extensions + settings) ───────────────────────
 // 共通定義: shared/config/devcontainer/defaults.json を編集すること。
 
-const DEFAULTS_PATH = join(ROOT, 'shared', 'devcontainer', 'defaults.json');
+const DEFAULTS_PATH = join(ROOT, 'shared', 'config', 'devcontainer', 'defaults.json');
 const DEFAULTS = JSON.parse(readFileSync(DEFAULTS_PATH, 'utf8')) as {
   features?: Record<string, Record<string, unknown>>;
   /** full-templates のみに適用する features（例: github-cli） */
@@ -107,20 +107,22 @@ interface Stack {
 }
 
 // Dockerfile paths in shared/config/docker/ (single source of truth)
-const NODE_DOCKERFILE_SRC = join(ROOT, 'shared', 'docker', 'Dockerfile.node');
-const RUBY_DOCKERFILE_SRC = join(ROOT, 'shared', 'docker', 'Dockerfile.ruby');
+const NODE_DOCKERFILE_SRC = join(ROOT, 'shared', 'config', 'docker', 'Dockerfile.node');
+const RUBY_DOCKERFILE_SRC = join(ROOT, 'shared', 'config', 'docker', 'Dockerfile.ruby');
 const DOTNET_DOCKERFILE_SRC = join(
   ROOT,
   'shared',
+  'config',
   'docker',
   'Dockerfile.dotnet',
 );
-const GO_DOCKERFILE_SRC = join(ROOT, 'shared', 'docker', 'Dockerfile.go');
-const RUST_DOCKERFILE_SRC = join(ROOT, 'shared', 'docker', 'Dockerfile.rust');
-const PHP_DOCKERFILE_SRC = join(ROOT, 'shared', 'docker', 'Dockerfile.php');
+const GO_DOCKERFILE_SRC = join(ROOT, 'shared', 'config', 'docker', 'Dockerfile.go');
+const RUST_DOCKERFILE_SRC = join(ROOT, 'shared', 'config', 'docker', 'Dockerfile.rust');
+const PHP_DOCKERFILE_SRC = join(ROOT, 'shared', 'config', 'docker', 'Dockerfile.php');
 const PYTHON_DOCKERFILE_SRC = join(
   ROOT,
   'shared',
+  'config',
   'docker',
   'Dockerfile.python',
 );
@@ -475,16 +477,18 @@ const STACKS: Stack[] = [
 const RUBY_DB_COMPOSE_SRC = join(
   ROOT,
   'shared',
+  'config',
   'docker',
   'docker-compose.ruby-db.yml',
 );
 const RAILS_COMPOSE_SRC = join(
   ROOT,
   'shared',
+  'config',
   'docker',
   'docker-compose.rails.yml',
 );
-const INIT_FIREWALL_SRC = join(ROOT, 'shared', 'docker', 'init-firewall.sh');
+const INIT_FIREWALL_SRC = join(ROOT, 'shared', 'config', 'docker', 'init-firewall.sh');
 
 // ── Generator ─────────────────────────────────────────────────────────────────
 

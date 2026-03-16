@@ -6,7 +6,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 import { ROOT } from "./utils.js";
 
-const README_BASE = join(ROOT, "shared", "readme");
+const README_BASE = join(ROOT, "shared", "templates", "readme");
 
 function loadJson<T>(filename: string): T {
   const raw = readFileSync(join(README_BASE, filename), "utf8");

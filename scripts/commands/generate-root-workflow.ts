@@ -54,7 +54,7 @@ const readWorkflow = (dir: string): Workflow => {
 };
 
 const readSharedWorkflow = (filename: string): Workflow => {
-  const path = join(ROOT, 'shared', 'workflows', filename);
+  const path = join(ROOT, 'shared', 'ci', 'workflows', filename);
   const raw = readFileSync(path, 'utf8');
   return YAML.parse(raw) as Workflow;
 };

@@ -19,20 +19,20 @@ export const SHARED_CONFIG_STACKS: readonly string[] = [
 ];
 
 /** フォーマッター・リンター設定の正本（一元管理・移行時はこの定数だけ変更） */
-export const SHARED_LINT_FORMAT = join(ROOT, "shared", "lint-format");
+export const SHARED_LINT_FORMAT = join(ROOT, "shared", "config", "lint-format");
 
 export const SHARED_EDITORCONFIG = join(SHARED_LINT_FORMAT, "editorconfig", ".editorconfig");
-export const GITIGNORE_DIR = join(ROOT, "shared", "gitignore");
+export const GITIGNORE_DIR = join(ROOT, "shared", "templates", "gitignore");
 /** テスト関連設定の正本（一元管理・移行時はこの定数だけ変更） */
-export const SHARED_TEST = join(ROOT, "shared", "test");
+export const SHARED_TEST = join(ROOT, "shared", "config", "test");
 export const RSPEC_COMMON = join(SHARED_TEST, "rspec", "rspec.common");
 export const SHARED_ESLINT = join(SHARED_LINT_FORMAT, "eslint");
 export const SHARED_PRETTIER = join(SHARED_LINT_FORMAT, "prettier");
-export const SHARED_TSCONFIG = join(ROOT, "shared", "tsconfig");
+export const SHARED_TSCONFIG = join(ROOT, "shared", "config", "tsconfig");
 export const SHARED_VITEST = join(SHARED_TEST, "vitest");
 
-export const SHARED_NPM = join(ROOT, "shared", "npm");
-export const SHARED_GEMFILE = join(ROOT, "shared", "gemfile");
+export const SHARED_NPM = join(ROOT, "shared", "dependencies", "npm");
+export const SHARED_GEMFILE = join(ROOT, "shared", "dependencies", "gemfile");
 export const SHARED_RUBOCOP = join(SHARED_LINT_FORMAT, "rubocop");
 
 export function deepMerge<T extends Record<string, unknown>>(a: T, b: Record<string, unknown>): T {

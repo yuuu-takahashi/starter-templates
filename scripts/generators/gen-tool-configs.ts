@@ -19,12 +19,12 @@ import {
 import { ensureFileExists, GenerationError } from '../lib/errors.js';
 import { logger } from '../lib/logger.js';
 
-const SHARED_MARKUPLINT = join(ROOT, 'shared', 'lint-format', 'markuplint');
-const SHARED_MARKDOWNLINT = join(ROOT, 'shared', 'lint-format', 'markdownlint');
-const SHARED_LIGHTHOUSE = join(ROOT, 'shared', 'lighthouse');
-const SHARED_KNIP = join(ROOT, 'shared', 'knip');
-const SHARED_PLAYWRIGHT = join(ROOT, 'shared', 'playwright');
-const SHARED_MOCKS = join(ROOT, 'shared', 'test', 'mocks');
+const SHARED_MARKUPLINT = join(ROOT, 'shared', 'config', 'lint-format', 'markuplint');
+const SHARED_MARKDOWNLINT = join(ROOT, 'shared', 'config', 'lint-format', 'markdownlint');
+const SHARED_LIGHTHOUSE = join(ROOT, 'shared', 'extensions', 'lighthouse');
+const SHARED_KNIP = join(ROOT, 'shared', 'extensions', 'knip');
+const SHARED_PLAYWRIGHT = join(ROOT, 'shared', 'extensions', 'playwright');
+const SHARED_MOCKS = join(ROOT, 'shared', 'config', 'test', 'mocks');
 
 export const generateESLint = async (): Promise<void> => {
   logger.debug('Generating ESLint configs');

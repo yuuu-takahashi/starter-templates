@@ -25,7 +25,7 @@ function slug(dir: string): string {
   return dir.replace(new RegExp(`^${TEMPLATES_DIR}/`), "");
 }
 
-const README_TEMPLATE_PATH = join(ROOT, "shared", "readme", "README.md.hbs");
+const README_TEMPLATE_PATH = join(ROOT, "shared", "templates", "readme", "README.md.hbs");
 
 function withDesc(name: string, map: Record<string, string>): string {
   const desc = map[name];
@@ -155,7 +155,7 @@ export async function run(): Promise<void> {
     strict: true,
   });
 
-  const DEFAULTS_PATH = join(ROOT, "shared", "devcontainer", "defaults.json");
+  const DEFAULTS_PATH = join(ROOT, "shared", "config", "devcontainer", "defaults.json");
   const devcontainerDefaults = JSON.parse(readFileSync(DEFAULTS_PATH, "utf8")) as {
     extensions: Record<ExtensionSetKey, string[]>;
   };
