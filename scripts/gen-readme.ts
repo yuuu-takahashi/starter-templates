@@ -1,7 +1,7 @@
 /**
  * Generates README.md for each template.
  * Run via generate-configs.ts
- * Template: shared/readme/README.md.hbs
+ * Template: shared/templates/readme/README.md.hbs
  */
 
 import { readFileSync, writeFileSync } from "fs";

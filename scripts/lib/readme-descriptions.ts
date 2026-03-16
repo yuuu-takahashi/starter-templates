@@ -1,5 +1,5 @@
 /**
- * README 用の説明マップ（shared/readme/*.json から読み込み）
+ * README 用の説明マップ（shared/templates/readme/*.json から読み込み）
  */
 
 import { readFileSync } from "fs";

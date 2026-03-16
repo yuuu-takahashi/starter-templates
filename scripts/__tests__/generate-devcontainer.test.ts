@@ -4,11 +4,11 @@ import { join } from "path";
 import { ROOT } from "../lib/utils.js";
 import { DEVCONTAINER_DOCKERFILE_MAP, TEMPLATE_DIRS } from "../lib/stacks.js";
 
-const DEFAULTS_PATH = join(ROOT, "shared", "devcontainer", "defaults.json");
-const INIT_FIREWALL_PATH = join(ROOT, "shared", "docker", "init-firewall.sh");
+const DEFAULTS_PATH = join(ROOT, "shared", "config", "devcontainer", "defaults.json");
+const INIT_FIREWALL_PATH = join(ROOT, "shared", "config", "docker", "init-firewall.sh");
 
 describe("generate-devcontainer が参照する共有ファイル", () => {
-  it("shared/devcontainer/defaults.json が存在する", () => {
+  it("shared/config/devcontainer/defaults.json が存在する", () => {
     expect(existsSync(DEFAULTS_PATH)).toBe(true);
   });
 
@@ -23,7 +23,7 @@ describe("generate-devcontainer が参照する共有ファイル", () => {
     expect(settings.base).toBeDefined();
   });
 
-  it("shared/docker/init-firewall.sh が存在する", () => {
+  it("shared/config/docker/init-firewall.sh が存在する", () => {
     expect(existsSync(INIT_FIREWALL_PATH)).toBe(true);
   });
 

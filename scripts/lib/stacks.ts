@@ -27,23 +27,23 @@ export interface StackDefinition {
   id: string;
   /** ランタイム（.node-version / .ruby-version 等の配布先） */
   runtime: Runtime;
-  /** code-check.yml の元ファイル（shared/workflows/ 内） */
+  /** code-check.yml の元ファイル（shared/ci/workflows/ 内） */
   codeCheckWorkflow: string;
-  /** test.yml の元ファイル（shared/workflows/ 内）。未定義なら test.yml は生成しない */
+  /** test.yml の元ファイル（shared/ci/workflows/ 内）。未定義なら test.yml は生成しない */
   testWorkflow?: string;
-  /** .gitignore の元ファイル（shared/gitignore/ 内） */
+  /** .gitignore の元ファイル（shared/templates/gitignore/ 内） */
   gitignore: string;
-  /** .devcontainer 用 Dockerfile（shared/docker/ 内）。null は docker-compose のみ */
+  /** .devcontainer 用 Dockerfile（shared/config/docker/ 内）。null は docker-compose のみ */
   devcontainerDockerfile: string | null;
-  /** package.json を shared/npm/<slug>.json から生成する */
+  /** package.json を shared/dependencies/npm/<slug>.json から生成する */
   hasNpm: boolean;
-  /** full-templates 用 npm 差分ファイルのスラグ。shared/npm/<slug>.diff.json を base にマージする */
+  /** full-templates 用 npm 差分ファイルのスラグ。shared/dependencies/npm/<slug>.diff.json を base にマージする */
   fullNpmDiffSlug?: string;
   /** full-templates 用 code-check ワークフロー（未定義なら codeCheckWorkflow と同じ） */
   fullCodeCheckWorkflow?: string;
-  /** full-templates 用 CI ワークフロー（e2e + lighthouse）。shared/workflows/ 内のファイル名 */
+  /** full-templates 用 CI ワークフロー（e2e + lighthouse）。shared/ci/workflows/ 内のファイル名 */
   ciWorkflow?: string;
-  /** Gemfile を shared/gemfile/Gemfile.<slug> から生成する */
+  /** Gemfile を shared/dependencies/gemfile/Gemfile.<slug> から生成する */
   hasGemfile: boolean;
   /** ルート CI でモノレポ向け path/working-directory 変換を適用する */
   monorepoPrefix: boolean;
@@ -214,12 +214,12 @@ export const TEMPLATE_DIRS: readonly string[] = STACK_DEFINITIONS.map(
   (s) => s.dir,
 );
 
-/** package.json を shared/npm/<stack>.json から生成するスタック名一覧 */
+/** package.json を shared/dependencies/npm/<stack>.json から生成するスタック名一覧 */
 export const NPM_STACKS: readonly string[] = STACK_DEFINITIONS.filter(
   (s) => s.hasNpm,
 ).map((s) => slug(s.dir));
 
-/** Gemfile を shared/gemfile/ から生成するスタック名一覧 */
+/** Gemfile を shared/dependencies/gemfile/ から生成するスタック名一覧 */
 export const GEMFILE_STACKS: readonly string[] = STACK_DEFINITIONS.filter(
   (s) => s.hasGemfile,
 ).map((s) => slug(s.dir));
@@ -249,7 +249,7 @@ export const GO_VERSION_DIRS: readonly string[] = STACK_DEFINITIONS.filter(
   (s) => s.runtime === 'go',
 ).map((s) => s.dir);
 
-/** code-check.yml の元ワークフロー名（shared/workflows/ 内のファイル名） */
+/** code-check.yml の元ワークフロー名（shared/ci/workflows/ 内のファイル名） */
 export const CODE_CHECK_SOURCE: Readonly<Record<string, string>> =
   Object.fromEntries(
     STACK_DEFINITIONS.map((s) => [s.dir, s.codeCheckWorkflow]),
@@ -263,17 +263,17 @@ export const TEST_SOURCE: Readonly<Record<string, string>> = Object.fromEntries(
   ]),
 );
 
-/** .gitignore の元ファイル名（shared/gitignore/ 内） */
+/** .gitignore の元ファイル名（shared/templates/gitignore/ 内） */
 export const GITIGNORE_SOURCE: Readonly<Record<string, string>> =
   Object.fromEntries(STACK_DEFINITIONS.map((s) => [s.dir, s.gitignore]));
 
-/** .dockerignore の元ファイル名（shared/docker/ 内）。フレームワーク数だけ用意し、テンプレートごとに1ファイル */
+/** .dockerignore の元ファイル名（shared/config/docker/ 内）。フレームワーク数だけ用意し、テンプレートごとに1ファイル */
 export const DOCKERIGNORE_SOURCE: Readonly<Record<string, string>> =
   Object.fromEntries(
     STACK_DEFINITIONS.map((s) => [s.dir, `dockerignore.${slug(s.dir)}`]),
   );
 
-/** .devcontainer/Dockerfile のコピー元（shared/docker/ 内）。null は docker-compose のみ */
+/** .devcontainer/Dockerfile のコピー元（shared/config/docker/ 内）。null は docker-compose のみ */
 export const DEVCONTAINER_DOCKERFILE_MAP: Readonly<
   Record<string, string | null>
 > = Object.fromEntries(

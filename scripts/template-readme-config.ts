@@ -1,7 +1,7 @@
 /**
  * 各テンプレートの README.md 生成用メタデータ。
  * scripts/generate-configs.ts → gen-readme.ts で各 templates/<id>/README.md を生成。
- * テンプレート: shared/readme/README.md.hbs
+ * テンプレート: shared/templates/readme/README.md.hbs
  * 共通の文面はテンプレート内で一元管理し、テンプレートごとの差分は config のみで指定する。
  */
 
@@ -17,7 +17,7 @@ export type TemplateReadmeDevGuide = {
   commands: string;
 };
 
-/** Dev Container の拡張機能セット（shared/devcontainer/defaults.json の extensions キー） */
+/** Dev Container の拡張機能セット（shared/config/devcontainer/defaults.json の extensions キー） */
 export type ExtensionSetKey =
   | 'base'
   | 'node'
@@ -35,11 +35,11 @@ export type TemplateReadmeConfig = {
   title: string;
   description: string;
   repoSlug: string;
-  /** shared/npm/${npmStack}.json のパッケージを「主なライブラリ」に記載 */
+  /** shared/dependencies/npm/${npmStack}.json のパッケージを「主なライブラリ」に記載 */
   npmStack?: string;
-  /** shared/gemfile/Gemfile.${gemfileStack} の gem を「主な Gem」に記載 */
+  /** shared/dependencies/gemfile/Gemfile.${gemfileStack} の gem を「主な Gem」に記載 */
   gemfileStack?: string;
-  /** shared/devcontainer/defaults.json の拡張機能セットを「主な拡張機能」に記載 */
+  /** shared/config/devcontainer/defaults.json の拡張機能セットを「主な拡張機能」に記載 */
   extensionSets?: ExtensionSetKey[];
   /** 「主なライブラリ」に記載する項目（Go: Gin, Rust: Axum など） */
   stackLibs?: string[];

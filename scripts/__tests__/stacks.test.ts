@@ -131,14 +131,14 @@ describe("stacks.ts ファイル存在確認", () => {
     }
   });
 
-  it("NPM_STACKS の各 slug に対応する shared/npm/<slug>.json が存在する", () => {
+  it("NPM_STACKS の各 slug に対応する shared/dependencies/npm/<slug>.json が存在する", () => {
     for (const slug of NPM_STACKS) {
       const path = join(ROOT, "shared", "npm", `${slug}.json`);
       expect(existsSync(path), `${path} が存在しない`).toBe(true);
     }
   });
 
-  it("GEMFILE_STACKS の各 slug に対応する shared/gemfile/Gemfile.<slug> が存在する", () => {
+  it("GEMFILE_STACKS の各 slug に対応する shared/dependencies/gemfile/Gemfile.<slug> が存在する", () => {
     for (const slug of GEMFILE_STACKS) {
       const path = join(ROOT, "shared", "gemfile", `Gemfile.${slug}`);
       expect(existsSync(path), `${path} が存在しない`).toBe(true);
