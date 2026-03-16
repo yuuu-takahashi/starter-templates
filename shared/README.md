@@ -22,9 +22,8 @@ shared/
 │   └── actions/                # GitHub Actions の再利用可能アクション
 ├── templates/                  # テンプレートテキスト
 │   ├── gitignore/              # .gitignore テンプレート
-│   ├── readme/                 # README.md テンプレート
-│   └── docker/                 # Dockerfile テンプレート（共有イメージ定義）
-├── framework-specific/         # フレームワーク固有設定
+│   └── readme/                 # README.md テンプレート
+├── extensions/                 # スタック固有の拡張設定
 │   ├── sentry/                 # Sentry 設定
 │   ├── knip/                   # knip（不使用ファイル検出）設定
 │   ├── lighthouse/             # Lighthouse CI 設定
@@ -167,23 +166,23 @@ README.md テンプレート。
 - `gem-descriptions.json` — Gem 説明
 - `extension-descriptions.json` — VS Code 拡張機能説明
 
-### framework-specific/lighthouse/
+### extensions/lighthouse/
 
 Lighthouse CI 設定。
 - `.lighthouserc.js` — Lighthouse CI 設定
 
-### framework-specific/knip/
+### extensions/knip/
 
 不使用ファイル検出ツール（knip）設定。
 - `knip.config.nextjs.ts` — Next.js テンプレート向け
 
-### framework-specific/playwright/
+### extensions/playwright/
 
 Playwright E2E テスト仕様。
 - `specs/top.spec.ts` — トップページテスト例
 - `playwright.config.nextjs.ts` — Next.js テンプレート向け設定
 
-### framework-specific/sentry/
+### extensions/sentry/
 
 Sentry エラートラッキング設定。
 - `instrumentation.nextjs.ts` — Next.js 計測設定
