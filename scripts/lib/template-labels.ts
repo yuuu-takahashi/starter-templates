@@ -3,16 +3,17 @@
  */
 
 export const TEMPLATE_LABELS: Record<string, string> = {
-  nextjs: "Next.js (App Router)",
-  nextjs_full: "Next.js (App Router) - 実用",
+  nextjs: "Next.js",
+  nextjs_full: "Next.js - Full",
   nodejs: "Node.js",
   react: "React + Vite",
   rails: "Ruby on Rails",
   rails_api: "Rails API",
-  laravel: "Laravel (PHP)",
+  ruby: "Ruby",
+  laravel: "Laravel",
   sinatra: "Sinatra",
-  csharp: "ASP.NET Core (C#)",
-  go: "Go (Gin)",
-  rust: "Rust (Axum)",
-  django: "Django (Python)",
+  csharp: "ASP.NET Core",
+  go: "Go",
+  rust: "Rust",
+  django: "Django",
 };

@@ -95,7 +95,7 @@ async function main(): Promise<void> {
 
   console.log("\nテンプレートを選んでください:\n");
   templates.forEach((t, i) => {
-    console.log(`  ${i + 1}. ${t.label} (${t.slug})`);
+    console.log(`  ${i + 1}. ${t.label}`);
   });
   console.log("");
 
