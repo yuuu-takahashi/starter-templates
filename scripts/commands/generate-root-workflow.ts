@@ -17,7 +17,8 @@ import {
   FULL_TEST_SOURCE,
   STACK_DEFINITIONS,
 } from '../lib/stacks.js';
-import { ROOT, VERSIONS } from '../lib/utils.js';
+import { VERSIONS } from '../lib/utils.js';
+import { ROOT, SHARED_WORKFLOWS } from '../lib/paths.js';
 
 const STACKS = ROOT_STACKS;
 
@@ -54,7 +55,7 @@ const readWorkflow = (dir: string): Workflow => {
 };
 
 const readSharedWorkflow = (filename: string): Workflow => {
-  const path = join(ROOT, 'shared', 'ci', 'workflows', filename);
+  const path = join(SHARED_WORKFLOWS, filename);
   const raw = readFileSync(path, 'utf8');
   return YAML.parse(raw) as Workflow;
 };

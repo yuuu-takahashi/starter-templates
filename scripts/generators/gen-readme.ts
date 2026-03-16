@@ -19,13 +19,14 @@ import {
   GEM_DESCRIPTIONS,
   EXTENSION_DESCRIPTIONS,
 } from "../lib/readme-descriptions.js";
-import { ROOT, SHARED_NPM, SHARED_GEMFILE } from "../lib/utils.js";
+import { SHARED_NPM, SHARED_GEMFILE, ROOT } from "../lib/utils.js";
+import { README_TEMPLATE } from "../lib/paths.js";
 
 function slug(dir: string): string {
   return dir.replace(new RegExp(`^${TEMPLATES_DIR}/`), "");
 }
 
-const README_TEMPLATE_PATH = join(ROOT, "shared", "templates", "readme", "README.md.hbs");
+const README_TEMPLATE_PATH = README_TEMPLATE;
 
 function withDesc(name: string, map: Record<string, string>): string {
   const desc = map[name];

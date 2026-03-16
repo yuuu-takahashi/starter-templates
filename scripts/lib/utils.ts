@@ -3,13 +3,44 @@
  */
 
 import { readFileSync } from "fs";
-import { join } from "path";
 import { TEMPLATE_DIRS, FULL_TEMPLATE_DIRS } from "./stacks.js";
+import {
+  ROOT,
+  VERSIONS_JSON,
+  SHARED_LINT_FORMAT,
+  SHARED_EDITORCONFIG,
+  GITIGNORE_DIR,
+  SHARED_TEST,
+  RSPEC_COMMON,
+  SHARED_ESLINT,
+  SHARED_PRETTIER,
+  SHARED_TSCONFIG,
+  SHARED_VITEST,
+  SHARED_NPM,
+  SHARED_GEMFILE,
+  SHARED_RUBOCOP,
+  SHARED_DOCKER,
+} from "./paths.js";
 
-export const ROOT: string = process.cwd();
+export {
+  ROOT,
+  SHARED_LINT_FORMAT,
+  SHARED_EDITORCONFIG,
+  GITIGNORE_DIR,
+  SHARED_TEST,
+  RSPEC_COMMON,
+  SHARED_ESLINT,
+  SHARED_PRETTIER,
+  SHARED_TSCONFIG,
+  SHARED_VITEST,
+  SHARED_NPM,
+  SHARED_GEMFILE,
+  SHARED_RUBOCOP,
+  SHARED_DOCKER,
+};
 
 export const VERSIONS = JSON.parse(
-  readFileSync(join(ROOT, "shared", "versions.json"), "utf8")
+  readFileSync(VERSIONS_JSON, "utf8")
 ) as { node: string; ruby: string; php?: string; go?: string; python?: string; dotnet?: string; rust?: string };
 
 /** 横断的な共通設定を配るテンプレート一覧（Prettier / EditorConfig 対象） */
@@ -17,23 +48,6 @@ export const SHARED_CONFIG_STACKS: readonly string[] = [
   ...TEMPLATE_DIRS,
   ...FULL_TEMPLATE_DIRS,
 ];
-
-/** フォーマッター・リンター設定の正本（一元管理・移行時はこの定数だけ変更） */
-export const SHARED_LINT_FORMAT = join(ROOT, "shared", "config", "lint-format");
-
-export const SHARED_EDITORCONFIG = join(SHARED_LINT_FORMAT, "editorconfig", ".editorconfig");
-export const GITIGNORE_DIR = join(ROOT, "shared", "templates", "gitignore");
-/** テスト関連設定の正本（一元管理・移行時はこの定数だけ変更） */
-export const SHARED_TEST = join(ROOT, "shared", "config", "test");
-export const RSPEC_COMMON = join(SHARED_TEST, "rspec", "rspec.common");
-export const SHARED_ESLINT = join(SHARED_LINT_FORMAT, "eslint");
-export const SHARED_PRETTIER = join(SHARED_LINT_FORMAT, "prettier");
-export const SHARED_TSCONFIG = join(ROOT, "shared", "config", "tsconfig");
-export const SHARED_VITEST = join(SHARED_TEST, "vitest");
-
-export const SHARED_NPM = join(ROOT, "shared", "dependencies", "npm");
-export const SHARED_GEMFILE = join(ROOT, "shared", "dependencies", "gemfile");
-export const SHARED_RUBOCOP = join(SHARED_LINT_FORMAT, "rubocop");
 
 export function deepMerge<T extends Record<string, unknown>>(a: T, b: Record<string, unknown>): T {
   const r = { ...a } as Record<string, unknown>;

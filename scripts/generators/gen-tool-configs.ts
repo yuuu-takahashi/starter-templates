@@ -16,15 +16,16 @@ import {
   SHARED_TSCONFIG,
   SHARED_VITEST,
 } from '../lib/utils.js';
+import {
+  SHARED_MARKUPLINT,
+  SHARED_MARKDOWNLINT,
+  SHARED_LIGHTHOUSE,
+  SHARED_KNIP,
+  SHARED_PLAYWRIGHT,
+  SHARED_MOCKS,
+} from '../lib/paths.js';
 import { ensureFileExists, GenerationError } from '../lib/errors.js';
 import { logger } from '../lib/logger.js';
-
-const SHARED_MARKUPLINT = join(ROOT, 'shared', 'config', 'lint-format', 'markuplint');
-const SHARED_MARKDOWNLINT = join(ROOT, 'shared', 'config', 'lint-format', 'markdownlint');
-const SHARED_LIGHTHOUSE = join(ROOT, 'shared', 'extensions', 'lighthouse');
-const SHARED_KNIP = join(ROOT, 'shared', 'extensions', 'knip');
-const SHARED_PLAYWRIGHT = join(ROOT, 'shared', 'extensions', 'playwright');
-const SHARED_MOCKS = join(ROOT, 'shared', 'config', 'test', 'mocks');
 
 export const generateESLint = async (): Promise<void> => {
   logger.debug('Generating ESLint configs');

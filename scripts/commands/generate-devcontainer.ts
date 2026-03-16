@@ -17,12 +17,25 @@ import {
   STACK_DEFINITIONS,
   TEMPLATES_DIR,
 } from '../lib/stacks.js';
-import { ROOT } from '../lib/utils.js';
+import {
+  ROOT,
+  DEVCONTAINER_DEFAULTS,
+  DOCKERFILE_NODE,
+  DOCKERFILE_RUBY,
+  DOCKERFILE_DOTNET,
+  DOCKERFILE_GO,
+  DOCKERFILE_RUST,
+  DOCKERFILE_PHP,
+  DOCKERFILE_PYTHON,
+  DOCKER_COMPOSE_RUBY_DB,
+  DOCKER_COMPOSE_RAILS,
+  INIT_FIREWALL,
+} from '../lib/paths.js';
 
 // ── Shared devcontainer defaults (extensions + settings) ───────────────────────
 // 共通定義: shared/config/devcontainer/defaults.json を編集すること。
 
-const DEFAULTS_PATH = join(ROOT, 'shared', 'config', 'devcontainer', 'defaults.json');
+const DEFAULTS_PATH = DEVCONTAINER_DEFAULTS;
 const DEFAULTS = JSON.parse(readFileSync(DEFAULTS_PATH, 'utf8')) as {
   features?: Record<string, Record<string, unknown>>;
   /** full-templates のみに適用する features（例: github-cli） */
@@ -107,25 +120,13 @@ interface Stack {
 }
 
 // Dockerfile paths in shared/config/docker/ (single source of truth)
-const NODE_DOCKERFILE_SRC = join(ROOT, 'shared', 'config', 'docker', 'Dockerfile.node');
-const RUBY_DOCKERFILE_SRC = join(ROOT, 'shared', 'config', 'docker', 'Dockerfile.ruby');
-const DOTNET_DOCKERFILE_SRC = join(
-  ROOT,
-  'shared',
-  'config',
-  'docker',
-  'Dockerfile.dotnet',
-);
-const GO_DOCKERFILE_SRC = join(ROOT, 'shared', 'config', 'docker', 'Dockerfile.go');
-const RUST_DOCKERFILE_SRC = join(ROOT, 'shared', 'config', 'docker', 'Dockerfile.rust');
-const PHP_DOCKERFILE_SRC = join(ROOT, 'shared', 'config', 'docker', 'Dockerfile.php');
-const PYTHON_DOCKERFILE_SRC = join(
-  ROOT,
-  'shared',
-  'config',
-  'docker',
-  'Dockerfile.python',
-);
+const NODE_DOCKERFILE_SRC = DOCKERFILE_NODE;
+const RUBY_DOCKERFILE_SRC = DOCKERFILE_RUBY;
+const DOTNET_DOCKERFILE_SRC = DOCKERFILE_DOTNET;
+const GO_DOCKERFILE_SRC = DOCKERFILE_GO;
+const RUST_DOCKERFILE_SRC = DOCKERFILE_RUST;
+const PHP_DOCKERFILE_SRC = DOCKERFILE_PHP;
+const PYTHON_DOCKERFILE_SRC = DOCKERFILE_PYTHON;
 
 // Common devcontainer options (reference: anthropics/claude-code .devcontainer)
 const WORKSPACE_MOUNT =
@@ -474,21 +475,9 @@ const STACKS: Stack[] = [
 // ── Shared docker-compose ──────────────────────────────────────────────────────
 // ruby-db: sinatra, rails-api. rails: rails only (different env/command).
 
-const RUBY_DB_COMPOSE_SRC = join(
-  ROOT,
-  'shared',
-  'config',
-  'docker',
-  'docker-compose.ruby-db.yml',
-);
-const RAILS_COMPOSE_SRC = join(
-  ROOT,
-  'shared',
-  'config',
-  'docker',
-  'docker-compose.rails.yml',
-);
-const INIT_FIREWALL_SRC = join(ROOT, 'shared', 'config', 'docker', 'init-firewall.sh');
+const RUBY_DB_COMPOSE_SRC = DOCKER_COMPOSE_RUBY_DB;
+const RAILS_COMPOSE_SRC = DOCKER_COMPOSE_RAILS;
+const INIT_FIREWALL_SRC = INIT_FIREWALL;
 
 // ── Generator ─────────────────────────────────────────────────────────────────
 
