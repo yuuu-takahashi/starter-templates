@@ -9,7 +9,7 @@ defaults:
   run:
     shell: bash
 concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -19,14 +19,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.node-version'
-          cache: "yarn"
-
-      - name: Install dependencies
-        run: yarn install
+      - uses: ./.github/actions/setup-node-yarn
 
       - name: test
         run: yarn test

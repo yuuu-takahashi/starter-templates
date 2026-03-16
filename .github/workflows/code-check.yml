@@ -100,8 +100,6 @@ jobs:
           node-version: 24.11.0
           cache: yarn
           cache-dependency-path: minimal-templates/nextjs/yarn.lock
-      - name: Install dependencies
-        run: yarn install
       - name: format
         run: yarn format
       - name: lint
@@ -120,8 +118,6 @@ jobs:
           node-version: 24.11.0
           cache: yarn
           cache-dependency-path: minimal-templates/nodejs/yarn.lock
-      - name: Install dependencies
-        run: yarn install
       - name: format
         run: yarn format
       - name: lint
@@ -140,8 +136,6 @@ jobs:
           node-version: 24.11.0
           cache: yarn
           cache-dependency-path: minimal-templates/react/yarn.lock
-      - name: Install dependencies
-        run: yarn install
       - name: format
         run: yarn format
       - name: lint

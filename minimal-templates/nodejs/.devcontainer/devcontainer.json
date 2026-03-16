@@ -14,6 +14,7 @@
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
   "remoteUser": "node",
+  "waitFor": "postStartCommand",
   "mounts": [
     "source=${localWorkspaceFolderBasename}_node_modules,target=/workspace/node_modules,type=volume",
     "source=${localWorkspaceFolderBasename}-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
@@ -29,7 +30,6 @@
     "NODE_OPTIONS": "--max-old-space-size=4096"
   },
   "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
-  "waitFor": "postStartCommand",
   "customizations": {
     "vscode": {
       "extensions": [

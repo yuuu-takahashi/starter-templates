@@ -174,20 +174,38 @@ const NODE_TERMINAL_SETTINGS = {
   },
 };
 
+// ── Common base configurations ─────────────────────────────────────────────────
+
+const COMMON_BASE = {
+  workspaceFolder: '/workspace',
+  workspaceMount: WORKSPACE_MOUNT,
+  remoteUser: 'node',
+  waitFor: 'postStartCommand',
+} as const;
+
+const FIREWALL_BASE = {
+  ...COMMON_BASE,
+  mounts: CLAUDE_BASE_MOUNTS,
+  runArgs: RUN_ARGS_FIREWALL,
+  containerEnv: CONTAINER_ENV_FIREWALL,
+  postStartCommand: POST_START_FIREWALL,
+} as const;
+
+const NODE_BASE = {
+  ...COMMON_BASE,
+  mounts: NODE_MOUNTS,
+  runArgs: NODE_RUN_ARGS,
+  containerEnv: NODE_CONTAINER_ENV,
+  postStartCommand: NODE_POST_START,
+} as const;
+
 const STACKS: Stack[] = [
   {
     dir: `${TEMPLATES_DIR}/nextjs`,
     config: {
       name: 'template-nextjs',
       build: { dockerfile: 'Dockerfile', context: '..', args: NODE_BUILD_ARGS },
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: NODE_MOUNTS,
-      runArgs: NODE_RUN_ARGS,
-      containerEnv: NODE_CONTAINER_ENV,
-      postStartCommand: NODE_POST_START,
-      waitFor: 'postStartCommand',
+      ...NODE_BASE,
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...NODE_EXTENSIONS],
@@ -210,14 +228,7 @@ const STACKS: Stack[] = [
     config: {
       name: 'full-template-nextjs',
       build: { dockerfile: 'Dockerfile', context: '..', args: NODE_BUILD_ARGS },
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: NODE_MOUNTS,
-      runArgs: NODE_RUN_ARGS,
-      containerEnv: NODE_CONTAINER_ENV,
-      postStartCommand: NODE_POST_START,
-      waitFor: 'postStartCommand',
+      ...NODE_BASE,
       customizations: {
         vscode: {
           extensions: [
@@ -244,14 +255,7 @@ const STACKS: Stack[] = [
     config: {
       name: 'template-nodejs',
       build: { dockerfile: 'Dockerfile', context: '..', args: NODE_BUILD_ARGS },
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: NODE_MOUNTS,
-      runArgs: NODE_RUN_ARGS,
-      containerEnv: NODE_CONTAINER_ENV,
-      postStartCommand: NODE_POST_START,
-      waitFor: 'postStartCommand',
+      ...NODE_BASE,
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...NODE_EXTENSIONS],
@@ -269,14 +273,7 @@ const STACKS: Stack[] = [
     config: {
       name: 'template-react',
       build: { dockerfile: 'Dockerfile', context: '..', args: NODE_BUILD_ARGS },
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: NODE_MOUNTS,
-      runArgs: NODE_RUN_ARGS,
-      containerEnv: NODE_CONTAINER_ENV,
-      postStartCommand: NODE_POST_START,
-      waitFor: 'postStartCommand',
+      ...NODE_BASE,
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...NODE_EXTENSIONS],
@@ -300,14 +297,7 @@ const STACKS: Stack[] = [
       name: 'template-sinatra',
       dockerComposeFile: './docker-compose.yml',
       service: 'web',
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: CLAUDE_BASE_MOUNTS,
-      runArgs: RUN_ARGS_FIREWALL,
-      containerEnv: CONTAINER_ENV_FIREWALL,
-      postStartCommand: POST_START_FIREWALL,
-      waitFor: 'postStartCommand',
+      ...FIREWALL_BASE,
       customizations: {
         vscode: {
           extensions: [
@@ -329,14 +319,7 @@ const STACKS: Stack[] = [
         context: '..',
         args: BUILD_ARGS_DEVCONTAINER,
       },
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: CLAUDE_BASE_MOUNTS,
-      runArgs: RUN_ARGS_FIREWALL,
-      containerEnv: CONTAINER_ENV_FIREWALL,
-      postStartCommand: POST_START_FIREWALL,
-      waitFor: 'postStartCommand',
+      ...FIREWALL_BASE,
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...RUBY_EXTENSIONS],
@@ -351,14 +334,7 @@ const STACKS: Stack[] = [
       name: 'template-rails-api',
       dockerComposeFile: './docker-compose.yml',
       service: 'web',
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: CLAUDE_BASE_MOUNTS,
-      runArgs: RUN_ARGS_FIREWALL,
-      containerEnv: CONTAINER_ENV_FIREWALL,
-      postStartCommand: POST_START_FIREWALL,
-      waitFor: 'postStartCommand',
+      ...FIREWALL_BASE,
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...RUBY_EXTENSIONS],
@@ -373,14 +349,7 @@ const STACKS: Stack[] = [
       name: 'template-rails',
       dockerComposeFile: './docker-compose.yml',
       service: 'web',
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: CLAUDE_BASE_MOUNTS,
-      runArgs: RUN_ARGS_FIREWALL,
-      containerEnv: CONTAINER_ENV_FIREWALL,
-      postStartCommand: POST_START_FIREWALL,
-      waitFor: 'postStartCommand',
+      ...FIREWALL_BASE,
       customizations: {
         vscode: {
           extensions: [
@@ -409,14 +378,7 @@ const STACKS: Stack[] = [
         context: '..',
         args: BUILD_ARGS_DEVCONTAINER,
       },
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: CLAUDE_BASE_MOUNTS,
-      runArgs: RUN_ARGS_FIREWALL,
-      containerEnv: CONTAINER_ENV_FIREWALL,
-      postStartCommand: POST_START_FIREWALL,
-      waitFor: 'postStartCommand',
+      ...FIREWALL_BASE,
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...CSHARP_EXTENSIONS],
@@ -434,14 +396,7 @@ const STACKS: Stack[] = [
         context: '..',
         args: BUILD_ARGS_DEVCONTAINER,
       },
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: CLAUDE_BASE_MOUNTS,
-      runArgs: RUN_ARGS_FIREWALL,
-      containerEnv: CONTAINER_ENV_FIREWALL,
-      postStartCommand: POST_START_FIREWALL,
-      waitFor: 'postStartCommand',
+      ...FIREWALL_BASE,
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...GO_EXTENSIONS],
@@ -459,14 +414,7 @@ const STACKS: Stack[] = [
         context: '..',
         args: BUILD_ARGS_DEVCONTAINER,
       },
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: CLAUDE_BASE_MOUNTS,
-      runArgs: RUN_ARGS_FIREWALL,
-      containerEnv: CONTAINER_ENV_FIREWALL,
-      postStartCommand: POST_START_FIREWALL,
-      waitFor: 'postStartCommand',
+      ...FIREWALL_BASE,
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...RUST_EXTENSIONS],
@@ -484,14 +432,7 @@ const STACKS: Stack[] = [
         context: '..',
         args: BUILD_ARGS_DEVCONTAINER,
       },
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: CLAUDE_BASE_MOUNTS,
-      runArgs: RUN_ARGS_FIREWALL,
-      containerEnv: CONTAINER_ENV_FIREWALL,
-      postStartCommand: POST_START_FIREWALL,
-      waitFor: 'postStartCommand',
+      ...FIREWALL_BASE,
       customizations: {
         vscode: {
           extensions: [
@@ -513,14 +454,7 @@ const STACKS: Stack[] = [
         context: '..',
         args: BUILD_ARGS_DEVCONTAINER,
       },
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: CLAUDE_BASE_MOUNTS,
-      runArgs: RUN_ARGS_FIREWALL,
-      containerEnv: CONTAINER_ENV_FIREWALL,
-      postStartCommand: POST_START_FIREWALL,
-      waitFor: 'postStartCommand',
+      ...FIREWALL_BASE,
       forwardPorts: [8000],
       portsAttributes: {
         '8000': { label: 'Django', onAutoForward: 'openPreview' },

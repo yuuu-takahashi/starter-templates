@@ -12,6 +12,7 @@
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
   "remoteUser": "node",
+  "waitFor": "postStartCommand",
   "mounts": [
     "source=${localWorkspaceFolderBasename}-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
     "source=${localWorkspaceFolderBasename}-claude-config-${devcontainerId},target=/home/node/.claude,type=volume"
@@ -25,7 +26,6 @@
     "POWERLEVEL9K_DISABLE_GITSTATUS": "true"
   },
   "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
-  "waitFor": "postStartCommand",
   "forwardPorts": [
     8000
   ],

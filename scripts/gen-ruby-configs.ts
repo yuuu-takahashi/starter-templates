@@ -29,16 +29,22 @@ export function run(): void {
 
   // ── .rubocop.yml（ベース + テンプレート用 fragment をマージ）──────────────
 
-  const rubocopBase = YAML.parse(readFileSync(join(SHARED_RUBOCOP, "rubocop.base.yml"), "utf8")) as Record<string, unknown>;
+  const parseYaml = (path: string): Record<string, unknown> => {
+    const parsed = YAML.parse(readFileSync(path, "utf8"));
+    return parsed === null || parsed === undefined ? {} : (parsed as Record<string, unknown>);
+  };
 
-  const rubocopRails = YAML.parse(readFileSync(join(SHARED_RUBOCOP, "rubocop.rails.yml"), "utf8")) as Record<string, unknown>;
-  const rubocopSinatra = YAML.parse(readFileSync(join(SHARED_RUBOCOP, "rubocop.sinatra.yml"), "utf8")) as Record<string, unknown>;
-  const rubocopRuby = YAML.parse(readFileSync(join(SHARED_RUBOCOP, "rubocop.ruby.yml"), "utf8")) as Record<string, unknown>;
+  const rubocopBase = parseYaml(join(SHARED_RUBOCOP, "rubocop.base.yml"));
+  const rubocopPureRuby = parseYaml(join(SHARED_RUBOCOP, "rubocop.pure-ruby.yml"));
+
+  const rubocopRails = parseYaml(join(SHARED_RUBOCOP, "rubocop.rails.yml"));
+  const rubocopSinatra = parseYaml(join(SHARED_RUBOCOP, "rubocop.sinatra.yml"));
+  const rubocopRuby = parseYaml(join(SHARED_RUBOCOP, "rubocop.ruby.yml"));
   const rubocopRailsApi = readFileSync(join(SHARED_RUBOCOP, "rubocop.rails_api.yml"), "utf8");
 
   const rubocopRailsMerged = deepMerge(rubocopBase, rubocopRails);
-  const rubocopSinatraMerged = deepMerge(rubocopBase, rubocopSinatra);
-  const rubocopRubyMerged = deepMerge(rubocopBase, rubocopRuby);
+  const rubocopSinatraMerged = deepMerge(deepMerge(rubocopBase, rubocopPureRuby), rubocopSinatra);
+  const rubocopRubyMerged = deepMerge(deepMerge(rubocopBase, rubocopPureRuby), rubocopRuby);
 
   const RUBOCOP_OUT: Array<{ dir: string; content: string }> = [
     { dir: `${td}/rails`, content: YAML.stringify(rubocopRailsMerged) },

@@ -75,8 +75,6 @@ jobs:
           node-version: 24.11.0
           cache: yarn
           cache-dependency-path: minimal-templates/nextjs/yarn.lock
-      - name: Install dependencies
-        run: yarn install
       - name: test
         run: yarn test
   nodejs:
@@ -90,8 +88,6 @@ jobs:
           node-version: 24.11.0
           cache: yarn
           cache-dependency-path: minimal-templates/nodejs/yarn.lock
-      - name: Install dependencies
-        run: yarn install
       - name: test
         run: yarn test
   react:
@@ -105,8 +101,6 @@ jobs:
           node-version: 24.11.0
           cache: yarn
           cache-dependency-path: minimal-templates/react/yarn.lock
-      - name: Install dependencies
-        run: yarn install
       - name: test
         run: yarn test
   rails:
@@ -115,13 +109,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Cache Ruby gems
-        uses: actions/cache@v4
-        with:
-          path: minimal-templates/rails/vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('minimal-templates/rails/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
+      - uses: ./.github/actions/setup-ruby-bundle
       - name: Install Node.js & Yarn inside the container
         run: |
           apt-get update
@@ -137,9 +125,6 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('minimal-templates/rails/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - name: Install dependencies
-        run: bundle install --path vendor/bundle
-        working-directory: minimal-templates/rails
       - name: Install JS dependencies
         run: yarn install
         working-directory: minimal-templates/rails
@@ -166,16 +151,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Cache Ruby gems
-        uses: actions/cache@v4
-        with:
-          path: minimal-templates/rails-api/vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('minimal-templates/rails-api/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-      - name: Install dependencies
-        run: bundle install --path vendor/bundle
-        working-directory: minimal-templates/rails-api
+      - uses: ./.github/actions/setup-ruby-bundle
       - name: Run tests
         run: |
           cp .env.test .env
@@ -226,16 +202,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Cache Ruby gems
-        uses: actions/cache@v4
-        with:
-          path: minimal-templates/sinatra/vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('minimal-templates/sinatra/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-      - name: Install dependencies
-        run: bundle install --path vendor/bundle
-        working-directory: minimal-templates/sinatra
+      - uses: ./.github/actions/setup-ruby-bundle
       - name: Run tests
         run: |
           bundle exec rspec
@@ -346,8 +313,6 @@ jobs:
           node-version: 24.11.0
           cache: yarn
           cache-dependency-path: full-templates/nextjs/yarn.lock
-      - name: Install dependencies
-        run: yarn install
       - name: test
         run: yarn test
   full_rails_api:
@@ -356,16 +321,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Cache Ruby gems
-        uses: actions/cache@v4
-        with:
-          path: full-templates/rails-api/vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('full-templates/rails-api/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-      - name: Install dependencies
-        run: bundle install --path vendor/bundle
-        working-directory: full-templates/rails-api
+      - uses: ./.github/actions/setup-ruby-bundle
       - name: Run tests
         run: |
           cp .env.test .env

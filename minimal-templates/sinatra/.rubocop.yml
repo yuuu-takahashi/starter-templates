@@ -3,9 +3,9 @@ AllCops:
   TargetRubyVersion: 3.3
 Style/Documentation:
   Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
 Metrics/BlockLength:
   Exclude:
     - Rakefile
     - spec/**/*
-Style/FrozenStringLiteralComment:
-  Enabled: false

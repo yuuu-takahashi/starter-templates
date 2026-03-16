@@ -2,6 +2,3 @@ Metrics/BlockLength:
   Exclude:
     - "Rakefile"
     - "spec/**/*"
-
-Style/FrozenStringLiteralComment:
-  Enabled: false
