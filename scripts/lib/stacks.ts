@@ -98,6 +98,7 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
   },
   {
     dir: `${td}/rails`,
+    fullDir: 'full-templates/rails',
     id: 'rails',
     runtime: 'ruby',
     codeCheckWorkflow: 'code-check-ruby-erb.yml',

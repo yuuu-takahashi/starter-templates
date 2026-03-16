@@ -606,11 +606,11 @@ for (const dir of [`${TEMPLATES_DIR}/sinatra`, `${TEMPLATES_DIR}/rails-api`]) {
 }
 
 const railsComposeContent = readFileSync(RAILS_COMPOSE_SRC, 'utf8');
-const railsComposeOut = join(
-  ROOT,
-  `${TEMPLATES_DIR}/rails`,
-  '.devcontainer',
-  'docker-compose.yml',
-);
-writeFileSync(railsComposeOut, YAML_HEADER_RAILS + railsComposeContent, 'utf8');
-console.log('Generated:', railsComposeOut);
+const railsComposePaths = [
+  join(ROOT, `${TEMPLATES_DIR}/rails`, '.devcontainer', 'docker-compose.yml'),
+  join(ROOT, 'full-templates/rails', '.devcontainer', 'docker-compose.yml'),
+];
+for (const railsComposeOut of railsComposePaths) {
+  writeFileSync(railsComposeOut, YAML_HEADER_RAILS + railsComposeContent, 'utf8');
+  console.log('Generated:', railsComposeOut);
+}

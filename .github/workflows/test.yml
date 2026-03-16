@@ -31,6 +31,7 @@ jobs:
       rust: ${{ steps.filter.outputs.rust }}
       django: ${{ steps.filter.outputs.django }}
       full_nextjs: ${{ steps.filter.outputs.full_nextjs }}
+      full_rails: ${{ steps.filter.outputs.full_rails }}
       full_rails_api: ${{ steps.filter.outputs.full_rails_api }}
     steps:
       - uses: actions/checkout@v4
@@ -62,6 +63,8 @@ jobs:
               - 'minimal-templates/django/**'
             full_nextjs:
               - 'full-templates/nextjs/**'
+            full_rails:
+              - 'full-templates/rails/**'
             full_rails_api:
               - 'full-templates/rails-api/**'
   nextjs:
@@ -315,6 +318,48 @@ jobs:
           cache-dependency-path: full-templates/nextjs/yarn.lock
       - name: test
         run: yarn test
+  full_rails:
+    needs: changes
+    if: needs.changes.outputs.full_rails == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-ruby-bundle
+      - name: Install Node.js & Yarn inside the container
+        run: |
+          apt-get update
+          apt-get install -y curl
+          curl -fsSL https://deb.nodesource.com/setup_24.x | bash -
+          apt-get install -y nodejs
+          npm install -g yarn
+        working-directory: full-templates/rails
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: full-templates/rails/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('full-templates/rails/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install JS dependencies
+        run: yarn install
+        working-directory: full-templates/rails
+      - name: Run tests
+        run: |
+          bin/rails db:prepare
+          bundle exec rspec
+        working-directory: full-templates/rails
+    container:
+      image: ruby:3.3.6
+    services:
+      db:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    env:
+      DATABASE_HOST: db
+      DATABASE_USER: root
+      DATABASE_PASSWORD: password
   full_rails_api:
     needs: changes
     if: needs.changes.outputs.full_rails_api == 'true'
