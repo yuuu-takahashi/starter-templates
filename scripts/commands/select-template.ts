@@ -13,7 +13,7 @@ import { STACK_DEFINITIONS, TEMPLATES_DIR } from "../lib/stacks.js";
 import { TEMPLATE_LABELS } from "../lib/template-labels.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = path.resolve(__dirname, "..");
+const REPO_ROOT = path.resolve(__dirname, "../..");
 
 function slug(dir: string): string {
   return dir.replace(new RegExp(`^${TEMPLATES_DIR}/`), "");
