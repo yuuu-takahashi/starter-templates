@@ -115,56 +115,21 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  const destInput = await ask(
-    rl,
-    "作成先のパス (未入力ならこのリポジトリをテンプレートで完全に入れ替え): "
-  );
   rl.close();
 
-  const pathEmpty = !destInput.trim();
-  const cwd = process.cwd();
-  const insideRepo = cwd === REPO_ROOT || cwd.startsWith(REPO_ROOT + path.sep);
-
-  let destDir: string;
-  let destPath: string;
-  let replaceCurrentDir = false;
-
-  if (pathEmpty) {
-    replaceCurrentDir = true;
-    destPath = ".";
-    destDir = insideRepo ? REPO_ROOT : cwd;
-  } else {
-    destPath = destInput.trim();
-    destDir = path.resolve(cwd, destPath);
-  }
-
-  if (replaceCurrentDir) {
-    console.log("\nテンプレートを一時保存しています...");
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), `starter-templates-${chosen.slug}-`));
-    try {
-      copyTemplate(sourceDir, tempDir);
-      console.log("このリポジトリをクリアしています（.git を残す）...");
-      clearDir(destDir);
-      console.log(`${chosen.label} をルートにコピーしています...`);
-      copyTemplate(tempDir, destDir);
-    } finally {
-      fs.rmSync(tempDir, { recursive: true, force: true });
-    }
-  } else {
-    if (fs.existsSync(destDir) && fs.readdirSync(destDir).length > 0) {
-      console.error(`作成先が既に存在するか、空ではありません: ${destDir}`);
-      process.exit(1);
-    }
-    console.log(`\n${chosen.label} を ${destDir} にコピーしています...`);
-    copyTemplate(sourceDir, destDir);
+  console.log("\nテンプレートを一時保存しています...");
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), `starter-templates-${chosen.slug}-`));
+  try {
+    copyTemplate(sourceDir, tempDir);
+    console.log("このリポジトリをクリアしています（.git を残す）...");
+    clearDir(REPO_ROOT);
+    console.log(`${chosen.label} をルートにコピーしています...`);
+    copyTemplate(tempDir, REPO_ROOT);
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
   }
   console.log("完了しました。\n");
-  if (replaceCurrentDir) {
-    console.log("このディレクトリがプロジェクトルートです。");
-  } else {
-    console.log("次のコマンドでプロジェクトに移動してください:");
-    console.log(`  cd ${destPath}`);
-  }
+  console.log("このディレクトリがプロジェクトルートです。")
   console.log("\n依存関係のインストール:");
   if (chosen.slug === "rails" || chosen.slug === "rails-api" || chosen.slug === "sinatra") {
     console.log("  bundle install && yarn install");
