@@ -3,13 +3,13 @@
  */
 
 export const TEMPLATE_LABELS: Record<string, string> = {
-  nextjs: "Next.js",
+  nextjs: "Next.js - Minimal",
   nextjs_full: "Next.js - Full",
   nodejs: "Node.js",
   react: "React + Vite",
-  rails: "Ruby on Rails",
+  rails: "Ruby on Rails - Minimal",
   rails_full: "Ruby on Rails - Full",
-  rails_api: "Rails API",
+  rails_api: "Rails API - Minimal",
   rails_api_full: "Rails API - Full",
   ruby: "Ruby",
   laravel: "Laravel",
