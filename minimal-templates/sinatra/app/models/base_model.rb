@@ -11,7 +11,7 @@ class BaseModel
   end
 
   def save
-    MySQLClient.with_table(self.class.table_name) do |table|
+    SQLiteClient.with_table(self.class.table_name) do |table|
       if id.nil?
         @attributes[:id] = table.insert(@attributes)
       else
@@ -36,7 +36,7 @@ class BaseModel
   end
 
   def self.find(id)
-    MySQLClient.with_table(table_name) do |table|
+    SQLiteClient.with_table(table_name) do |table|
       record = table.where(id: id).first
       raise Sinatra::NotFound, "#{name} not found" unless record
 
@@ -46,7 +46,7 @@ class BaseModel
 
   def self.all
     Enumerator.new do |yielder|
-      MySQLClient.with_table(table_name) do |table|
+      SQLiteClient.with_table(table_name) do |table|
         table.each do |record|
           yielder << instantiate_from_record(record)
         end
@@ -55,7 +55,7 @@ class BaseModel
   end
 
   def delete
-    MySQLClient.with_table(self.class.table_name) do |table|
+    SQLiteClient.with_table(self.class.table_name) do |table|
       table.where(id: id).delete.positive?
     end
   end
@@ -73,7 +73,7 @@ class BaseModel
   private
 
   def define_columns
-    MySQLClient.with_database do |client|
+    SQLiteClient.with_database do |client|
       client.schema(self.class.table_name).each do |col|
         column = col[0]
         define_getter(column)

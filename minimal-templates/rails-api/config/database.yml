@@ -1,18 +1,15 @@
 default: &default
-  adapter: mysql2
-  encoding: utf8mb4
-  host: <%= ENV.fetch("DATABASE_HOST") %>
-  username: <%= ENV.fetch("DATABASE_USER") %>
-  password: <%= ENV.fetch("DATABASE_PASSWORD") %>
+  adapter: sqlite3
+  timeout: 5000
 
 development:
   <<: *default
-  database: template-rails-api_development
+  database: db/development.sqlite3
 
 test:
   <<: *default
-  database: template-rails-api_test
+  database: db/test.sqlite3
 
 production:
   <<: *default
-  database: template-rails-api_production
+  database: db/production.sqlite3
