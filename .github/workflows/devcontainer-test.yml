@@ -2,10 +2,10 @@ name: DevContainer Test
 
 on:
   pull_request:
-    # paths:
-    #   - '**/\.devcontainer/**'
-    # - 'shared/devcontainer/**'
-    # - 'scripts/generate-devcontainer.ts'
+    paths:
+      - '**/\.devcontainer/**'
+      - 'shared/devcontainer/**'
+      - 'scripts/generate-devcontainer.ts'
 
 defaults:
   run:
@@ -155,6 +155,18 @@ jobs:
               ;;
             python)
               devcontainer exec --workspace-folder "${{ matrix.path }}" pip install -r requirements.txt 2>/dev/null || true
+              ;;
+            php)
+              devcontainer exec --workspace-folder "${{ matrix.path }}" composer install
+              ;;
+            go)
+              devcontainer exec --workspace-folder "${{ matrix.path }}" go mod download
+              ;;
+            csharp)
+              devcontainer exec --workspace-folder "${{ matrix.path }}" dotnet restore
+              ;;
+            rust)
+              echo "Rust dependencies managed by Cargo, no separate install needed"
               ;;
             *)
               echo "Dependencies installation not configured for ${{ matrix.language }}"
