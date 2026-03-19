@@ -142,7 +142,7 @@ jobs:
           echo "Installing dependencies in devcontainer for: ${{ matrix.template }}"
           case "${{ matrix.language }}" in
             node)
-              devcontainer exec --workspace-folder "${{ matrix.path }}" yarn install
+              devcontainer exec --workspace-folder "${{ matrix.path }}" yarn install --frozen-lockfile
               ;;
             ruby)
               devcontainer exec --workspace-folder "${{ matrix.path }}" bundle install
