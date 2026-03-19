@@ -2,7 +2,7 @@ module DBSetup
   def self.create_database
     database_path = ENV.fetch('DATABASE_NAME', 'db/development.db')
     db_dir = File.dirname(database_path)
-    Dir.mkdir(db_dir) unless Dir.exist?(db_dir)
+    FileUtils.mkdir_p(db_dir)
     if File.exist?(database_path)
       puts "Database '#{database_path}' already exists."
     else
