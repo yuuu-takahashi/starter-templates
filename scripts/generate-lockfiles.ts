@@ -18,6 +18,20 @@ const run = (): void => {
   let successCount = 0;
   let failureCount = 0;
 
+  // First, run yarn install at root
+  try {
+    logger.info(`📦 Installing root npm dependencies`);
+    execSync('yarn install', { cwd: ROOT, stdio: 'inherit' });
+    logger.success(`  yarn.lock updated at root`);
+    successCount++;
+  } catch (error) {
+    logger.warn(`Failed to install root npm dependencies`);
+    if (error instanceof Error) {
+      logger.error(`  Error: ${error.message}`);
+    }
+    failureCount++;
+  }
+
   for (const stack of STACK_DEFINITIONS) {
     const dirs: string[] = [join(ROOT, stack.dir)];
     if (stack.fullDir) {
@@ -34,6 +48,22 @@ const run = (): void => {
           successCount++;
         } catch (error) {
           logger.warn(`Failed to install npm dependencies in ${dir}`);
+          if (error instanceof Error) {
+            logger.error(`  Error: ${error.message}`);
+          }
+          failureCount++;
+        }
+      }
+
+      // bundle install for Ruby templates
+      if (stack.hasGemfile) {
+        try {
+          logger.info(`💎 Installing Ruby dependencies: ${dir}`);
+          execSync('bundle install', { cwd: dir, stdio: 'inherit' });
+          logger.success(`  Gemfile.lock updated: ${dir}`);
+          successCount++;
+        } catch (error) {
+          logger.warn(`Failed to install Ruby dependencies in ${dir}`);
           if (error instanceof Error) {
             logger.error(`  Error: ${error.message}`);
           }
