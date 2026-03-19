@@ -5,7 +5,7 @@
  */
 
 import { execSync } from 'child_process';
-import { existsSync } from 'fs';
+import { existsSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import { STACK_DEFINITIONS } from './lib/stacks.js';
 import { ROOT } from './lib/utils.js';
@@ -54,6 +54,12 @@ async function setupTemplates() {
             cwd: templatePath,
             stdio: 'inherit',
           });
+
+          // Remove package-lock.json (use yarn.lock instead)
+          const packageLockPath = join(templatePath, 'package-lock.json');
+          if (existsSync(packageLockPath)) {
+            unlinkSync(packageLockPath);
+          }
         }
       }
 
