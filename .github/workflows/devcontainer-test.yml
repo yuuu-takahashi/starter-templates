@@ -130,17 +130,11 @@ jobs:
         if: matrix.output == 'true'
         run: npm install -g @devcontainers/cli
 
-      - name: Build devcontainer image
+      - name: Build and run devcontainer
         if: matrix.output == 'true'
         run: |
-          echo "Building devcontainer for: ${{ matrix.template }}"
-          devcontainer build --workspace-folder "${{ matrix.path }}"
-
-      - name: Verify container configuration
-        if: matrix.output == 'true'
-        run: |
-          echo "Reading devcontainer configuration for: ${{ matrix.template }}"
-          devcontainer read-configuration --workspace-folder "${{ matrix.path }}" > /dev/null
+          echo "Building and starting devcontainer for: ${{ matrix.template }}"
+          devcontainer up --workspace-folder "${{ matrix.path }}"
 
       - name: Install dependencies inside container
         if: matrix.output == 'true'
