@@ -12,6 +12,7 @@
     "vitest": "^3.0.5"
   },
   "scripts": {
+    "dev": "node example.js",
     "format": "prettier --write .",
     "lint": "eslint . --fix",
     "test": "vitest --run"

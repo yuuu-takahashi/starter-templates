@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "create-project": "tsx scripts/select-template.ts",
+    "dev": "concurrently \"cd minimal-templates/nextjs && yarn dev\" \"cd minimal-templates/react && yarn dev\" \"cd minimal-templates/nodejs && yarn dev\" \"cd minimal-templates/rails && bin/rails server -p 3003\" \"cd minimal-templates/rails-api && bin/rails server -p 3004\" \"cd minimal-templates/ruby && ruby lib/hello.rb\" \"cd minimal-templates/sinatra && PORT=3007 bundle exec ruby index.rb\"",
     "generate:ci": "tsx scripts/generate-root-workflow.ts",
     "generate:devcontainer": "tsx scripts/generate-devcontainer.ts",
     "devcontainer": "devcontainer",
@@ -22,6 +23,7 @@
     "@devcontainers/cli": "^0.83.0",
     "@eslint/js": "^9",
     "@types/node": "^22.0.0",
+    "concurrently": "^9",
     "eslint": "^9",
     "eslint-config-prettier": "^10",
     "handlebars": "^4.7.8",

@@ -6,6 +6,7 @@
     "prettier": "^3.4.2"
   },
   "scripts": {
+    "dev": "PORT=3007 bundle exec ruby index.rb",
     "format": "prettier --write ."
   },
   "author": "",
