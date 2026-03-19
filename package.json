@@ -11,7 +11,7 @@
     "generate:configs": "tsx scripts/generate-configs.ts",
     "generate:deps": "tsx scripts/generate-deps.ts",
     "generate:lockfiles": "tsx scripts/generate-lockfiles.ts",
-    "generate:all": "yarn generate:configs && yarn generate:deps && yarn generate:ci && yarn generate:devcontainer && yarn generate:lockfiles",
+    "generate:all": "yarn generate:configs && yarn generate:deps && yarn generate:ci && yarn generate:devcontainer",
     "setup:templates": "tsx scripts/setup-templates.ts",
     "test": "vitest run",
     "lint": "eslint scripts/ && yarn lint:md",
