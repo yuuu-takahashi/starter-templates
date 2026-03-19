@@ -144,10 +144,8 @@ const CLAUDE_BASE_MOUNTS = [
 ];
 
 // Node-specific (firewall, zsh, git-delta, bash history, Claude config)
-const NODE_MOUNTS = [
-  'source=${localWorkspaceFolderBasename}_node_modules,target=/workspace/node_modules,type=volume',
-  ...CLAUDE_BASE_MOUNTS,
-];
+// Note: node_modules is NOT mounted separately; bind mount with delegated consistency is sufficient
+const NODE_MOUNTS = CLAUDE_BASE_MOUNTS;
 const NODE_BUILD_ARGS: Record<string, string> = {
   ...BUILD_ARGS_TZ,
   CLAUDE_CODE_VERSION: 'latest',
