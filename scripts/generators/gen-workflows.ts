@@ -118,6 +118,14 @@ export function run(): void {
     console.log("Generated:", join(outActionDir, "action.yml"));
   }
 
+  // setup-ruby-bundle at root level (for root test.yml workflow)
+  const rootSetupRubyBundleSrc = join(ACTIONS_DIR, "setup-ruby-bundle", "action.yml");
+  const rootSetupRubyBundleDir = join(ROOT, ".github", "actions", "setup-ruby-bundle");
+  mkdirSync(rootSetupRubyBundleDir, { recursive: true });
+  const rootActionContent = ACTION_GEN_HEADER + readFileSync(rootSetupRubyBundleSrc, "utf8");
+  writeFileSync(join(rootSetupRubyBundleDir, "action.yml"), rootActionContent, "utf8");
+  console.log("Generated:", join(rootSetupRubyBundleDir, "action.yml"));
+
   // ── dependabot.yml ─────────────────────────────────────────────────────────
 
   const DEPENDABOT_SRC = join(WORKFLOWS_DIR, "dependabot.yml");
