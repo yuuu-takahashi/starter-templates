@@ -58,16 +58,24 @@ const run = (): void => {
       // bundle install for Ruby templates
       if (stack.hasGemfile) {
         try {
+          // Check if bundler is available
+          execSync('bundle --version', { stdio: 'pipe' });
+
           logger.info(`💎 Installing Ruby dependencies: ${dir}`);
           execSync('bundle install', { cwd: dir, stdio: 'inherit' });
           logger.success(`  Gemfile.lock updated: ${dir}`);
           successCount++;
         } catch (error) {
-          logger.warn(`Failed to install Ruby dependencies in ${dir}`);
-          if (error instanceof Error) {
-            logger.error(`  Error: ${error.message}`);
+          if (error instanceof Error && error.message.includes('bundle')) {
+            // bundler not installed - skip this template
+            logger.info(`⏭️  Skipping Ruby dependencies (bundler not installed): ${dir}`);
+          } else {
+            logger.warn(`Failed to install Ruby dependencies in ${dir}`);
+            if (error instanceof Error) {
+              logger.error(`  Error: ${error.message}`);
+            }
+            failureCount++;
           }
-          failureCount++;
         }
       }
     }

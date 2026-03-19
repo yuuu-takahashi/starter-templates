@@ -28,19 +28,30 @@ async function setupTemplates() {
       if (stack.hasGemfile) {
         const gemfilePath = join(templatePath, 'Gemfile');
         if (existsSync(gemfilePath)) {
-          console.log(`   → bundle install`);
-          execSync('bundle install', {
-            cwd: templatePath,
-            stdio: 'inherit',
-          });
+          try {
+            // Check if bundler is available
+            execSync('bundle --version', { stdio: 'pipe' });
 
-          // Run migrations for Rails-based templates
-          if (stack.dir.includes('rails')) {
-            console.log(`   → rails db:migrate`);
-            execSync('rails db:migrate', {
+            console.log(`   → bundle install`);
+            execSync('bundle install', {
               cwd: templatePath,
               stdio: 'inherit',
             });
+
+            // Run migrations for Rails-based templates
+            if (stack.dir.includes('rails')) {
+              console.log(`   → rails db:migrate`);
+              execSync('rails db:migrate', {
+                cwd: templatePath,
+                stdio: 'inherit',
+              });
+            }
+          } catch (error) {
+            if ((error as Error).message.includes('bundle')) {
+              console.log(`⏭️  Skipping bundle install (bundler not installed)`);
+            } else {
+              throw error;
+            }
           }
         }
       }
