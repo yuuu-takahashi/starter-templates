@@ -62,7 +62,6 @@ GEM
     multi_json (1.15.0)
     mustermann (3.0.3)
       ruby2_keywords (~> 0.0.1)
-    mysql2 (0.5.6)
     nio4r (2.7.4)
     nokogiri (1.18.1-aarch64-linux-gnu)
       racc (~> 1.4)
@@ -152,6 +151,9 @@ GEM
       tilt (~> 2.0)
     smart_properties (1.17.0)
     sorbet-runtime (0.5.11690)
+    sqlite3 (1.7.3-aarch64-linux)
+    sqlite3 (1.7.3-arm64-darwin)
+    sqlite3 (1.7.3-x86_64-linux)
     tilt (2.4.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
@@ -170,7 +172,6 @@ DEPENDENCIES
   factory_bot (~> 6.2)
   faker
   htmlbeautifier
-  mysql2 (~> 0.5.6)
   puma (~> 6.5)
   rack-test
   rackup
@@ -181,6 +182,7 @@ DEPENDENCIES
   sequel (~> 5.88)
   sinatra (~> 4.2.0)
   sinatra-contrib
+  sqlite3 (~> 1.7)
 
 BUNDLED WITH
    2.3.27

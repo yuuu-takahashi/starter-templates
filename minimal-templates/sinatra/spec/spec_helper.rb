@@ -13,7 +13,7 @@ FactoryBot.definition_file_paths = %w[./spec/factories]
 FactoryBot.find_definitions
 FactoryBot.define do
   to_create do |instance|
-    client = MySQLClient.connect
+    client = SQLiteClient.connect
     begin
       klass = instance.class
       result = klass.create(instance.attributes)
@@ -34,14 +34,12 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
-    MySQLClient.with_database do |client|
-      client.run('SET FOREIGN_KEY_CHECKS=0')
+    SQLiteClient.with_database do |client|
+      client.run('PRAGMA foreign_keys=OFF')
       client.tables.each do |table|
-        MySQLClient.with_table(table) do |table_client|
-          table_client.db.run("TRUNCATE TABLE #{table_client.first_source_table}")
-        end
+        client.run("DELETE FROM #{table}")
       end
-      client.run('SET FOREIGN_KEY_CHECKS=1')
+      client.run('PRAGMA foreign_keys=ON')
     end
   end
 

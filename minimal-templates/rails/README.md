@@ -31,7 +31,6 @@
 - htmlbeautifier — ERB テンプレートのフォーマット
 - importmap-rails — Import Maps による JS 管理
 - jbuilder — JSON レスポンスを DSL で構築
-- mysql2 — MySQL クライアント
 - nokogiri — XML/HTML パーサー
 - prettier — コードフォーマッター
 - puma — マルチスレッド Web サーバー
@@ -44,6 +43,7 @@
 - ruby-lsp — Ruby 言語サーバー
 - selenium-webdriver — ブラウザ自動操作（E2E テスト）
 - sprockets-rails — アセットパイプライン
+- sqlite3
 - stimulus-rails — 軽量 JavaScript フレームワーク（Stimulus）
 - turbo-rails — 高速なページ遷移・フォーム送信（Turbo）
 - tzinfo-data — タイムゾーンデータ（Windows 向け）

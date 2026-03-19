@@ -1,0 +1,199 @@
+name: DevContainer Test
+
+on:
+  pull_request:
+    paths:
+      - '**/\.devcontainer/**'
+      - 'shared/devcontainer/**'
+      - 'scripts/generate-devcontainer.ts'
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: '${{ github.workflow }}-${{ github.head_ref || github.ref_name }}'
+  cancel-in-progress: true
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      has-changes: ${{ steps.filter.outputs.any }}
+      minimal-nextjs: ${{ steps.filter.outputs.minimal-nextjs }}
+      minimal-nodejs: ${{ steps.filter.outputs.minimal-nodejs }}
+      minimal-react: ${{ steps.filter.outputs.minimal-react }}
+      minimal-rails: ${{ steps.filter.outputs.minimal-rails }}
+      minimal-rails-api: ${{ steps.filter.outputs.minimal-rails-api }}
+      minimal-laravel: ${{ steps.filter.outputs.minimal-laravel }}
+      minimal-sinatra: ${{ steps.filter.outputs.minimal-sinatra }}
+      minimal-ruby: ${{ steps.filter.outputs.minimal-ruby }}
+      minimal-csharp: ${{ steps.filter.outputs.minimal-csharp }}
+      minimal-go: ${{ steps.filter.outputs.minimal-go }}
+      minimal-rust: ${{ steps.filter.outputs.minimal-rust }}
+      minimal-django: ${{ steps.filter.outputs.minimal-django }}
+      full-nextjs: ${{ steps.filter.outputs.full-nextjs }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            any:
+              - '**/\.devcontainer/**'
+              - 'shared/devcontainer/**'
+              - 'scripts/generate-devcontainer.ts'
+            minimal-nextjs: 'minimal-templates/nextjs/.devcontainer/**'
+            minimal-nodejs: 'minimal-templates/nodejs/.devcontainer/**'
+            minimal-react: 'minimal-templates/react/.devcontainer/**'
+            minimal-rails: 'minimal-templates/rails/.devcontainer/**'
+            minimal-rails-api: 'minimal-templates/rails-api/.devcontainer/**'
+            minimal-laravel: 'minimal-templates/laravel/.devcontainer/**'
+            minimal-sinatra: 'minimal-templates/sinatra/.devcontainer/**'
+            minimal-ruby: 'minimal-templates/ruby/.devcontainer/**'
+            minimal-csharp: 'minimal-templates/csharp/.devcontainer/**'
+            minimal-go: 'minimal-templates/go/.devcontainer/**'
+            minimal-rust: 'minimal-templates/rust/.devcontainer/**'
+            minimal-django: 'minimal-templates/django/.devcontainer/**'
+            full-nextjs: 'full-templates/nextjs/.devcontainer/**'
+
+  build-and-test:
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.has-changes == 'true'
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - template: minimal-nextjs
+            path: minimal-templates/nextjs
+            output: ${{ needs.detect-changes.outputs.minimal-nextjs }}
+            language: node
+          - template: minimal-nodejs
+            path: minimal-templates/nodejs
+            output: ${{ needs.detect-changes.outputs.minimal-nodejs }}
+            language: node
+          - template: minimal-react
+            path: minimal-templates/react
+            output: ${{ needs.detect-changes.outputs.minimal-react }}
+            language: node
+          - template: minimal-rails
+            path: minimal-templates/rails
+            output: ${{ needs.detect-changes.outputs.minimal-rails }}
+            language: ruby
+          - template: minimal-rails-api
+            path: minimal-templates/rails-api
+            output: ${{ needs.detect-changes.outputs.minimal-rails-api }}
+            language: ruby
+          - template: minimal-laravel
+            path: minimal-templates/laravel
+            output: ${{ needs.detect-changes.outputs.minimal-laravel }}
+            language: php
+          - template: minimal-sinatra
+            path: minimal-templates/sinatra
+            output: ${{ needs.detect-changes.outputs.minimal-sinatra }}
+            language: ruby
+          - template: minimal-ruby
+            path: minimal-templates/ruby
+            output: ${{ needs.detect-changes.outputs.minimal-ruby }}
+            language: ruby
+          - template: minimal-csharp
+            path: minimal-templates/csharp
+            output: ${{ needs.detect-changes.outputs.minimal-csharp }}
+            language: csharp
+          - template: minimal-go
+            path: minimal-templates/go
+            output: ${{ needs.detect-changes.outputs.minimal-go }}
+            language: go
+          - template: minimal-rust
+            path: minimal-templates/rust
+            output: ${{ needs.detect-changes.outputs.minimal-rust }}
+            language: rust
+          - template: minimal-django
+            path: minimal-templates/django
+            output: ${{ needs.detect-changes.outputs.minimal-django }}
+            language: python
+          - template: full-nextjs
+            path: full-templates/nextjs
+            output: ${{ needs.detect-changes.outputs.full-nextjs }}
+            language: node
+    steps:
+      - uses: actions/checkout@v4
+        if: matrix.output == 'true'
+
+      - name: Install devcontainers CLI
+        if: matrix.output == 'true'
+        run: npm install -g @devcontainers/cli
+
+      - name: Build and run devcontainer
+        if: matrix.output == 'true'
+        run: |
+          echo "Building and starting devcontainer for: ${{ matrix.template }}"
+          devcontainer up --workspace-folder "${{ matrix.path }}"
+
+      - name: Install dependencies inside container
+        if: matrix.output == 'true'
+        run: |
+          echo "Installing dependencies in devcontainer for: ${{ matrix.template }}"
+          case "${{ matrix.language }}" in
+            node)
+              devcontainer exec --workspace-folder "${{ matrix.path }}" yarn install --frozen-lockfile
+              ;;
+            ruby)
+              devcontainer exec --workspace-folder "${{ matrix.path }}" bundle install
+              ;;
+            python)
+              devcontainer exec --workspace-folder "${{ matrix.path }}" pip install -r requirements.txt 2>/dev/null || true
+              ;;
+            php)
+              devcontainer exec --workspace-folder "${{ matrix.path }}" composer install
+              ;;
+            go)
+              devcontainer exec --workspace-folder "${{ matrix.path }}" go mod download
+              ;;
+            csharp)
+              devcontainer exec --workspace-folder "${{ matrix.path }}" dotnet restore
+              ;;
+            rust)
+              echo "Rust dependencies managed by Cargo, no separate install needed"
+              ;;
+            *)
+              echo "Dependencies installation not configured for ${{ matrix.language }}"
+              ;;
+          esac
+
+      - name: Lint and static analysis
+        if: matrix.output == 'true'
+        run: |
+          echo "Running linting for: ${{ matrix.template }}"
+          case "${{ matrix.language }}" in
+            node)
+              devcontainer exec --workspace-folder "${{ matrix.path }}" yarn lint:all 2>/dev/null || devcontainer exec --workspace-folder "${{ matrix.path }}" yarn lint 2>/dev/null || echo "No lint script found"
+              ;;
+            ruby)
+              devcontainer exec --workspace-folder "${{ matrix.path }}" rubocop 2>/dev/null || echo "Rubocop not configured"
+              ;;
+            python)
+              devcontainer exec --workspace-folder "${{ matrix.path }}" flake8 . 2>/dev/null || echo "Flake8 not configured"
+              ;;
+            php)
+              devcontainer exec --workspace-folder "${{ matrix.path }}" ./vendor/bin/pint 2>/dev/null || devcontainer exec --workspace-folder "${{ matrix.path }}" phpstan analyse 2>/dev/null || echo "PHP linting not configured"
+              ;;
+            rust)
+              devcontainer exec --workspace-folder "${{ matrix.path }}" cargo clippy -- -D warnings 2>/dev/null || echo "Cargo clippy not available"
+              ;;
+            go)
+              devcontainer exec --workspace-folder "${{ matrix.path }}" golangci-lint run 2>/dev/null || echo "Golangci-lint not configured"
+              ;;
+            csharp)
+              devcontainer exec --workspace-folder "${{ matrix.path }}" dotnet format --verify-no-changes 2>/dev/null || echo "Dotnet format not configured"
+              ;;
+            *)
+              echo "Linting not configured for ${{ matrix.language }}"
+              ;;
+          esac

@@ -10,6 +10,7 @@
     "prettier": "^3.4.2"
   },
   "scripts": {
+    "dev": "bin/rails server -p 3003",
     "format": "prettier --write .",
     "lint": "eslint . --fix"
   },

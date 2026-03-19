@@ -56,21 +56,21 @@ RSpec.describe User do
       end
 
       it 'does not access the database when initializing the enumerator' do
-        expect(MySQLClient).not_to receive(:with_table)
+        expect(SQLiteClient).not_to receive(:with_table)
 
         enumerator = User.all
         expect(enumerator).to be_an(Enumerator)
       end
 
       it 'accesses the database only when the enumerator is executed' do
-        allow(MySQLClient).to receive(:with_table).and_call_original
+        allow(SQLiteClient).to receive(:with_table).and_call_original
 
         enumerator = User.all
 
-        expect(MySQLClient).not_to have_received(:with_table)
+        expect(SQLiteClient).not_to have_received(:with_table)
 
         enumerator.to_a
-        expect(MySQLClient).to have_received(:with_table).once
+        expect(SQLiteClient).to have_received(:with_table).once
       end
     end
 

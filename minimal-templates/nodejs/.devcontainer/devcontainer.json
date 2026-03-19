@@ -16,7 +16,6 @@
   "remoteUser": "node",
   "waitFor": "postStartCommand",
   "mounts": [
-    "source=${localWorkspaceFolderBasename}_node_modules,target=/workspace/node_modules,type=volume",
     "source=${localWorkspaceFolderBasename}-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
     "source=${localWorkspaceFolderBasename}-claude-config-${devcontainerId},target=/home/node/.claude,type=volume"
   ],
