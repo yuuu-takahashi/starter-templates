@@ -1,6 +1,6 @@
-module MySQLClient
+module SQLiteClient
   def self.with_database
-    client = MySQLClient.connect
+    client = SQLiteClient.connect
     yield(client)
   ensure
     client.disconnect
@@ -12,20 +12,13 @@ module MySQLClient
     end
   end
 
-  def self.connect_without_database
-    connect_to_database
-  end
-
   def self.connect
-    connect_to_database(database: ENV.fetch('DATABASE_NAME', nil))
+    connect_to_database(database: ENV.fetch('DATABASE_NAME', 'db/development.db'))
   end
 
   def connect_to_database(database: nil)
     Sequel.connect(
-      adapter: 'mysql2',
-      host: ENV.fetch('DATABASE_HOST', nil),
-      user: ENV.fetch('DATABASE_USER', nil),
-      password: ENV.fetch('DATABASE_PASSWORD', nil),
+      adapter: 'sqlite',
       database: database
     )
   end

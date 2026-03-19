@@ -1,28 +1,27 @@
 module DBSetup
   def self.create_database
-    client = MySQLClient.connect_without_database
-    database_name = ENV.fetch('DATABASE_NAME', nil)
-    databases = client.fetch("SHOW DATABASES LIKE '#{database_name}'").all
-    if databases.any?
-      puts "Database '#{database_name}' already exists."
+    database_path = ENV.fetch('DATABASE_NAME', 'db/development.db')
+    db_dir = File.dirname(database_path)
+    FileUtils.mkdir_p(db_dir)
+    if File.exist?(database_path)
+      puts "Database '#{database_path}' already exists."
     else
-      client.run("CREATE DATABASE `#{database_name}`")
-      puts "Database '#{database_name}' created successfully!"
+      File.write(database_path, '')
+      puts "Database '#{database_path}' created successfully!"
     end
   end
 
   def self.client
-    @client ||= MySQLClient.connect
+    @client ||= SQLiteClient.connect
   end
 
   def self.drop_database
-    database_name = ENV.fetch('DATABASE_NAME', nil)
-    databases = client.fetch("SHOW DATABASES LIKE '#{database_name}'").all
-    if databases.any?
-      client.run("DROP DATABASE `#{database_name}`")
-      puts "Database '#{database_name}' dropped successfully!"
+    database_path = ENV.fetch('DATABASE_NAME', 'db/development.db')
+    if File.exist?(database_path)
+      File.delete(database_path)
+      puts "Database '#{database_path}' dropped successfully!"
     else
-      puts "Database '#{database_name}' does not exist."
+      puts "Database '#{database_path}' does not exist."
     end
   end
 

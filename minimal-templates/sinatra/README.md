@@ -20,7 +20,6 @@
 - factory_bot — テスト用フィクスチャファクトリー
 - faker — テスト用ダミーデータ生成
 - htmlbeautifier — ERB テンプレートのフォーマット
-- mysql2 — MySQL クライアント
 - puma — マルチスレッド Web サーバー
 - rack-test — Rack アプリのテストヘルパー
 - rackup — Rack アプリの起動ツール
@@ -31,6 +30,7 @@
 - sequel — ORM / データベースツールキット
 - sinatra — 軽量 Web フレームワーク
 - sinatra-contrib — Sinatra 拡張機能コレクション
+- sqlite3
 
 ### Dev Container でインストールされる主な拡張機能
 

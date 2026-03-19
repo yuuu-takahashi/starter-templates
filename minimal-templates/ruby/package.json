@@ -6,6 +6,7 @@
     "prettier": "^3.4.2"
   },
   "scripts": {
+    "dev": "ruby lib/hello.rb",
     "format": "prettier --write ."
   },
   "author": "",

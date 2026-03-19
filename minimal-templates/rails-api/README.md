@@ -25,7 +25,6 @@
 - dotenv-rails — 環境変数を .env から読み込む（Rails）
 - factory_bot_rails — テスト用フィクスチャファクトリー（Rails）
 - faker — テスト用ダミーデータ生成
-- mysql2 — MySQL クライアント
 - nokogiri — XML/HTML パーサー
 - puma — マルチスレッド Web サーバー
 - rack — Ruby Web サーバーインターフェース
@@ -33,6 +32,7 @@
 - rspec-rails — Rails 向けテストフレームワーク
 - rswag — RSpec から Swagger ドキュメントを生成
 - rubocop-rails-omakase — Rails 公式の RuboCop プリセット
+- sqlite3
 - tzinfo-data — タイムゾーンデータ（Windows 向け）
 
 ### Dev Container でインストールされる主な拡張機能
