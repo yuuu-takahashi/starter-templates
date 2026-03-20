@@ -3,10 +3,10 @@
  */
 import { execSync } from 'node:child_process';
 
-export function bundleInstallVendorPath(cwd: string): void {
+export const bundleInstallVendorPath = (cwd: string): void => {
   execSync('bundle config set --local path vendor/bundle', {
     cwd,
     stdio: 'inherit',
   });
   execSync('bundle install', { cwd, stdio: 'inherit' });
-}
+};
