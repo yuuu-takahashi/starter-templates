@@ -109,6 +109,12 @@ interface Stack {
 // Dockerfile paths in shared/docker/ (single source of truth)
 const NODE_DOCKERFILE_SRC = join(ROOT, 'shared', 'docker', 'Dockerfile.node');
 const RUBY_DOCKERFILE_SRC = join(ROOT, 'shared', 'docker', 'Dockerfile.ruby');
+const RUBY_MONOREPO_DOCKERFILE_SRC = join(
+  ROOT,
+  'shared',
+  'docker',
+  'Dockerfile.ruby-monorepo',
+);
 const DOTNET_DOCKERFILE_SRC = join(
   ROOT,
   'shared',
@@ -562,6 +568,7 @@ const YAML_HEADER_RAILS: string =
 const DOCKERFILE_SRCS: Record<string, string> = {
   'Dockerfile.node': NODE_DOCKERFILE_SRC,
   'Dockerfile.ruby': RUBY_DOCKERFILE_SRC,
+  'Dockerfile.ruby-monorepo': RUBY_MONOREPO_DOCKERFILE_SRC,
   'Dockerfile.dotnet': DOTNET_DOCKERFILE_SRC,
   'Dockerfile.go': GO_DOCKERFILE_SRC,
   'Dockerfile.rust': RUST_DOCKERFILE_SRC,
@@ -632,6 +639,19 @@ for (const [dir, dockerfileName] of Object.entries({
   writeInitFirewall(outDir, dir);
 }
 
+// Repository root: Ruby 3.3 + Node (monorepo maintenance / yarn dev / bundle in templates)
+const ROOT_DEVCONTAINER_DIR = join(ROOT, '.devcontainer');
+mkdirSync(ROOT_DEVCONTAINER_DIR, { recursive: true });
+const rootDockerfileOut = join(ROOT_DEVCONTAINER_DIR, 'Dockerfile');
+writeFileSync(
+  rootDockerfileOut,
+  dockerfileHeader('Dockerfile.ruby-monorepo') +
+    readFileSync(RUBY_MONOREPO_DOCKERFILE_SRC, 'utf8'),
+  'utf8',
+);
+console.log('Generated:', rootDockerfileOut);
+writeInitFirewall(ROOT_DEVCONTAINER_DIR, 'monorepo');
+
 const DEVCONTAINER_FEATURES = DEFAULTS.features ?? {};
 const DEVCONTAINER_FEATURES_FULL_ONLY = DEFAULTS.featuresFullOnly ?? {};
 const isFullTemplate = (d: string) => d.startsWith('full-templates/');
@@ -661,6 +681,62 @@ for (const { dir, config } of STACKS) {
   );
   console.log('Generated:', outPath);
 }
+
+const rootDevcontainerConfig: DevcontainerConfig = {
+  name: 'starter-templates',
+  build: {
+    dockerfile: 'Dockerfile',
+    context: '..',
+    args: BUILD_ARGS_DEVCONTAINER,
+  },
+  workspaceFolder: '/workspace',
+  workspaceMount: WORKSPACE_MOUNT,
+  remoteUser: 'node',
+  mounts: NODE_MOUNTS,
+  runArgs: NODE_RUN_ARGS,
+  containerEnv: NODE_CONTAINER_ENV,
+  postStartCommand: NODE_POST_START,
+  waitFor: 'postStartCommand',
+  postCreateCommand: 'yarn install',
+  forwardPorts: [3001, 3002, 3003, 3004, 3007],
+  customizations: {
+    vscode: {
+      extensions: [
+        ...BASE_EXTENSIONS,
+        ...NODE_EXTENSIONS,
+        ...RUBY_EXTENSIONS,
+        ...ERB_EXTENSIONS,
+        ...TOOLING_EXTENSIONS,
+      ],
+      settings: {
+        ...BASE_SETTINGS,
+        ...NODE_TERMINAL_SETTINGS,
+        ...RUBY_SETTINGS,
+        ...ERB_SETTINGS,
+        'eslint.validate': ['javascript', 'typescript'],
+      },
+    },
+  },
+};
+const rootFeatures =
+  Object.keys(DEVCONTAINER_FEATURES).length > 0
+    ? DEVCONTAINER_FEATURES
+    : undefined;
+const rootDevcontainerPath = join(ROOT_DEVCONTAINER_DIR, 'devcontainer.json');
+const rootConfigWithCursor = {
+  ...rootDevcontainerConfig,
+  ...(rootFeatures && Object.keys(rootFeatures).length > 0 && { features: rootFeatures }),
+  customizations: {
+    vscode: rootDevcontainerConfig.customizations.vscode,
+    cursor: rootDevcontainerConfig.customizations.vscode,
+  },
+};
+writeFileSync(
+  rootDevcontainerPath,
+  JSON_HEADER + JSON.stringify(rootConfigWithCursor, null, 2) + '\n',
+  'utf8',
+);
+console.log('Generated:', rootDevcontainerPath);
 
 const rubyDbComposeContent = readFileSync(RUBY_DB_COMPOSE_SRC, 'utf8');
 for (const dir of [`${TEMPLATES_DIR}/sinatra`, `${TEMPLATES_DIR}/rails-api`]) {

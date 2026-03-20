@@ -60,7 +60,9 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: bundle install --path vendor/bundle
+        run: |
+          bundle config set --local path vendor/bundle
+          bundle install
 
       - name: Install JS dependencies
         run: yarn install

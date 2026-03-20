@@ -145,7 +145,7 @@ jobs:
               devcontainer exec --workspace-folder "${{ matrix.path }}" yarn install --frozen-lockfile
               ;;
             ruby)
-              devcontainer exec --workspace-folder "${{ matrix.path }}" bundle install
+              devcontainer exec --workspace-folder "${{ matrix.path }}" sh -lc "bundle config set --local path vendor/bundle && bundle install"
               ;;
             python)
               devcontainer exec --workspace-folder "${{ matrix.path }}" pip install -r requirements.txt 2>/dev/null || true
@@ -154,7 +154,9 @@ jobs:
               devcontainer exec --workspace-folder "${{ matrix.path }}" composer install
               ;;
             go)
-              devcontainer exec --workspace-folder "${{ matrix.path }}" go mod download
+              # 制限 egress + proxy.golang.org の anycast で許可 IP とずれることがあるため origin 直取り。
+              # go.sum が必要分を含む場合、checksum DB へは問い合わせない（go.dev/ref/mod#checksum-database）。
+              devcontainer exec --workspace-folder "${{ matrix.path }}" env GOPROXY=direct go mod download
               ;;
             csharp)
               devcontainer exec --workspace-folder "${{ matrix.path }}" dotnet restore

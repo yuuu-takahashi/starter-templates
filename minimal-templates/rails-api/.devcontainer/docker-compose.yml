@@ -7,10 +7,9 @@ services:
       args:
         TZ: ${TZ:-UTC}
         CLAUDE_CODE_VERSION: latest
+    # node_modules / vendor/bundle はワークスペースの bind のみ（anthropics/claude-code .devcontainer と同様。DB 以外は名前付きボリュームにしない）。
     volumes:
       - ..:/workspace
-      - node_modules_cache:/workspace/node_modules
-      - gem_cache:/workspace/vendor/bundle
     environment:
       RAILS_ENV: development
       APP_ENV: development
@@ -33,6 +32,4 @@ services:
       - db_data:/var/lib/mysql
 
 volumes:
-  node_modules_cache:
-  gem_cache:
   db_data:

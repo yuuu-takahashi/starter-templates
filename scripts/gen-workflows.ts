@@ -6,6 +6,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from "fs";
 import { join } from "path";
 import { ROOT } from "./lib/utils.js";
+import { logger } from "./lib/logger.js";
 import {
   TEMPLATE_DIRS,
   FULL_TEMPLATE_DIRS,
@@ -31,7 +32,7 @@ export function run(): void {
     mkdirSync(outDir, { recursive: true });
     const outPath = join(outDir, "static-analysis.yml");
     writeFileSync(outPath, staticAnalysisContent, "utf8");
-    console.log("Generated:", outPath);
+    logger.generated(outPath);
   }
 
   // ── code-check.yml ─────────────────────────────────────────────────────────
@@ -43,7 +44,7 @@ export function run(): void {
     mkdirSync(outDir, { recursive: true });
     const outPath = join(outDir, "code-check.yml");
     writeFileSync(outPath, content, "utf8");
-    console.log("Generated:", outPath);
+    logger.generated(outPath);
   }
 
   // ── test.yml ───────────────────────────────────────────────────────────────
@@ -55,7 +56,7 @@ export function run(): void {
     mkdirSync(outDir, { recursive: true });
     const outPath = join(outDir, "test.yml");
     writeFileSync(outPath, content, "utf8");
-    console.log("Generated:", outPath);
+    logger.generated(outPath);
   }
 
   // ── ci.yml ─────────────────────────────────────────────────────────────────
@@ -67,7 +68,7 @@ export function run(): void {
     mkdirSync(outDir, { recursive: true });
     const outPath = join(outDir, "ci.yml");
     writeFileSync(outPath, content, "utf8");
-    console.log("Generated:", outPath);
+    logger.generated(outPath);
   }
 
   // ── ci-e2e-nextjs.yml / ci-lighthouse-nextjs.yml (reusable, full-templates with CI only) ──
@@ -81,7 +82,7 @@ export function run(): void {
         GEN_HEADER.replace("<name>", srcName) +
         readFileSync(join(WORKFLOWS_DIR, srcName), "utf8");
       writeFileSync(join(outDir, srcName), content, "utf8");
-      console.log("Generated:", join(outDir, srcName));
+      logger.generated(join(outDir, srcName));
     }
   }
 
@@ -96,7 +97,7 @@ export function run(): void {
     mkdirSync(outActionDir, { recursive: true });
     const actionContent = ACTION_GEN_HEADER + readFileSync(setupNodeYarnSrc, "utf8");
     writeFileSync(join(outActionDir, "action.yml"), actionContent, "utf8");
-    console.log("Generated:", join(outActionDir, "action.yml"));
+    logger.generated(join(outActionDir, "action.yml"));
   }
 
   // ── dependabot.yml ─────────────────────────────────────────────────────────
@@ -111,6 +112,6 @@ export function run(): void {
     mkdirSync(outDir, { recursive: true });
     const outPath = join(outDir, "dependabot.yml");
     writeFileSync(outPath, dependabotContent, "utf8");
-    console.log("Generated:", outPath);
+    logger.generated(outPath);
   }
 }

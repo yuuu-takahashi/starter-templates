@@ -14,4 +14,3 @@ coverage
 Dockerfile*
 docker-compose*.yml
 compose*.yml
-.devcontainer
