@@ -2,6 +2,31 @@
  * テンプレート・スタックの一覧を一元定義。
  * 新規テンプレート追加時は STACK_DEFINITIONS に1エントリ追加するだけで、
  * TEMPLATE_DIRS / CODE_CHECK_SOURCE / ROOT_STACKS 等はすべてここから導出される。
+ *
+ * ## 新規スタック追加手順
+ *
+ * 1. STACK_DEFINITIONS に新しいスタック定義を追加
+ * 2. 各フィールド（dir, id, runtime, workflow, devcontainer など）を適切に設定
+ * 3. devcontainer フィールドに Dev Container 設定を記述
+ *    - buildMode: 'node' | 'ruby' | 'docker-compose'
+ *    - remoteUser: コンテナ内のユーザー（通常は 'node'）
+ *    - extensionSets: 必要なVSCode拡張機能セット
+ *    - extraSettings: VSCode 設定のカスタマイズ（オプション）
+ *    - composeKey: docker-compose ファイルの種類（docker-compose の場合）
+ *    - full: full-templates 版の設定（オプション）
+ * 4. shared/npm/<stack>.json を作成（hasNpm=true の場合）
+ * 5. shared/gemfile/Gemfile.<stack> を作成（hasGemfile=true の場合）
+ * 6. yarn generate:all で自動生成
+ *
+ * ## 設定の一元性
+ *
+ * STACK_DEFINITIONS は単一の真実の源（Single Source of Truth）として機能します。
+ * ここに記述された情報から以下が自動導出されます：
+ * - package.json / Gemfile の生成箇所
+ * - .node-version / .ruby-version の配布先
+ * - GitHub Workflows の生成
+ * - .devcontainer/devcontainer.json の生成
+ * - ルート CI 設定
  */
 
 import type { DevcontainerStackConfig } from './devcontainer-types.js';

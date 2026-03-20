@@ -1,5 +1,25 @@
 /**
  * Error handling utilities for generation scripts.
+ *
+ * ## Error Handling Pattern
+ *
+ * すべての生成スクリプト（gen-*.ts）では、try-catch で GenerationError または他のエラーをキャッチし、
+ * handleGenerationError() を使って統一されたエラー出力を行います。
+ *
+ * ### 使用例
+ *
+ * ```typescript
+ * try {
+ *   // 生成処理
+ * } catch (error) {
+ *   handleGenerationError(error);
+ * }
+ * ```
+ *
+ * このパターンにより：
+ * - エラーメッセージが統一される
+ * - コンテキスト情報が適切に出力される
+ * - プロセスが確実に終了する (exit code 1)
  */
 
 import { existsSync, statSync } from 'fs';

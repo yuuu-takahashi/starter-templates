@@ -2,6 +2,23 @@
  * Generates README.md for each template.
  * Run via generate-configs.ts
  * Template: shared/readme/README.md.hbs
+ *
+ * ## 生成プロセス
+ *
+ * 1. TEMPLATE_README_CONFIGS から各テンプレートの設定を取得
+ * 2. buildStackSection() で「主なライブラリ」「主な Gem」「拡張機能」セクションを生成
+ *    - npm/gemfile ファイルが存在しない場合は existsSync でチェック（エラーなく黙ってスキップ）
+ * 3. prepareTemplateContext() で Handlebars テンプレート用のコンテキストを準備
+ * 4. shared/readme/README.md.hbs で README.md を生成
+ * 5. outputDir で出力先を決定
+ *
+ * ## outputDir の重要性
+ *
+ * - minimal テンプレート: outputDir なし → minimal-templates/${id} に出力
+ * - full テンプレート: outputDir 指定 → full-templates/${id} に出力
+ *
+ * 従来のハック（-full サフィックスから出力先を計算）は廃止され、
+ * 明示的な outputDir で管理する構造に変更されました。
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'fs';

@@ -3,6 +3,28 @@
  * scripts/generate-configs.ts → gen-readme.ts で各 templates/<id>/README.md を生成。
  * テンプレート: shared/readme/README.md.hbs
  * 共通の文面はテンプレート内で一元管理し、テンプレートごとの差分は config のみで指定する。
+ *
+ * ## TemplateReadmeConfig の主要フィールド
+ *
+ * - id: config の識別子（ファイルとの対応用）
+ * - outputDir: README の出力先（例: 'full-templates/nextjs'）
+ *   - 未指定時は minimal-templates/${id} に出力される
+ *   - full-templates は outputDir で明示的に指定する（-full サフィックスハックなし）
+ * - npmStack: shared/npm/${stack}.json を参照して「主なライブラリ」セクションを生成
+ * - gemfileStack: shared/gemfile/Gemfile.${stack} を参照して「主な Gem」セクションを生成
+ * - extensionSets: shared/devcontainer/defaults.json から拡張機能セットを取得
+ * - devGuide: 開発ガイドのセクション（コマンド集）
+ *
+ * ## 出力先の決定ロジック
+ *
+ * ```
+ * outputDir が定義されている
+ *   → join(ROOT, outputDir) に出力
+ * outputDir が undefined
+ *   → join(ROOT, minimal-templates, id) に出力
+ * ```
+ *
+ * これにより、minimal/full の差分を明示的に管理できます。
  */
 
 import type { ExtensionSetKey } from './devcontainer-types.js';
