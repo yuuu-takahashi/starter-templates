@@ -17,14 +17,13 @@ vi.mock('../lib/bundle-vendor-path.js', () => ({
   bundleInstallVendorPath: vi.fn(),
 }));
 
-import { existsSync, unlinkSync } from 'fs';
+import { existsSync } from 'fs';
 import { execSync } from 'child_process';
 import { bundleInstallVendorPath } from '../lib/bundle-vendor-path.js';
 import { setupRubyDeps } from '../setup-templates.js';
 import type { StackDefinition } from '../lib/stacks.js';
 
 const mockExistsSync = existsSync as ReturnType<typeof vi.fn>;
-const mockUnlinkSync = unlinkSync as ReturnType<typeof vi.fn>;
 const mockExecSync = execSync as ReturnType<typeof vi.fn>;
 const mockBundleInstall = bundleInstallVendorPath as ReturnType<typeof vi.fn>;
 
