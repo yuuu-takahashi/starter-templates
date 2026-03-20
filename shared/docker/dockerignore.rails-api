@@ -42,10 +42,6 @@
 /coverage/
 /spec/cassettes/
 
-# Ignore Kamal deployment
-/kamal-secrets/
-/config/deploy.yml.lock
-
 # Ignore Docker-related files
 /.dockerignore
 /Dockerfile*

@@ -19,9 +19,11 @@ interface PublicConfig {
 }
 
 const env = process.env;
+const isDevelopment = process.env.NODE_ENV === 'development';
+const defaultAppUrl = isDevelopment ? 'http://localhost:3009' : '';
 
 export const publicConfig: PublicConfig = {
-  APP_URL: env.NEXT_PUBLIC_APP_URL ?? '',
+  APP_URL: env.NEXT_PUBLIC_APP_URL ?? defaultAppUrl,
 };
 
 // ============================================
@@ -59,7 +61,7 @@ export const secretConfig: SecretConfig = {
 // ============================================
 // バリデーション
 // ============================================
-const requiredPublicEnvVars = ['NEXT_PUBLIC_APP_URL'] as const;
+const requiredPublicEnvVars = isDevelopment ? [] : (['NEXT_PUBLIC_APP_URL'] as const);
 
 export const validateEnv = () => {
   requiredPublicEnvVars.forEach((varName) => {

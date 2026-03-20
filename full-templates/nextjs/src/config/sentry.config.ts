@@ -10,7 +10,7 @@ export const sentryConfig = {
   dsn: secretConfig.SENTRY_DSN,
   enabled: serverConfig.IS_PRODUCTION && !!secretConfig.SENTRY_DSN,
   environment: process.env.SENTRY_ENVIRONMENT ?? serverConfig.ENV,
-  release: process.env.NEXT_PUBLIC_SENTRY_RELEASE ?? process.env.VERCEL_GIT_COMMIT_SHA,
+  release: process.env.NEXT_PUBLIC_SENTRY_RELEASE,
   // サンプリング設定（本番環境のみ）
   replaysOnErrorSampleRate: serverConfig.IS_PRODUCTION ? 1.0 : 0,
   replaysSessionSampleRate: serverConfig.IS_PRODUCTION ? 0.1 : 0,
