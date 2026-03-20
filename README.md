@@ -8,15 +8,164 @@
 
 このリポジトリで `yarn create-project` や `yarn generate:all` などを**ローカルで実行する**には、Node.js と Yarn が必要です。Dev Container で開く場合は不要です。
 
-- **Node.js**（推奨: v22 以上。テンプレートは Node 24 を想定）
+#### anyenv を使用した準備（推奨）
 
-  - [nodejs.org](https://nodejs.org/ja/) から LTS をインストールする
-  - または [nodenv](https://github.com/nodenv/nodenv) を使う場合:
+Ruby テンプレートも含めて複数のランタイムを扱う場合は、[anyenv](https://github.com/anyenv/anyenv) で統一管理できます。
+
+1. **anyenv のインストール**
+
+   ```bash
+   git clone https://github.com/anyenv/anyenv ~/.anyenv
+   echo 'export PATH="$HOME/.anyenv/bin:$PATH"' >> ~/.zshrc
+   eval "$(anyenv init -)"
+   ```
+
+2. **言語マネージャーをインストール（anyenv 対応言語）**
+
+   ```bash
+   anyenv install nodenv
+   anyenv install rbenv
+   anyenv install phpenv
+   anyenv install goenv
+   anyenv install pyenv
+   ```
+
+3. **各言語をインストール**
+
+   **anyenv で管理:**
+
+   ```bash
+   # 必須（このリポジトリ実行用）
+   nodenv install 24.11.0
+   rbenv install 3.3.6
+
+   # テンプレート用（必要に応じて）
+   phpenv install 8.3.0      # マイナーバージョンまで指定
+   goenv install 1.24.0       # マイナーバージョンまで指定
+   pyenv install 3.12.0       # マイナーバージョンまで指定
+   ```
+
+   **利用可能なバージョンを確認:**
+
+   ```bash
+   nodenv install --list | grep 24
+   rbenv install --list | grep 3.3
+   phpenv install --list | grep 8.3
+   goenv install --list | grep 1.24
+   pyenv install --list | grep 3.12
+   ```
+
+   **anyenv 非対応（専用ツール / 直接インストール）:**
+
+   - **.NET Core** (v8.0、ASP.NET Core テンプレート用)
+
+     ```bash
+     # Homebrew
+     brew install dotnet
+     # または Microsoft.com から直接インストール
+     ```
+
+   - **Rust** (stable、Rust テンプレート用)
+
+     ```bash
+     # rustup（推奨）
+     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+     source $HOME/.cargo/env
+     rustup install stable
+     ```
+
+4. **このリポジトリで言語をセットアップ**
+
+   ```bash
+   cd starter-templates
+   ```
+
+   リポジトリルートに `.node-version`、`.ruby-version`、`.php-version`、`.go-version`、`.python-version`、`.dotnet-version`、`.rust-version` があるため、以降このディレクトリで自動的に対応バージョンが使用されます。
+
+4. **Yarn と依存関係をインストール**
+
+   ```bash
+   corepack enable
+   yarn install
+   ```
+
+#### 従来の方法（言語マネージャーまたは直接インストール）
+
+- **Node.js**（v24.11.0）
+
+  - [nodejs.org](https://nodejs.org/ja/) から LTS をインストール
+  - または [nodenv](https://github.com/nodenv/nodenv):
 
     ```bash
-    # nodenv の例（rbenv と同じ思想。Rails などと合わせて使いやすい）
-    nodenv install 24
-    nodenv local 24
+    nodenv install 24.11.0
+    nodenv local 24.11.0
+    ```
+
+- **Ruby**（v3.3.6、テンプレート用・scripts 実行用）
+
+  - [rbenv](https://github.com/rbenv/rbenv):
+
+    ```bash
+    rbenv install 3.3.6
+    rbenv local 3.3.6
+    ```
+
+- **PHP**（v8.3、Laravel テンプレート用）
+
+  - [phpenv](https://github.com/phpenv/phpenv):
+
+    ```bash
+    phpenv install 8.3.0     # マイナーバージョンまで指定
+    phpenv local 8.3.0
+    # 利用可能なバージョン確認: phpenv install --list | grep 8.3
+    ```
+
+  - または Homebrew:
+
+    ```bash
+    brew install php@8.3
+    ```
+
+- **Go**（v1.24、Go テンプレート用）
+
+  - [goenv](https://github.com/syndbg/goenv):
+
+    ```bash
+    goenv install 1.24.0     # マイナーバージョンまで指定
+    goenv local 1.24.0
+    # 利用可能なバージョン確認: goenv install --list | grep 1.24
+    ```
+
+  - または [go.dev](https://golang.org/dl/) から直接インストール
+
+- **Python**（v3.12、Django テンプレート用）
+
+  - [pyenv](https://github.com/pyenv/pyenv):
+
+    ```bash
+    pyenv install 3.12.0     # マイナーバージョンまで指定
+    pyenv local 3.12.0
+    # 利用可能なバージョン確認: pyenv install --list | grep 3.12
+    ```
+
+  - または [python.org](https://www.python.org/) から直接インストール
+
+- **.NET Core**（v8.0、ASP.NET Core テンプレート用）
+
+  - [microsoft.com](https://dotnet.microsoft.com/) から直接インストール
+  - または Homebrew:
+
+    ```bash
+    brew install dotnet
+    ```
+
+- **Rust**（stable、Rust テンプレート用）
+
+  - [rustup](https://rustup.rs/)（推奨）:
+
+    ```bash
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    rustup install stable
     ```
 
 - **Yarn**
@@ -41,6 +190,40 @@
   ```bash
   yarn install
   ```
+
+#### インストール確認
+
+環境が正しくセットアップされているか確認するには、以下のコマンドで各言語のバージョンを確認できます。
+
+**このリポジトリで必須:**
+
+```bash
+node --version        # Node.js（v24 以上）
+ruby --version        # Ruby（3.3.6）
+yarn --version        # Yarn
+```
+
+**各テンプレート用途に応じて:**
+
+```bash
+php --version         # Laravel テンプレート用
+go version            # Go テンプレート用
+python --version      # Django テンプレート用
+dotnet --version      # ASP.NET Core テンプレート用
+rustc --version       # Rust テンプレート用
+```
+
+**anyenv を使用している場合:**
+
+ディレクトリを移動すると `.node-version` / `.ruby-version` などから自動的にバージョンが切り替わります:
+
+```bash
+cd minimal-templates/rails
+ruby --version         # 3.3.6（rails/.ruby-version から自動切り替え）
+
+cd ../django
+python --version       # 3.12（django/.python-version から自動切り替え）
+```
 
 ### Dev Container（リポジトリルート）
 

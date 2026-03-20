@@ -54,10 +54,10 @@ yarn create-project
 2. 開発サーバー起動
 
    ```bash
-   dotnet run
+   dotnet run --urls http://localhost:3005
    ```
 
-ブラウザで <http://localhost:5000> を開き、表示確認
+ブラウザで <http://localhost:3005> を開き、表示確認
 
 ## 開発作業ガイド
 

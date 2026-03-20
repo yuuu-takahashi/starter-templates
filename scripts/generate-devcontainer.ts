@@ -423,6 +423,10 @@ const STACKS: Stack[] = [
       containerEnv: CONTAINER_ENV_FIREWALL,
       postStartCommand: POST_START_FIREWALL,
       waitFor: 'postStartCommand',
+      forwardPorts: [3005],
+      portsAttributes: {
+        '3005': { label: 'ASP.NET Core', onAutoForward: 'openPreview' },
+      },
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...CSHARP_EXTENSIONS],
@@ -448,6 +452,10 @@ const STACKS: Stack[] = [
       containerEnv: CONTAINER_ENV_FIREWALL,
       postStartCommand: POST_START_FIREWALL,
       waitFor: 'postStartCommand',
+      forwardPorts: [3008],
+      portsAttributes: {
+        '3008': { label: 'Go (Gin)', onAutoForward: 'openPreview' },
+      },
       customizations: {
         vscode: {
           extensions: [...BASE_EXTENSIONS, ...GO_EXTENSIONS],
@@ -498,6 +506,10 @@ const STACKS: Stack[] = [
       containerEnv: CONTAINER_ENV_FIREWALL,
       postStartCommand: POST_START_FIREWALL,
       waitFor: 'postStartCommand',
+      forwardPorts: [3009],
+      portsAttributes: {
+        '3009': { label: 'Laravel', onAutoForward: 'openPreview' },
+      },
       customizations: {
         vscode: {
           extensions: [
@@ -527,9 +539,9 @@ const STACKS: Stack[] = [
       containerEnv: CONTAINER_ENV_FIREWALL,
       postStartCommand: POST_START_FIREWALL,
       waitFor: 'postStartCommand',
-      forwardPorts: [8000],
+      forwardPorts: [3006],
       portsAttributes: {
-        '8000': { label: 'Django', onAutoForward: 'openPreview' },
+        '3006': { label: 'Django', onAutoForward: 'openPreview' },
       },
       customizations: {
         vscode: {
@@ -709,7 +721,7 @@ export function run(): void {
     postStartCommand: NODE_POST_START,
     waitFor: 'postStartCommand',
     postCreateCommand: 'yarn install',
-    forwardPorts: [3001, 3002, 3003, 3004, 3007],
+    forwardPorts: [3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008, 3009],
     customizations: {
       vscode: {
         extensions: [

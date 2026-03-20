@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "create-project": "tsx scripts/select-template.ts",
-    "dev": "concurrently \"cd minimal-templates/nextjs && yarn dev\" \"cd minimal-templates/react && yarn dev\" \"cd minimal-templates/nodejs && yarn dev\" \"cd minimal-templates/rails && bin/rails server -p 3003\" \"cd minimal-templates/rails-api && bin/rails server -p 3004\" \"cd minimal-templates/ruby && ruby lib/hello.rb\" \"cd minimal-templates/sinatra && PORT=3007 bundle exec ruby index.rb\"",
+    "dev": "concurrently \"cd minimal-templates/nextjs && yarn dev\" \"cd minimal-templates/react && yarn dev\" \"cd minimal-templates/nodejs && yarn dev\" \"cd minimal-templates/rails && bin/rails server -p 3003\" \"cd minimal-templates/rails-api && bin/rails server -p 3004\" \"cd minimal-templates/ruby && ruby lib/hello.rb\" \"cd minimal-templates/sinatra && PORT=3007 bundle exec ruby index.rb\" \"cd minimal-templates/csharp && dotnet run --urls http://localhost:3005\" \"cd minimal-templates/django && . .venv/bin/activate && python manage.py runserver 3006\" \"cd minimal-templates/go && go run .\" \"cd minimal-templates/laravel && php artisan serve --port=3009\"",
     "generate:ci": "tsx scripts/generate-root-workflow.ts",
     "generate:devcontainer": "tsx scripts/generate-devcontainer.ts",
     "devcontainer": "devcontainer",

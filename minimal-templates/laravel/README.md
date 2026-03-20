@@ -69,10 +69,10 @@ yarn create-project
 3. 開発サーバー起動
 
    ```bash
-   php artisan serve
+   php artisan serve --port=3009
    ```
 
-ブラウザで <http://localhost:8000> を開き、表示確認
+ブラウザで <http://localhost:3009> を開き、表示確認
 
 ## 開発作業ガイド
 

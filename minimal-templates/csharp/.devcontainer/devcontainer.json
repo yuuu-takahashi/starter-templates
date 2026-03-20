@@ -26,6 +26,15 @@
   },
   "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
   "waitFor": "postStartCommand",
+  "forwardPorts": [
+    3005
+  ],
+  "portsAttributes": {
+    "3005": {
+      "label": "ASP.NET Core",
+      "onAutoForward": "openPreview"
+    }
+  },
   "customizations": {
     "vscode": {
       "extensions": [

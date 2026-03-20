@@ -14,6 +14,7 @@ import {
 } from "./lib/utils.js";
 import {
   DOCKERIGNORE_SOURCE,
+  DOTNET_VERSION_DIRS,
   FULL_DOCKERIGNORE_SOURCE,
   GITIGNORE_SOURCE,
   GO_VERSION_DIRS,
@@ -21,6 +22,7 @@ import {
   PHP_VERSION_DIRS,
   PYTHON_VERSION_DIRS,
   RUBY_VERSION_DIRS,
+  RUST_VERSION_DIRS,
   STACK_DEFINITIONS,
 } from "./lib/stacks.js";
 import { ensureFileExists, GenerationError } from "./lib/errors.js";
@@ -118,6 +120,26 @@ export const run = (): void => {
       for (const dir of PYTHON_VERSION_DIRS) {
         const outPath = join(ROOT, dir, ".python-version");
         writeFileSync(outPath, VERSIONS.python + "\n", "utf8");
+        logger.generated(outPath);
+      }
+    }
+
+    // ── .dotnet-version（shared/versions.json から生成）────────────────────────────
+
+    if (VERSIONS.dotnet) {
+      for (const dir of DOTNET_VERSION_DIRS) {
+        const outPath = join(ROOT, dir, ".dotnet-version");
+        writeFileSync(outPath, VERSIONS.dotnet + "\n", "utf8");
+        logger.generated(outPath);
+      }
+    }
+
+    // ── .rust-version（shared/versions.json から生成）──────────────────────────────
+
+    if (VERSIONS.rust) {
+      for (const dir of RUST_VERSION_DIRS) {
+        const outPath = join(ROOT, dir, ".rust-version");
+        writeFileSync(outPath, VERSIONS.rust + "\n", "utf8");
         logger.generated(outPath);
       }
     }

@@ -27,10 +27,10 @@
   "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
   "waitFor": "postStartCommand",
   "forwardPorts": [
-    8000
+    3006
   ],
   "portsAttributes": {
-    "8000": {
+    "3006": {
       "label": "Django",
       "onAutoForward": "openPreview"
     }

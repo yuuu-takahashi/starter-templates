@@ -60,7 +60,7 @@ yarn create-project
    go run .
    ```
 
-ブラウザで <http://localhost:8080> を開き、表示確認
+ブラウザで <http://localhost:3008> を開き、表示確認
 
 ## 開発作業ガイド
 

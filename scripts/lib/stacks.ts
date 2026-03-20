@@ -247,6 +247,16 @@ export const GO_VERSION_DIRS: readonly string[] = STACK_DEFINITIONS.filter(
   (s) => s.runtime === 'go',
 ).map((s) => s.dir);
 
+/** .dotnet-version を配布するテンプレート */
+export const DOTNET_VERSION_DIRS: readonly string[] = STACK_DEFINITIONS.filter(
+  (s) => s.runtime === 'dotnet',
+).map((s) => s.dir);
+
+/** .rust-version を配布するテンプレート */
+export const RUST_VERSION_DIRS: readonly string[] = STACK_DEFINITIONS.filter(
+  (s) => s.runtime === 'rust',
+).map((s) => s.dir);
+
 /** code-check.yml の元ワークフロー名（shared/workflows/ 内のファイル名） */
 export const CODE_CHECK_SOURCE: Readonly<Record<string, string>> =
   Object.fromEntries(

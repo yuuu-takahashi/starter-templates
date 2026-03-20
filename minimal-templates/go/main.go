@@ -14,7 +14,7 @@ func main() {
 		c.String(http.StatusOK, "Hello, World!")
 	})
 
-	addr := ":8080"
+	addr := ":3008"
 	log.Printf("Listening on http://localhost%s", addr)
 	if err := r.Run(addr); err != nil {
 		log.Fatal(err)

@@ -26,6 +26,15 @@
   },
   "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
   "waitFor": "postStartCommand",
+  "forwardPorts": [
+    3009
+  ],
+  "portsAttributes": {
+    "3009": {
+      "label": "Laravel",
+      "onAutoForward": "openPreview"
+    }
+  },
   "customizations": {
     "vscode": {
       "extensions": [
