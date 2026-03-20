@@ -1,4 +1,4 @@
-import { secretConfig, serverConfig } from './src/config/env';
+import { secretConfig, serverConfig } from './env';
 
 /**
  * Sentry エラートラッキング設定
