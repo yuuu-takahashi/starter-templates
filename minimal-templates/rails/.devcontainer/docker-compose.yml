@@ -7,29 +7,14 @@ services:
       args:
         TZ: ${TZ:-UTC}
         CLAUDE_CODE_VERSION: latest
-    # node_modules / vendor/bundle はワークスペースの bind のみ（anthropics/claude-code .devcontainer と同様。DB 以外は名前付きボリュームにしない）。
+    # node_modules / vendor/bundle はワークスペースの bind のみ（anthropics/claude-code .devcontainer と同様。）
     volumes:
       - ..:/workspace
     environment:
       RAILS_ENV: development
-      DATABASE_HOST: db
-      DATABASE_USER: root
-      DATABASE_PASSWORD: password
       BUNDLER_VERSION: 2.3.7
     tty: true
     stdin_open: true
     # sleep infinity: postStart（ファイアウォール）より先に yarn/bundle が落ちてコンテナが止まるのを防ぐ。
-    # 依存インストールは CI の devcontainer exec またはローカルで実行する（ruby-db テンプレートと同じ方針）。
+    # 依存インストールは CI の devcontainer exec またはローカルで実行する。
     command: ['sleep', 'infinity']
-    depends_on:
-      - db
-
-  db:
-    image: mysql:8.4
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-    volumes:
-      - db_data:/var/lib/mysql
-
-volumes:
-  db_data:

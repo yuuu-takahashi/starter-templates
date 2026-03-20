@@ -19,20 +19,9 @@ jobs:
     container:
       image: ruby:3.3.6
 
-    services:
-      db:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: password
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
     env:
       APP_ENV: test
       RACK_ENV: test
-      DATABASE_HOST: db
-      DATABASE_USER: root
-      DATABASE_PASSWORD: password
-      DATABASE_NAME: template-sinatra_test
 
     steps:
       - name: Checkout code

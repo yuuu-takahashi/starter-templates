@@ -137,16 +137,6 @@ jobs:
         working-directory: minimal-templates/rails
     container:
       image: ruby:3.3.6
-    services:
-      db:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: password
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-    env:
-      DATABASE_HOST: db
-      DATABASE_USER: root
-      DATABASE_PASSWORD: password
   rails_api:
     needs: changes
     if: needs.changes.outputs.rails_api == 'true'
@@ -173,12 +163,6 @@ jobs:
         working-directory: minimal-templates/rails-api
     container:
       image: ruby:3.3.6
-    services:
-      db:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: password
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
   sinatra:
     needs: changes
     if: needs.changes.outputs.sinatra == 'true'
@@ -203,19 +187,9 @@ jobs:
         working-directory: minimal-templates/sinatra
     container:
       image: ruby:3.3.6
-    services:
-      db:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: password
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     env:
       APP_ENV: test
       RACK_ENV: test
-      DATABASE_HOST: db
-      DATABASE_USER: root
-      DATABASE_PASSWORD: password
-      DATABASE_NAME: template-sinatra_test
   full_nextjs:
     needs: changes
     if: needs.changes.outputs.full_nextjs == 'true'
@@ -257,9 +231,3 @@ jobs:
         working-directory: full-templates/rails-api
     container:
       image: ruby:3.3.6
-    services:
-      db:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: password
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3

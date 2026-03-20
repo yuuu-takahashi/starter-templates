@@ -3,7 +3,6 @@
   "sinatra": "軽量 Web フレームワーク",
   "puma": "マルチスレッド Web サーバー",
   "rackup": "Rack アプリの起動ツール",
-  "mysql2": "MySQL クライアント",
   "bcrypt": "パスワードのハッシュ化",
   "brakeman": "セキュリティ脆弱性スキャナー",
   "dotenv": "環境変数を .env から読み込む",
