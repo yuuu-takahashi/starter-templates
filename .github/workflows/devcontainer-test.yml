@@ -32,6 +32,7 @@ jobs:
       minimal-sinatra: ${{ steps.filter.outputs.minimal-sinatra }}
       minimal-ruby: ${{ steps.filter.outputs.minimal-ruby }}
       full-nextjs: ${{ steps.filter.outputs.full-nextjs }}
+      full-rails-api: ${{ steps.filter.outputs.full-rails-api }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -50,6 +51,7 @@ jobs:
             minimal-sinatra: 'minimal-templates/sinatra/.devcontainer/**'
             minimal-ruby: 'minimal-templates/ruby/.devcontainer/**'
             full-nextjs: 'full-templates/nextjs/.devcontainer/**'
+            full-rails-api: 'full-templates/rails-api/.devcontainer/**'
 
   build-and-test:
     runs-on: ubuntu-latest
@@ -92,6 +94,10 @@ jobs:
             path: full-templates/nextjs
             output: ${{ needs.detect-changes.outputs.full-nextjs }}
             language: node
+          - template: full-rails-api
+            path: full-templates/rails-api
+            output: ${{ needs.detect-changes.outputs.full-rails-api }}
+            language: ruby
     steps:
       - uses: actions/checkout@v4
         if: matrix.output == 'true'
