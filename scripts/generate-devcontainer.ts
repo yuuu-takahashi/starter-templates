@@ -582,22 +582,30 @@ function dockerfileHeader(srcFile: string): string {
 
 const FIREWALL_PLACEHOLDER = '__ALLOWED_FIREWALL_DOMAINS__';
 
+/** Build the firewall domain block for init-firewall.sh based on a list of domains */
+export function buildFirewallDomainBlock(domains: string[]): string {
+  if (domains.length === 0) {
+    return '';
+  }
+  if (domains.length === 1) {
+    return `  "${domains[0]}"`;
+  }
+  return domains
+    .map((d, i) =>
+      i === 0
+        ? `"${d}" \\`
+        : i < domains.length - 1
+          ? `  "${d}" \\`
+          : `  "${d}"`,
+    )
+    .join('\n');
+}
+
 // Copy Dockerfiles and init-firewall.sh to each template (domain list is per-stack)
 function writeInitFirewall(outDir: string, templateDir: string): void {
   const slug = templateDir.replace(/^(minimal|full)-templates\//, '');
   const domains = getFirewallDomainsForStack(slug);
-  const domainBlock =
-    domains.length === 1
-      ? `  "${domains[0]}"`
-      : domains
-          .map((d, i) =>
-            i === 0
-              ? `"${d}" \\`
-              : i < domains.length - 1
-                ? `  "${d}" \\`
-                : `  "${d}"`,
-          )
-          .join('\n');
+  const domainBlock = buildFirewallDomainBlock(domains);
 
   const firewallOut = join(outDir, 'init-firewall.sh');
   let firewallContent = readFileSync(INIT_FIREWALL_SRC, 'utf8');

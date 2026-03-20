@@ -8,6 +8,7 @@ import { join } from "path";
 import YAML from "yaml";
 import { ROOT, RSPEC_COMMON, SHARED_RUBOCOP, deepMerge } from "./lib/utils.js";
 import { TEMPLATES_DIR } from "./lib/stacks.js";
+import { logger } from "./lib/logger.js";
 
 export function run(): void {
   // ── .rspec（共通オプション + 各 template の --require）────────────────────
@@ -24,7 +25,7 @@ export function run(): void {
     const content = requireLines + "\n" + rspecCommonContent;
     const outPath = join(ROOT, dir, ".rspec");
     writeFileSync(outPath, content, "utf8");
-    console.log("Generated:", outPath);
+    logger.generated(outPath);
   }
 
   // ── .rubocop.yml（ベース + テンプレート用 fragment をマージ）──────────────
@@ -49,6 +50,6 @@ export function run(): void {
   for (const { dir, content } of RUBOCOP_OUT) {
     const outPath = join(ROOT, dir, ".rubocop.yml");
     writeFileSync(outPath, content, "utf8");
-    console.log("Generated:", outPath);
+    logger.generated(outPath);
   }
 }
