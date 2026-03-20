@@ -1,6 +1,6 @@
 /**
  * Template README.md generation metadata.
- * Config is processed by gen-readme.ts and renders via shared/readme/README.md.hbs
+ * Config is processed by generate-readme.ts and renders via shared/readme/README.md.hbs
  * outputDir: minimal-templates/${id} (default) or explicit full-templates/${id}
  */
 

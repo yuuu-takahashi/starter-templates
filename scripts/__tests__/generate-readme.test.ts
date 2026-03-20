@@ -6,7 +6,7 @@ import { TEMPLATE_README_CONFIGS } from '../lib/template-readme-config.js';
 import {
   buildStackSection,
   prepareTemplateContext,
-} from '../gen-readme.js';
+} from '../generate-readme.js';
 
 // ── 生成済み README ファイル ─────────────────────────────────────────────────
 

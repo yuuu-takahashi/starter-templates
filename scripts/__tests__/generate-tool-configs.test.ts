@@ -10,7 +10,7 @@ import {
   SHARED_TSCONFIG,
 } from '../lib/utils.js';
 import { TEMPLATES_DIR } from '../lib/stacks.js';
-import { ESLINT_SOURCE } from '../gen-tool-configs.js';
+import { ESLINT_SOURCE } from '../generate-tool-configs.js';
 
 const td = TEMPLATES_DIR;
 

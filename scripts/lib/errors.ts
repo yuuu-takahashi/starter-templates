@@ -3,7 +3,7 @@
  *
  * ## Error Handling Pattern
  *
- * すべての生成スクリプト（gen-*.ts）では、try-catch で GenerationError または他のエラーをキャッチし、
+ * すべての生成スクリプト（generate-*.ts）では、try-catch で GenerationError または他のエラーをキャッチし、
  * handleGenerationError() を使って統一されたエラー出力を行います。
  *
  * ### 使用例

@@ -9,11 +9,11 @@
  * Run: yarn generate:configs
  */
 
-import { run as genCommonFiles } from './gen-common-files.js';
-import { run as genToolConfigs } from './gen-tool-configs.js';
-import { run as genRubyConfigs } from './gen-ruby-configs.js';
-import { run as genWorkflows } from './gen-workflows.js';
-import { run as genReadme } from './gen-readme.js';
+import { run as genCommonFiles } from './generate-common-files.js';
+import { run as genToolConfigs } from './generate-tool-configs.js';
+import { run as genRubyConfigs } from './generate-ruby-configs.js';
+import { run as genWorkflows } from './generate-workflows.js';
+import { run as genReadme } from './generate-readme.js';
 import { logger } from './lib/logger.js';
 
 const run = async (): Promise<void> => {
