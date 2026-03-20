@@ -1,0 +1,40 @@
+{
+  "$schema": "https://markuplint.dev/schema.json",
+  "extends": ["markuplint:recommended"],
+  "parser": {
+    ".jsx$": "@markuplint/jsx-parser",
+    ".tsx$": "@markuplint/jsx-parser"
+  },
+  "specs": {
+    ".jsx$": "@markuplint/react-spec",
+    ".tsx$": "@markuplint/react-spec"
+  },
+  "excludeFiles": ["**/*.stories.tsx", "**/*.test.tsx"],
+  "rules": {
+    "required-element": false,
+    "permitted-contents": false,
+    "heading-levels": false
+  },
+  "nodeRules": [
+    {
+      "selector": "meta",
+      "rules": { "invalid-attr": false }
+    },
+    {
+      "selector": "html",
+      "rules": { "required-attr": false }
+    },
+    {
+      "selector": "head",
+      "rules": { "required-element": false }
+    },
+    {
+      "selector": "ElementText",
+      "rules": { "require-accessible-name": false }
+    },
+    {
+      "selector": "[role='option']",
+      "rules": { "wai-aria": false }
+    }
+  ]
+}

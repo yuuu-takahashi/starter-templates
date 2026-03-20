@@ -1,0 +1,43 @@
+# Logs
+log/
+*.log
+
+# Database
+*.sqlite3
+*.sqlite3-journal
+*.sqlite
+db/schema.rb
+
+# Environment
+.env*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+vendor/bundle/
+node_modules/
+yarn-error.log
+
+# Build artifacts
+public/assets/
+public/packs/
+tmp/
+coverage/
+
+# Kamal
+kamal-secrets/
+config/deploy.yml.lock
+
+# Test
+spec/fixtures/*
+spec/cassettes/

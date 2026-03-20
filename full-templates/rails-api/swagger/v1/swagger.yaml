@@ -1,0 +1,77 @@
+openapi: 3.0.3
+info:
+  title: Rails API
+  version: v1
+  description: Production-ready Rails API template with service layer, serializers, and error handling
+
+servers:
+  - url: http://localhost:3000
+    description: Development server
+    variables:
+      basePath:
+        default: /api/v1
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token authentication
+
+  schemas:
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - timestamp
+      properties:
+        status:
+          type: string
+          example: "ok"
+        timestamp:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: string
+              example: "internal_error"
+            message:
+              type: string
+              example: "Internal server error"
+            errors:
+              type: object
+              description: Additional error details
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      tags:
+        - Health
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+        "500":
+          description: Service error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+security:
+  - bearerAuth: []

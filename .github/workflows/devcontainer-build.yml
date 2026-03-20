@@ -27,6 +27,7 @@ jobs:
       sinatra: ${{ steps.filter.outputs.sinatra }}
       ruby: ${{ steps.filter.outputs.ruby }}
       full_nextjs: ${{ steps.filter.outputs.full_nextjs }}
+      full_rails_api: ${{ steps.filter.outputs.full_rails_api }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -49,6 +50,8 @@ jobs:
               - 'minimal-templates/ruby/.devcontainer/**'
             full_nextjs:
               - 'full-templates/nextjs/.devcontainer/**'
+            full_rails_api:
+              - 'full-templates/rails-api/.devcontainer/**'
   nextjs:
     needs: changes
     if: needs.changes.outputs.nextjs == 'true'
@@ -128,4 +131,14 @@ jobs:
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: full-templates/nextjs/.devcontainer/Dockerfile
+          failure-threshold: error
+  full_rails_api:
+    needs: changes
+    if: needs.changes.outputs.full_rails_api == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: full-templates/rails-api/.devcontainer/Dockerfile
           failure-threshold: error

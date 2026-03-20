@@ -26,6 +26,7 @@ jobs:
       rails_api: ${{ steps.filter.outputs.rails_api }}
       sinatra: ${{ steps.filter.outputs.sinatra }}
       full_nextjs: ${{ steps.filter.outputs.full_nextjs }}
+      full_rails_api: ${{ steps.filter.outputs.full_rails_api }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -46,6 +47,8 @@ jobs:
               - 'minimal-templates/sinatra/**'
             full_nextjs:
               - 'full-templates/nextjs/**'
+            full_rails_api:
+              - 'full-templates/rails-api/**'
   nextjs:
     needs: changes
     if: needs.changes.outputs.nextjs == 'true'
@@ -228,3 +231,35 @@ jobs:
         run: yarn install
       - name: test
         run: yarn test
+  full_rails_api:
+    needs: changes
+    if: needs.changes.outputs.full_rails_api == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache Ruby gems
+        uses: actions/cache@v4
+        with:
+          path: full-templates/rails-api/vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('full-templates/rails-api/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: Install dependencies
+        run: |
+          bundle config set --local path vendor/bundle
+          bundle install
+        working-directory: full-templates/rails-api
+      - name: Run tests
+        run: |
+          cp .env.test .env
+          bundle exec rails db:create db:migrate
+          bundle exec rspec
+        working-directory: full-templates/rails-api
+    container:
+      image: ruby:3.3.6
+    services:
+      db:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
