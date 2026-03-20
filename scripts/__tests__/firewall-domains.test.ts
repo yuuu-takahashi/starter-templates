@@ -22,9 +22,9 @@ describe('firewall-domains', () => {
       expect(domains).toContain('rubygems.org');
     });
 
-    it('laravel スタックは packagist.org を含む', () => {
-      const domains = getFirewallDomainsForStack('laravel');
-      expect(domains).toContain('packagist.org');
+    it('sinatra スタックは rubygems.org を含む', () => {
+      const domains = getFirewallDomainsForStack('sinatra');
+      expect(domains).toContain('rubygems.org');
     });
 
     it('unknown スタックはエラーなく共通ドメインのみを返す', () => {
@@ -44,7 +44,7 @@ describe('firewall-domains', () => {
   describe('STACK_FIREWALL_DOMAINS 一貫性', () => {
     it('全キーが STACK_DEFINITIONS の id に含まれる', () => {
       const stackIds = new Set(
-        STACK_DEFINITIONS.map((s) => s.id.replace(/_/g, '-'))
+        STACK_DEFINITIONS.map((s) => s.id.replace(/_/g, '-')),
       );
       for (const key of Object.keys(STACK_FIREWALL_DOMAINS)) {
         const normalizedKey = key.replace(/_/g, '-');

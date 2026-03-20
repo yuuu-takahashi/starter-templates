@@ -275,7 +275,9 @@ const buildTestWorkflow = (): Record<string, WorkflowJob> => {
   const jobs: Record<string, WorkflowJob> = {};
 
   const ALL_TEST_SOURCE = { ...TEST_SOURCE, ...FULL_TEST_SOURCE };
-  const testStacks = [...STACKS, ...FULL_ROOT_STACKS].filter((s) => ALL_TEST_SOURCE[s.dir]);
+  const testStacks = [...STACKS, ...FULL_ROOT_STACKS].filter(
+    (s) => ALL_TEST_SOURCE[s.dir],
+  );
   const filtersBlock = testStacks
     .map((s) => `${s.id}:\n  - '${s.pathFilter}'`)
     .join('\n');
@@ -387,7 +389,10 @@ export function run(): void {
     'templates',
     'code-check.yml',
   );
-  const codeCheckTemplate = readFileSync(codeCheckTemplatePath, 'utf8').trimEnd();
+  const codeCheckTemplate = readFileSync(
+    codeCheckTemplatePath,
+    'utf8',
+  ).trimEnd();
   const codeCheckJobs = buildRootWorkflow();
   const codeCheckJobsYaml = YAML.stringify(
     { jobs: codeCheckJobs },
@@ -407,7 +412,11 @@ export function run(): void {
   const testJobs = buildTestWorkflow();
   const testJobsYaml = YAML.stringify({ jobs: testJobs }, { lineWidth: 0 });
   const testOutPath = join(ROOT, '.github', 'workflows', 'test.yml');
-  writeFileSync(testOutPath, header + testTemplate + '\n' + testJobsYaml, 'utf8');
+  writeFileSync(
+    testOutPath,
+    header + testTemplate + '\n' + testJobsYaml,
+    'utf8',
+  );
   logger.generated(testOutPath);
 
   // Generate devcontainer-build.yml

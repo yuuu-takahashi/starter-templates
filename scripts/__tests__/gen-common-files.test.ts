@@ -1,16 +1,13 @@
 import { describe, it, expect, vi } from 'vitest';
 import { STACK_DEFINITIONS } from '../lib/stacks.js';
-import {
-  NODE_VERSION_DIRS,
-  RUBY_VERSION_DIRS,
-} from '../lib/stacks.js';
+import { NODE_VERSION_DIRS, RUBY_VERSION_DIRS } from '../lib/stacks.js';
 import { VERSIONS } from '../lib/utils.js';
 
 describe('gen-common-files ロジック', () => {
   describe('.node-version 配布対象', () => {
     it('runtime === "node" を満たすスタックに .node-version が必要', () => {
       const nodeRuntimes = STACK_DEFINITIONS.filter(
-        (s) => s.runtime === 'node'
+        (s) => s.runtime === 'node',
       );
       expect(nodeRuntimes.length).toBeGreaterThan(0);
       nodeRuntimes.forEach((s) => {
@@ -35,7 +32,7 @@ describe('gen-common-files ロジック', () => {
   describe('.ruby-version 配布対象', () => {
     it('runtime === "ruby" を満たすスタックに .ruby-version が必要', () => {
       const rubyRuntimes = STACK_DEFINITIONS.filter(
-        (s) => s.runtime === 'ruby'
+        (s) => s.runtime === 'ruby',
       );
       expect(rubyRuntimes.length).toBeGreaterThan(0);
       rubyRuntimes.forEach((s) => {
@@ -49,15 +46,17 @@ describe('gen-common-files ロジック', () => {
       const nodeVersionDirsCombined = [
         ...NODE_VERSION_DIRS,
         ...STACK_DEFINITIONS.filter(
-          (s) => s.fullDir != null && (s.runtime === 'node' || s.hasNpm)
+          (s) => s.fullDir != null && (s.runtime === 'node' || s.hasNpm),
         ).map((s) => s.fullDir!),
         ...STACK_DEFINITIONS.filter(
-          (s) => s.hasNpm && s.runtime !== 'node'
+          (s) => s.hasNpm && s.runtime !== 'node',
         ).map((s) => s.dir),
       ];
       const unique = new Set(nodeVersionDirsCombined);
       // Note: may have dups due to multiple sources, but should all be valid paths
-      expect(nodeVersionDirsCombined.length).toBeGreaterThanOrEqual(unique.size);
+      expect(nodeVersionDirsCombined.length).toBeGreaterThanOrEqual(
+        unique.size,
+      );
     });
 
     it('.ruby-version 配布先に重複がない', () => {

@@ -76,7 +76,9 @@ describe('Logger', () => {
       verboseLogger.start('operation');
       verboseLogger.end('operation');
       expect(logSpy).toHaveBeenCalledWith('⏱️  Starting: operation');
-      expect(logSpy).toHaveBeenCalledWith(expect.stringMatching(/⏱️ {2}Completed: operation \(\d+ms\)/));
+      expect(logSpy).toHaveBeenCalledWith(
+        expect.stringMatching(/⏱️ {2}Completed: operation \(\d+ms\)/),
+      );
     });
 
     it('silent mode で start/end は出力しない', () => {

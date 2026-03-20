@@ -181,14 +181,6 @@ async function main(): Promise<void> {
     console.log(
       '  bundle config set --local path vendor/bundle && bundle install && yarn install',
     );
-  } else if (chosen.slug === 'laravel') {
-    console.log('  composer install');
-  } else if (chosen.slug === 'django') {
-    console.log('  pip install -r requirements.txt');
-  } else if (chosen.slug === 'csharp') {
-    console.log('  dotnet restore');
-  } else if (chosen.slug === 'go' || chosen.slug === 'rust') {
-    console.log('  (必要に応じて依存取得)');
   } else {
     console.log('  yarn install');
   }

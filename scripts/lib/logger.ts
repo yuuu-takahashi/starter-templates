@@ -62,4 +62,5 @@ export class Logger {
 // Singleton instance
 export const logger = new Logger();
 
-export const createLogger = (options: LoggerOptions): Logger => new Logger(options);
+export const createLogger = (options: LoggerOptions): Logger =>
+  new Logger(options);

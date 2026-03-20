@@ -29,13 +29,8 @@ jobs:
       minimal-react: ${{ steps.filter.outputs.minimal-react }}
       minimal-rails: ${{ steps.filter.outputs.minimal-rails }}
       minimal-rails-api: ${{ steps.filter.outputs.minimal-rails-api }}
-      minimal-laravel: ${{ steps.filter.outputs.minimal-laravel }}
       minimal-sinatra: ${{ steps.filter.outputs.minimal-sinatra }}
       minimal-ruby: ${{ steps.filter.outputs.minimal-ruby }}
-      minimal-csharp: ${{ steps.filter.outputs.minimal-csharp }}
-      minimal-go: ${{ steps.filter.outputs.minimal-go }}
-      minimal-rust: ${{ steps.filter.outputs.minimal-rust }}
-      minimal-django: ${{ steps.filter.outputs.minimal-django }}
       full-nextjs: ${{ steps.filter.outputs.full-nextjs }}
     steps:
       - uses: actions/checkout@v4
@@ -52,13 +47,8 @@ jobs:
             minimal-react: 'minimal-templates/react/.devcontainer/**'
             minimal-rails: 'minimal-templates/rails/.devcontainer/**'
             minimal-rails-api: 'minimal-templates/rails-api/.devcontainer/**'
-            minimal-laravel: 'minimal-templates/laravel/.devcontainer/**'
             minimal-sinatra: 'minimal-templates/sinatra/.devcontainer/**'
             minimal-ruby: 'minimal-templates/ruby/.devcontainer/**'
-            minimal-csharp: 'minimal-templates/csharp/.devcontainer/**'
-            minimal-go: 'minimal-templates/go/.devcontainer/**'
-            minimal-rust: 'minimal-templates/rust/.devcontainer/**'
-            minimal-django: 'minimal-templates/django/.devcontainer/**'
             full-nextjs: 'full-templates/nextjs/.devcontainer/**'
 
   build-and-test:
@@ -90,10 +80,6 @@ jobs:
             path: minimal-templates/rails-api
             output: ${{ needs.detect-changes.outputs.minimal-rails-api }}
             language: ruby
-          - template: minimal-laravel
-            path: minimal-templates/laravel
-            output: ${{ needs.detect-changes.outputs.minimal-laravel }}
-            language: php
           - template: minimal-sinatra
             path: minimal-templates/sinatra
             output: ${{ needs.detect-changes.outputs.minimal-sinatra }}
@@ -102,22 +88,6 @@ jobs:
             path: minimal-templates/ruby
             output: ${{ needs.detect-changes.outputs.minimal-ruby }}
             language: ruby
-          - template: minimal-csharp
-            path: minimal-templates/csharp
-            output: ${{ needs.detect-changes.outputs.minimal-csharp }}
-            language: csharp
-          - template: minimal-go
-            path: minimal-templates/go
-            output: ${{ needs.detect-changes.outputs.minimal-go }}
-            language: go
-          - template: minimal-rust
-            path: minimal-templates/rust
-            output: ${{ needs.detect-changes.outputs.minimal-rust }}
-            language: rust
-          - template: minimal-django
-            path: minimal-templates/django
-            output: ${{ needs.detect-changes.outputs.minimal-django }}
-            language: python
           - template: full-nextjs
             path: full-templates/nextjs
             output: ${{ needs.detect-changes.outputs.full-nextjs }}
@@ -147,23 +117,6 @@ jobs:
             ruby)
               devcontainer exec --workspace-folder "${{ matrix.path }}" sh -lc "bundle config set --local path vendor/bundle && bundle install"
               ;;
-            python)
-              devcontainer exec --workspace-folder "${{ matrix.path }}" pip install -r requirements.txt 2>/dev/null || true
-              ;;
-            php)
-              devcontainer exec --workspace-folder "${{ matrix.path }}" composer install
-              ;;
-            go)
-              # 制限 egress + proxy.golang.org の anycast で許可 IP とずれることがあるため origin 直取り。
-              # go.sum が必要分を含む場合、checksum DB へは問い合わせない（go.dev/ref/mod#checksum-database）。
-              devcontainer exec --workspace-folder "${{ matrix.path }}" env GOPROXY=direct go mod download
-              ;;
-            csharp)
-              devcontainer exec --workspace-folder "${{ matrix.path }}" dotnet restore
-              ;;
-            rust)
-              echo "Rust dependencies managed by Cargo, no separate install needed"
-              ;;
             *)
               echo "Dependencies installation not configured for ${{ matrix.language }}"
               ;;
@@ -179,21 +132,6 @@ jobs:
               ;;
             ruby)
               devcontainer exec --workspace-folder "${{ matrix.path }}" rubocop 2>/dev/null || echo "Rubocop not configured"
-              ;;
-            python)
-              devcontainer exec --workspace-folder "${{ matrix.path }}" flake8 . 2>/dev/null || echo "Flake8 not configured"
-              ;;
-            php)
-              devcontainer exec --workspace-folder "${{ matrix.path }}" ./vendor/bin/pint 2>/dev/null || devcontainer exec --workspace-folder "${{ matrix.path }}" phpstan analyse 2>/dev/null || echo "PHP linting not configured"
-              ;;
-            rust)
-              devcontainer exec --workspace-folder "${{ matrix.path }}" cargo clippy -- -D warnings 2>/dev/null || echo "Cargo clippy not available"
-              ;;
-            go)
-              devcontainer exec --workspace-folder "${{ matrix.path }}" golangci-lint run 2>/dev/null || echo "Golangci-lint not configured"
-              ;;
-            csharp)
-              devcontainer exec --workspace-folder "${{ matrix.path }}" dotnet format --verify-no-changes 2>/dev/null || echo "Dotnet format not configured"
               ;;
             *)
               echo "Linting not configured for ${{ matrix.language }}"

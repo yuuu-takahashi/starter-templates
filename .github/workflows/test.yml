@@ -24,12 +24,7 @@ jobs:
       react: ${{ steps.filter.outputs.react }}
       rails: ${{ steps.filter.outputs.rails }}
       rails_api: ${{ steps.filter.outputs.rails_api }}
-      laravel: ${{ steps.filter.outputs.laravel }}
       sinatra: ${{ steps.filter.outputs.sinatra }}
-      csharp: ${{ steps.filter.outputs.csharp }}
-      go: ${{ steps.filter.outputs.go }}
-      rust: ${{ steps.filter.outputs.rust }}
-      django: ${{ steps.filter.outputs.django }}
       full_nextjs: ${{ steps.filter.outputs.full_nextjs }}
     steps:
       - uses: actions/checkout@v4
@@ -47,18 +42,8 @@ jobs:
               - 'minimal-templates/rails/**'
             rails_api:
               - 'minimal-templates/rails-api/**'
-            laravel:
-              - 'minimal-templates/laravel/**'
             sinatra:
               - 'minimal-templates/sinatra/**'
-            csharp:
-              - 'minimal-templates/csharp/**'
-            go:
-              - 'minimal-templates/go/**'
-            rust:
-              - 'minimal-templates/rust/**'
-            django:
-              - 'minimal-templates/django/**'
             full_nextjs:
               - 'full-templates/nextjs/**'
   nextjs:
@@ -191,36 +176,6 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: password
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-  laravel:
-    needs: changes
-    if: needs.changes.outputs.laravel == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.3"
-          extensions: mbstring, zip, exif, pcntl, bcmath, gd
-          coverage: none
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: minimal-templates/laravel/.composer-cache
-          key: ${{ runner.os }}-composer-${{ hashFiles('minimal-templates/laravel/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-      - name: Install dependencies
-        run: COMPOSER_CACHE_DIR=.composer-cache composer install --prefer-dist --no-progress
-        working-directory: minimal-templates/laravel
-      - name: Prepare Laravel
-        run: |
-          cp .env.example .env
-          php artisan key:generate
-          touch database/database.sqlite
-        working-directory: minimal-templates/laravel
-      - name: Run tests
-        run: php artisan test
-        working-directory: minimal-templates/laravel
   sinatra:
     needs: changes
     if: needs.changes.outputs.sinatra == 'true'
@@ -258,86 +213,6 @@ jobs:
       DATABASE_USER: root
       DATABASE_PASSWORD: password
       DATABASE_NAME: template-sinatra_test
-  csharp:
-    needs: changes
-    if: needs.changes.outputs.csharp == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          global-json-file: minimal-templates/csharp/global.json
-      - name: Restore
-        run: dotnet restore
-        working-directory: minimal-templates/csharp
-      - name: Test
-        run: dotnet test --verbosity normal
-        working-directory: minimal-templates/csharp
-  go:
-    needs: changes
-    if: needs.changes.outputs.go == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version-file: minimal-templates/go/.go-version
-      - name: Tidy
-        run: go mod tidy
-        working-directory: minimal-templates/go
-      - name: Test
-        run: go test ./...
-        working-directory: minimal-templates/go
-  rust:
-    needs: changes
-    if: needs.changes.outputs.rust == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-      - name: Cache cargo
-        uses: actions/cache@v4
-        with:
-          path: minimal-templates/rust/target
-          key: ${{ runner.os }}-cargo-rust-${{ hashFiles('minimal-templates/rust/Cargo.lock', 'minimal-templates/rust/Cargo.toml') }}
-          restore-keys: ${{ runner.os }}-cargo-rust-
-      - name: Test
-        run: cargo test
-        working-directory: minimal-templates/rust
-  django:
-    needs: changes
-    if: needs.changes.outputs.django == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: minimal-templates/django/.python-version
-      - name: Cache pip
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('minimal-templates/django/requirements*.txt') }}
-          restore-keys: ${{ runner.os }}-pip-
-      - name: Install dependencies
-        run: |
-          python -m venv .venv
-          . .venv/bin/activate
-          pip install -r requirements.txt
-        working-directory: minimal-templates/django
-      - name: Prepare environment
-        run: |
-          cp .env.example .env
-        working-directory: minimal-templates/django
-      - name: Run tests
-        run: |
-          . .venv/bin/activate
-          python manage.py test
-        working-directory: minimal-templates/django
   full_nextjs:
     needs: changes
     if: needs.changes.outputs.full_nextjs == 'true'

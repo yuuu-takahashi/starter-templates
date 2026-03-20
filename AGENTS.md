@@ -27,7 +27,7 @@
 
 - **NEVER** `minimal-templates/*/` と `full-templates/*/` 内の生成対象ファイルを直接編集する（次回 `yarn generate:*` で上書きされる）
 - 設定変更は `shared/` 配下の該当ファイルを編集する
-- Next.js / React / Laravel / C# のフレームワーク固有設定は `minimal-templates/<stack>/` と `full-templates/<stack>/` 直下を直接編集可能（生成されない部分のみ）
+- Next.js / React のフレームワーク固有設定は `minimal-templates/<stack>/` と `full-templates/<stack>/` 直下を直接編集可能（生成されない部分のみ）
 - 新規テンプレート追加時は `scripts/lib/stacks.ts` にエントリを追加する
 
 ## コードスタイル
@@ -35,7 +35,7 @@
 - `scripts/` 配下の TypeScript は ESLint + Prettier で統一
 - Markdown は markdownlint でチェック
 - 既存のスクリプトパターン（`gen-*.ts`, `generate-*.ts`）に合わせる
-- `shared/` 内のソースは各言語の慣習に従う（JS/TS, Ruby, PHP など）
+- `shared/` 内のソースは各言語の慣習に従う（JS/TS, Ruby など）
 
 ## Security Boundaries
 

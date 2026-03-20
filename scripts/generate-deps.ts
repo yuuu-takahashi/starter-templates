@@ -4,20 +4,21 @@
  *
  * - package.json: shared/npm/<stack>.json → templates/<stack>/package.json
  * - Gemfile:      shared/gemfile/Gemfile.<stack> → templates/<stack>/Gemfile
- * - C# global.json: templates/csharp/global.json の sdk.version を shared/versions.json の dotnet で上書き
- * - Go:           .golangci.yml は templates/go/ を正本として編集
- * - Rust:         rust-toolchain.toml は templates/rust/ を正本として編集
  *
- * フレームワーク別（next.config.ts, vite.config.ts, Laravel pint/phpunit, C# .csproj/.sln）は
- * templates/<stack>/ 直下を正本として編集する。
+ * フレームワーク別（next.config.ts, vite*.ts など）は templates/<stack>/ 直下を正本として編集する。
  *
  * Run: yarn generate:deps
  */
 
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import { NPM_STACKS, GEMFILE_STACKS, STACK_DEFINITIONS, TEMPLATES_DIR } from './lib/stacks.js';
-import { ROOT, VERSIONS, SHARED_NPM, SHARED_GEMFILE, deepMerge } from './lib/utils.js';
+import {
+  NPM_STACKS,
+  GEMFILE_STACKS,
+  STACK_DEFINITIONS,
+  TEMPLATES_DIR,
+} from './lib/stacks.js';
+import { ROOT, SHARED_NPM, SHARED_GEMFILE, deepMerge } from './lib/utils.js';
 import { logger } from './lib/logger.js';
 
 const GEMFILE_HEADER =
@@ -40,27 +41,10 @@ function run(): void {
     logger.generated(outPath);
   }
 
-  // C#: templates/csharp/global.json の sdk.version を versions.json の dotnet で上書き
-  const csharpGlobalPath = join(ROOT, TEMPLATES_DIR, 'csharp', 'global.json');
-  if (VERSIONS.dotnet && existsSync(csharpGlobalPath)) {
-    const globalJson = JSON.parse(readFileSync(csharpGlobalPath, 'utf8')) as {
-      sdk: { version: string; rollForward?: string };
-    };
-    globalJson.sdk.version = VERSIONS.dotnet;
-    writeFileSync(
-      csharpGlobalPath,
-      JSON.stringify(globalJson, null, 2) + '\n',
-      'utf8',
-    );
-    logger.info('  Updated: ' + csharpGlobalPath);
-  }
-
-  // Django/Laravel: 設定のみ管理するテンプレートのディレクトリを事前作成
-  mkdirSync(join(ROOT, TEMPLATES_DIR, 'django'), { recursive: true });
-  mkdirSync(join(ROOT, TEMPLATES_DIR, 'laravel'), { recursive: true });
-
   // full-templates: package.json を shared/npm/<stack>.json + <slug>.diff.json のマージで生成
-  for (const s of STACK_DEFINITIONS.filter((s) => s.fullDir != null && s.hasNpm)) {
+  for (const s of STACK_DEFINITIONS.filter(
+    (s) => s.fullDir != null && s.hasNpm,
+  )) {
     const stackSlug = s.dir.replace(new RegExp(`^${TEMPLATES_DIR}/`), '');
     const basePath = join(SHARED_NPM, `${stackSlug}.json`);
     const base = JSON.parse(readFileSync(basePath, 'utf8'));
