@@ -3,6 +3,13 @@
 set -euo pipefail  # Exit on error, undefined vars, and pipeline failures
 IFS=$'\n\t'       # Stricter word splitting
 
+# GitHub Actions など、コンテナに netfilter を変更する権限が無い環境ではスキップする。
+# （root でも CAP_NET_ADMIN が無いと iptables が Permission denied になる。）
+if ! iptables-save -t nat >/dev/null 2>&1; then
+  echo "Skipping firewall init: netfilter not available in this environment."
+  exit 0
+fi
+
 # 1. Extract Docker DNS info BEFORE any flushing
 DOCKER_DNS_RULES=$(iptables-save -t nat | grep "127\.0\.0\.11" || true)
 
