@@ -1,47 +1,24 @@
 /**
- * 各テンプレートの README.md 生成用メタデータ。
- * scripts/generate-configs.ts → gen-readme.ts で各 templates/<id>/README.md を生成。
- * テンプレート: shared/readme/README.md.hbs
- * 共通の文面はテンプレート内で一元管理し、テンプレートごとの差分は config のみで指定する。
- *
- * ## TemplateReadmeConfig の主要フィールド
- *
- * - id: config の識別子（ファイルとの対応用）
- * - outputDir: README の出力先（例: 'full-templates/nextjs'）
- *   - 未指定時は minimal-templates/${id} に出力される
- *   - full-templates は outputDir で明示的に指定する（-full サフィックスハックなし）
- * - npmStack: shared/npm/${stack}.json を参照して「主なライブラリ」セクションを生成
- * - gemfileStack: shared/gemfile/Gemfile.${stack} を参照して「主な Gem」セクションを生成
- * - extensionSets: shared/devcontainer/defaults.json から拡張機能セットを取得
- * - devGuide: 開発ガイドのセクション（コマンド集）
- *
- * ## 出力先の決定ロジック
- *
- * ```
- * outputDir が定義されている
- *   → join(ROOT, outputDir) に出力
- * outputDir が undefined
- *   → join(ROOT, minimal-templates, id) に出力
- * ```
- *
- * これにより、minimal/full の差分を明示的に管理できます。
+ * Template README.md generation metadata.
+ * Config is processed by gen-readme.ts and renders via shared/readme/README.md.hbs
+ * outputDir: minimal-templates/${id} (default) or explicit full-templates/${id}
  */
 
 import type { ExtensionSetKey } from './devcontainer-types.js';
 
-// ── 共通コマンド定数 ──────────────────────────────────────────────────────
+// Common commands
 
 const CMD = {
-  YARN_FORMAT_LINT: ['yarn format', 'yarn lint'] as string[],
-  RUBOCOP_FIX: ['bundle exec rubocop -A'] as string[],
-  RSPEC: ['bundle exec rspec'] as string[],
-  ERB_LINT: ['bundle exec erb_lint app/views/**/*.erb'] as string[],
+  YARN_FORMAT_LINT: ['yarn format', 'yarn lint'],
+  RUBOCOP_FIX: ['bundle exec rubocop -A'],
+  RSPEC: ['bundle exec rspec'],
+  ERB_LINT: ['bundle exec erb_lint app/views/**/*.erb'],
   HTML_BEAUTIFIER: [
     'find app/views -name "*.erb" -exec bundle exec htmlbeautifier {} \\;',
-  ] as string[],
+  ],
 };
 
-// ── プレビューURL・拡張機能セット定数 ──────────────────────────────────
+// Preview URLs and extension sets
 
 const PREVIEW_URLS = {
   RAILS: 'http://localhost:3000',
@@ -63,7 +40,7 @@ const EXT_SETS = {
   REACT: ['base', 'node'] as ExtensionSetKey[],
 };
 
-// ── 型定義 ───────────────────────────────────────────────────────────────────
+// Types
 
 export type TemplateReadmeStep = {
   label?: string;
@@ -80,23 +57,16 @@ export type TemplateReadmeConfig = {
   title?: string;
   description: string;
   repoSlug: string;
-  /** shared/npm/${npmStack}.json のパッケージを「主なライブラリ」に記載 */
   npmStack?: string;
-  /** shared/gemfile/Gemfile.${gemfileStack} の gem を「主な Gem」に記載 */
   gemfileStack?: string;
-  /** shared/devcontainer/defaults.json の拡張機能セットを「主な拡張機能」に記載 */
   extensionSets?: ExtensionSetKey[];
-  /** 「主なライブラリ」に記載する項目（Go: Gin, Rust: Axum など） */
   stackLibs?: string[];
   setupSteps: TemplateReadmeStep[];
   previewUrl?: string;
   devGuide: TemplateReadmeDevGuide[];
   extraSectionsPath?: string;
-  /** create-project の選択番号（full-templates 用など）。未指定時は minimal の並びから算出 */
   selectNumber?: number;
-  /** create-project の表示名（full-templates 用など） */
   selectLabel?: string;
-  /** README出力先（相対パス、例: 'full-templates/nextjs'）。未指定時は minimal-templates/${id} */
   outputDir?: string;
 };
 
