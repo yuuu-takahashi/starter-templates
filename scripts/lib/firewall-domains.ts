@@ -92,14 +92,14 @@ export const COMMON_FIREWALL_DOMAINS: readonly string[] = [
 // ── STACK（スタック別：パッケージレジストリ等）─────────────────────────────
 export const STACK_FIREWALL_DOMAINS: Readonly<Record<string, string[]>> = {
   // リポジトリルート devcontainer（各テンプレートで bundle install するため）
-  monorepo: ['rubygems.org', 'gems.rubygems.org'],
+  monorepo: ['rubygems.org'],
   nextjs: [],
   nodejs: [],
   react: [],
-  rails: ['rubygems.org', 'gems.rubygems.org'],
-  'rails-api': ['rubygems.org', 'gems.rubygems.org'],
-  ruby: ['rubygems.org', 'gems.rubygems.org'],
-  sinatra: ['rubygems.org', 'gems.rubygems.org'],
+  rails: ['rubygems.org'],
+  'rails-api': ['rubygems.org'],
+  ruby: ['rubygems.org'],
+  sinatra: ['rubygems.org'],
   laravel: ['packagist.org', 'repo.packagist.org'],
   django: ['pypi.org', 'files.pythonhosted.org'],
   csharp: ['api.nuget.org', 'nuget.org', 'globalcdn.nuget.org'],

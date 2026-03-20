@@ -71,11 +71,31 @@ while read -r cidr; do
   ipset add -exist allowed-domains "$cidr"
 done < <(echo "$gh_ranges" | jq -r '(.web + .api + .git)[]' | aggregate -q)
 
+# anycast / エッジ CDN はリゾルバやタイミングで異なる A レコードを返す（例: proxy.golang.org）。
+# 1 回の dig では後続の接続先 IP が許可リストに無いと OUTPUT DROP で拒否されるため、複数リゾルバの答えを合算する。
+collect_ipv4_a_records() {
+  local domain="$1"
+  (
+    set +o pipefail
+    ips=""
+    batch=""
+    for resolver in "" "8.8.8.8" "1.1.1.1"; do
+      if [ -n "$resolver" ]; then
+        batch=$(dig @"$resolver" +time=2 +tries=1 +noall +answer A "$domain" 2>/dev/null | awk '$4 == "A" {print $5}')
+      else
+        batch=$(dig +time=2 +tries=1 +noall +answer A "$domain" 2>/dev/null | awk '$4 == "A" {print $5}')
+      fi
+      ips="${ips}${batch}"$'\n'
+    done
+    echo "$ips" | awk 'NF' | sort -u
+  )
+}
+
 # Resolve and add other allowed domains (list from scripts/lib/firewall-domains.ts, injected by generate-devcontainer.ts)
 for domain in \
   __ALLOWED_FIREWALL_DOMAINS__; do
   echo "Resolving $domain..."
-  ips=$(dig +noall +answer A "$domain" | awk '$4 == "A" {print $5}')
+  ips=$(collect_ipv4_a_records "$domain")
   if [ -z "$ips" ]; then
     echo "ERROR: Failed to resolve $domain"
     exit 1
