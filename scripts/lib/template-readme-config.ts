@@ -120,7 +120,6 @@ export const TEMPLATE_README_CONFIGS: TemplateReadmeConfig[] = [
       { title: 'E2E テスト（Playwright）', commands: ['yarn test:e2e'] },
       { title: '型チェック', commands: ['yarn type-check'] },
     ],
-    extraSectionsPath: 'shared/readme/extra-sections/nextjs-full-sentry.md',
     selectNumber: 2,
     selectLabel: 'Next.js (App Router) - 実用',
   },
