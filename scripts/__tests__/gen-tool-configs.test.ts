@@ -10,19 +10,9 @@ import {
   SHARED_TSCONFIG,
 } from '../lib/utils.js';
 import { TEMPLATES_DIR } from '../lib/stacks.js';
+import { ESLINT_SOURCE } from '../gen-tool-configs.js';
 
 const td = TEMPLATES_DIR;
-
-// ── ESLint ──────────────────────────────────────────────────────────────────
-
-const ESLINT_SOURCE: Array<{ dir: string; source: string }> = [
-  { dir: `${td}/nodejs`, source: 'eslint.config.nodejs.js' },
-  { dir: `${td}/react`, source: 'eslint.config.react.js' },
-  { dir: `${td}/nextjs`, source: 'eslint.config.nextjs.js' },
-  { dir: `${td}/rails`, source: 'eslint.config.rails.js' },
-  { dir: `${td}/rails-api`, source: 'eslint.config.rails.js' },
-  { dir: 'full-templates/nextjs', source: 'eslint.config.nextjs-full.js' },
-];
 
 describe('gen-tool-configs: ESLint ソースファイル', () => {
   it.each(ESLINT_SOURCE)(

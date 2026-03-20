@@ -20,6 +20,7 @@ import {
   TEMPLATES_DIR,
 } from './lib/stacks.js';
 import { ROOT } from './lib/utils.js';
+import { handleGenerationError } from './lib/errors.js';
 
 // ── Shared devcontainer defaults (extensions + settings) ───────────────────────
 // 共通定義: shared/devcontainer/defaults.json を編集すること。
@@ -89,7 +90,7 @@ interface DevcontainerConfig {
   features?: Record<string, Record<string, unknown>>;
   customizations: {
     vscode: VscodeCustomization;
-    cursor: VscodeCustomization;
+    cursor?: VscodeCustomization;
   };
 }
 
@@ -669,5 +670,9 @@ export function run(): void {
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
-  run();
+  try {
+    run();
+  } catch (error) {
+    handleGenerationError(error);
+  }
 }

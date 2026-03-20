@@ -7,7 +7,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { ROOT } from './lib/utils.js';
 import { logger } from './lib/logger.js';
-import { GenerationError } from './lib/errors.js';
+import { handleGenerationError } from './lib/errors.js';
 import {
   TEMPLATE_DIRS,
   FULL_TEMPLATE_DIRS,
@@ -143,15 +143,6 @@ export function run(): void {
       logger.generated(outPath);
     }
   } catch (error) {
-    if (error instanceof GenerationError) {
-      console.error(`\n❌ ${error.message}`);
-      console.error(`   Context: ${error.context}`);
-    } else if (error instanceof Error) {
-      console.error(`\n❌ Unexpected error: ${error.message}`);
-      console.error(error.stack);
-    } else {
-      console.error('\n❌ Unknown error occurred');
-    }
-    process.exit(1);
+    handleGenerationError(error);
   }
 }

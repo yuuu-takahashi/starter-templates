@@ -51,3 +51,16 @@ export const ensureDirectoryIsDir = (
     );
   }
 };
+
+export function handleGenerationError(error: unknown): never {
+  if (error instanceof GenerationError) {
+    console.error(`\n❌ ${error.message}`);
+    console.error(`   Context: ${error.context}`);
+  } else if (error instanceof Error) {
+    console.error(`\n❌ Unexpected error: ${error.message}`);
+    console.error(error.stack);
+  } else {
+    console.error('\n❌ Unknown error occurred');
+  }
+  process.exit(1);
+}
