@@ -136,12 +136,19 @@ export function buildStackSection(
 export function prepareTemplateContext(
   config: TemplateReadmeConfig,
   stackSection: string | undefined,
+  extraSections: string | undefined,
 ): Record<string, unknown> {
   const setupSteps = config.setupSteps.map((step, i) => ({
     num: i + 1,
     label: step.label,
     commands: step.commands,
     hasCommands: step.commands.length > 0,
+  }));
+
+  // Convert devGuide.commands from array to newline-separated string for template
+  const devGuide = config.devGuide.map((guide) => ({
+    title: guide.title,
+    commands: guide.commands.join('\n'),
   }));
 
   const stackIndex = STACK_DEFINITIONS.findIndex(
@@ -153,9 +160,10 @@ export function prepareTemplateContext(
   const selectLabel =
     config.selectLabel ??
     (stack ? (TEMPLATE_LABELS[stack.id] ?? config.id) : config.id);
+  const title = config.title ?? `template-${config.id}`;
 
   return {
-    title: config.title,
+    title,
     description: config.description,
     id: config.id,
     stackSection: stackSection ?? '',
@@ -165,9 +173,9 @@ export function prepareTemplateContext(
     previewLine: config.previewUrl
       ? `ブラウザで <${config.previewUrl}> を開き、表示確認`
       : '',
-    devGuide: config.devGuide,
-    hasDevGuide: config.devGuide.length > 0,
-    extraSections: config.extraSections ?? '',
+    devGuide,
+    hasDevGuide: devGuide.length > 0,
+    extraSections: extraSections ?? '',
   };
 }
 
@@ -188,7 +196,17 @@ export async function run(): Promise<void> {
 
     for (const config of TEMPLATE_README_CONFIGS) {
       const stackSection = buildStackSection(config, devcontainerDefaults);
-      const context = prepareTemplateContext(config, stackSection);
+
+      // Load extra sections from external file if specified
+      let extraSections: string | undefined;
+      if (config.extraSectionsPath) {
+        const extraPath = join(ROOT, config.extraSectionsPath);
+        if (existsSync(extraPath)) {
+          extraSections = readFileSync(extraPath, 'utf8');
+        }
+      }
+
+      const context = prepareTemplateContext(config, stackSection, extraSections);
       const content = template(context);
       const normalized = content.replace(/\n{3,}/g, '\n\n').trimEnd() + '\n';
       const outDir = config.outputDir
