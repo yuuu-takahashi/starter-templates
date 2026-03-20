@@ -1,5 +1,6 @@
 require "swagger_helper"
 
+# rubocop:disable RSpec/EmptyExampleGroup
 describe "Health", type: :request do
   path "/api/v1/health" do
     get "Health check" do
@@ -19,3 +20,4 @@ describe "Health", type: :request do
     end
   end
 end
+# rubocop:enable RSpec/EmptyExampleGroup

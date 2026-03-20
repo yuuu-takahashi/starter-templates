@@ -1,3 +1,4 @@
+# rubocop:disable RSpec/EmptyExampleGroup
 RSpec.describe "UserAPI" do
   path "/api/v1/users" do
     get "Get all users" do
@@ -20,3 +21,4 @@ RSpec.describe "UserAPI" do
     end
   end
 end
+# rubocop:enable RSpec/EmptyExampleGroup
