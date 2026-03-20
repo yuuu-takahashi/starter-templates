@@ -1,11 +1,11 @@
 {
   "name": "full-template-nextjs",
   "scripts": {
-    "dev": "next dev --turbopack -H 0.0.0.0 -p 3000",
+    "dev": "next dev --turbopack -H 0.0.0.0 -p 3009",
     "build": "next build",
     "build:analyze": "NODE_ENV=production ANALYZE=true next build",
     "start": "next start",
-    "start:lhci": "next start -p 3000",
+    "start:lhci": "next start -p 3009",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "lint:all": "yarn _lint && yarn _type-check",

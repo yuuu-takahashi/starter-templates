@@ -27,7 +27,6 @@
 - dotenv-rails — 環境変数を .env から読み込む（Rails）
 - factory_bot_rails — テスト用フィクスチャファクトリー（Rails）
 - faker — テスト用ダミーデータ生成
-- kamal
 - kaminari
 - nokogiri — XML/HTML パーサー
 - puma — マルチスレッド Web サーバー
