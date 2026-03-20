@@ -86,6 +86,36 @@ export async function setupTemplates(): Promise<void> {
       );
       process.exit(1);
     }
+
+    // Setup full-templates variant if it exists
+    if (stack.fullDir) {
+      const fullTemplatePath = join(ROOT, stack.fullDir);
+
+      if (!existsSync(fullTemplatePath)) {
+        logger.warn(`${stack.fullDir} does not exist, skipping`);
+        continue;
+      }
+
+      logger.info(`📦 Setting up ${stack.fullDir}...`);
+
+      try {
+        if (stack.hasGemfile) {
+          setupRubyDeps(stack, fullTemplatePath);
+        }
+
+        if (stack.hasNpm) {
+          setupNpmDeps(fullTemplatePath);
+        }
+
+        logger.success(`${stack.fullDir} setup complete\n`);
+      } catch (error) {
+        logger.error(
+          `Error setting up ${stack.fullDir}`,
+          error instanceof Error ? error : new Error(String(error)),
+        );
+        process.exit(1);
+      }
+    }
   }
 
   logger.success('All templates setup complete!');
