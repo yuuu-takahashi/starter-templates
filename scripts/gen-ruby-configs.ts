@@ -8,8 +8,11 @@ import { join } from "path";
 import YAML from "yaml";
 import { ROOT, RSPEC_COMMON, SHARED_RUBOCOP, deepMerge } from "./lib/utils.js";
 import { TEMPLATES_DIR } from "./lib/stacks.js";
+import { logger } from "./lib/logger.js";
+import { GenerationError } from "./lib/errors.js";
 
 export function run(): void {
+  try {
   // ── .rspec（共通オプション + 各 template の --require）────────────────────
 
   const rspecCommonContent = readFileSync(RSPEC_COMMON, "utf8");
@@ -24,7 +27,7 @@ export function run(): void {
     const content = requireLines + "\n" + rspecCommonContent;
     const outPath = join(ROOT, dir, ".rspec");
     writeFileSync(outPath, content, "utf8");
-    console.log("Generated:", outPath);
+    logger.generated(outPath);
   }
 
   // ── .rubocop.yml（ベース + テンプレート用 fragment をマージ）──────────────
@@ -49,6 +52,18 @@ export function run(): void {
   for (const { dir, content } of RUBOCOP_OUT) {
     const outPath = join(ROOT, dir, ".rubocop.yml");
     writeFileSync(outPath, content, "utf8");
-    console.log("Generated:", outPath);
+    logger.generated(outPath);
+  }
+  } catch (error) {
+    if (error instanceof GenerationError) {
+      console.error(`\n❌ ${error.message}`);
+      console.error(`   Context: ${error.context}`);
+    } else if (error instanceof Error) {
+      console.error(`\n❌ Unexpected error: ${error.message}`);
+      console.error(error.stack);
+    } else {
+      console.error('\n❌ Unknown error occurred');
+    }
+    process.exit(1);
   }
 }

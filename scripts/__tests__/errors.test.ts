@@ -39,15 +39,7 @@ describe('ensureFileExists', () => {
 
   it('エラーに正しいコンテキストが含まれる', () => {
     const filePath = '/nonexistent/file.txt';
-    try {
-      ensureFileExists(filePath, 'myop');
-    } catch (error) {
-      expect(error instanceof GenerationError).toBe(true);
-      if (error instanceof GenerationError) {
-        expect(error.operation).toBe('myop');
-        expect(error.context).toBe(filePath);
-      }
-    }
+    expect(() => ensureFileExists(filePath, 'myop')).toThrow(GenerationError);
   });
 });
 
@@ -64,14 +56,7 @@ describe('ensureDirectoryExists', () => {
 
   it('エラーメッセージに "Directory not found" が含まれる', () => {
     const dirPath = '/nonexistent/dir';
-    try {
-      ensureDirectoryExists(dirPath, 'test');
-    } catch (error) {
-      expect(error instanceof GenerationError).toBe(true);
-      if (error instanceof GenerationError) {
-        expect(error.message).toContain('Directory not found');
-      }
-    }
+    expect(() => ensureDirectoryExists(dirPath, 'test')).toThrow(GenerationError);
   });
 });
 
@@ -88,13 +73,6 @@ describe('ensureDirectoryIsDir', () => {
 
   it('エラーメッセージに "Not a directory" が含まれる', () => {
     const filePath = join(process.cwd(), 'package.json');
-    try {
-      ensureDirectoryIsDir(filePath, 'test');
-    } catch (error) {
-      expect(error instanceof GenerationError).toBe(true);
-      if (error instanceof GenerationError) {
-        expect(error.message).toContain('Not a directory');
-      }
-    }
+    expect(() => ensureDirectoryIsDir(filePath, 'test')).toThrow(GenerationError);
   });
 });

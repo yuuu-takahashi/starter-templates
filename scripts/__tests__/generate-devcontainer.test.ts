@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { ROOT } from "../lib/utils.js";
 import { DEVCONTAINER_DOCKERFILE_MAP, TEMPLATE_DIRS } from "../lib/stacks.js";
+import { buildFirewallDomainBlock } from "../generate-devcontainer.js";
 
 const DEFAULTS_PATH = join(ROOT, "shared", "devcontainer", "defaults.json");
 const INIT_FIREWALL_PATH = join(ROOT, "shared", "docker", "init-firewall.sh");
@@ -56,5 +57,34 @@ describe("DEVCONTAINER_DOCKERFILE_MAP とテンプレート整合性", () => {
         );
       }
     }
+  });
+});
+
+describe("buildFirewallDomainBlock", () => {
+  it("ドメイン1件の場合は適切な形式で返す", () => {
+    const result = buildFirewallDomainBlock(["example.com"]);
+    expect(result).toBe('  "example.com"');
+  });
+
+  it("ドメイン2件以上の場合、1行目にバックスラッシュが付く", () => {
+    const result = buildFirewallDomainBlock([
+      "example.com",
+      "another.com",
+    ]);
+    expect(result).toContain('"example.com" \\');
+  });
+
+  it("複数ドメインの場合、最終行にバックスラッシュがない", () => {
+    const result = buildFirewallDomainBlock([
+      "example.com",
+      "another.com",
+    ]);
+    const lines = result.split("\n");
+    expect(lines[lines.length - 1]).not.toContain("\\");
+  });
+
+  it("空配列の場合は空文字列を返す", () => {
+    const result = buildFirewallDomainBlock([]);
+    expect(result).toBe("");
   });
 });

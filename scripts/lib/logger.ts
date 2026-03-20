@@ -2,26 +2,16 @@
  * Logging utilities for generation scripts.
  */
 
-export enum LogLevel {
-  DEBUG = 'debug',
-  INFO = 'info',
-  WARN = 'warn',
-  ERROR = 'error',
-}
-
 export interface LoggerOptions {
   verbose?: boolean;
-  level?: LogLevel;
 }
 
 export class Logger {
   private verbose: boolean;
-  private level: LogLevel;
   private startTimes: Map<string, number> = new Map();
 
   constructor(options: LoggerOptions = {}) {
     this.verbose = options.verbose ?? false;
-    this.level = options.level ?? LogLevel.INFO;
   }
 
   debug(message: string, context?: unknown): void {

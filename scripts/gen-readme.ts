@@ -11,7 +11,7 @@ import {
   TEMPLATE_README_CONFIGS,
   type TemplateReadmeConfig,
   type ExtensionSetKey,
-} from "./template-readme-config.js";
+} from "./lib/template-readme-config.js";
 import { STACK_DEFINITIONS, TEMPLATES_DIR } from "./lib/stacks.js";
 import { TEMPLATE_LABELS } from "./lib/template-labels.js";
 import {
@@ -20,6 +20,7 @@ import {
   EXTENSION_DESCRIPTIONS,
 } from "./lib/readme-descriptions.js";
 import { ROOT, SHARED_NPM, SHARED_GEMFILE } from "./lib/utils.js";
+import { GenerationError } from "./lib/errors.js";
 
 function slug(dir: string): string {
   return dir.replace(new RegExp(`^${TEMPLATES_DIR}/`), "");
@@ -149,27 +150,40 @@ function prepareTemplateContext(
 }
 
 export async function run(): Promise<void> {
-  const templateSource = readFileSync(README_TEMPLATE_PATH, "utf8");
-  const template = Handlebars.compile(templateSource, {
-    noEscape: true,
-    strict: true,
-  });
+  try {
+    const templateSource = readFileSync(README_TEMPLATE_PATH, "utf8");
+    const template = Handlebars.compile(templateSource, {
+      noEscape: true,
+      strict: true,
+    });
 
-  const DEFAULTS_PATH = join(ROOT, "shared", "devcontainer", "defaults.json");
-  const devcontainerDefaults = JSON.parse(readFileSync(DEFAULTS_PATH, "utf8")) as {
-    extensions: Record<ExtensionSetKey, string[]>;
-  };
+    const DEFAULTS_PATH = join(ROOT, "shared", "devcontainer", "defaults.json");
+    const devcontainerDefaults = JSON.parse(readFileSync(DEFAULTS_PATH, "utf8")) as {
+      extensions: Record<ExtensionSetKey, string[]>;
+    };
 
-  for (const config of TEMPLATE_README_CONFIGS) {
-    const stackSection = buildStackSection(config, devcontainerDefaults);
-    const context = prepareTemplateContext(config, stackSection);
-    const content = template(context);
-    const normalized = content.replace(/\n{3,}/g, "\n\n").trimEnd() + "\n";
-    const outDir = config.id.endsWith("-full")
-      ? join(ROOT, "full-templates", config.id.replace(/-full$/, ""))
-      : join(ROOT, TEMPLATES_DIR, config.id);
-    const outPath = join(outDir, "README.md");
-    writeFileSync(outPath, normalized, "utf8");
-    console.log("Generated:", outPath);
+    for (const config of TEMPLATE_README_CONFIGS) {
+      const stackSection = buildStackSection(config, devcontainerDefaults);
+      const context = prepareTemplateContext(config, stackSection);
+      const content = template(context);
+      const normalized = content.replace(/\n{3,}/g, "\n\n").trimEnd() + "\n";
+      const outDir = config.id.endsWith("-full")
+        ? join(ROOT, "full-templates", config.id.replace(/-full$/, ""))
+        : join(ROOT, TEMPLATES_DIR, config.id);
+      const outPath = join(outDir, "README.md");
+      writeFileSync(outPath, normalized, "utf8");
+      console.log("Generated:", outPath);
+    }
+  } catch (error) {
+    if (error instanceof GenerationError) {
+      console.error(`\n❌ ${error.message}`);
+      console.error(`   Context: ${error.context}`);
+    } else if (error instanceof Error) {
+      console.error(`\n❌ Unexpected error: ${error.message}`);
+      console.error(error.stack);
+    } else {
+      console.error('\n❌ Unknown error occurred');
+    }
+    process.exit(1);
   }
 }
