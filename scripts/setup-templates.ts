@@ -40,7 +40,7 @@ export function setupRubyDeps(
         cwd: templatePath,
         stdio: 'inherit',
       });
-    } catch (error) {
+    } catch {
       logger.warn(
         `⏭️  db:migrate failed (may be due to native extensions in this environment). Continuing setup...`,
       );

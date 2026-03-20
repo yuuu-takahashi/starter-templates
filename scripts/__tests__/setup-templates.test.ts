@@ -20,7 +20,7 @@ vi.mock('../lib/bundle-vendor-path.js', () => ({
 import { existsSync, unlinkSync } from 'fs';
 import { execSync } from 'child_process';
 import { bundleInstallVendorPath } from '../lib/bundle-vendor-path.js';
-import { setupRubyDeps, setupNpmDeps } from '../setup-templates.js';
+import { setupRubyDeps } from '../setup-templates.js';
 import type { StackDefinition } from '../lib/stacks.js';
 
 const mockExistsSync = existsSync as ReturnType<typeof vi.fn>;
@@ -93,42 +93,5 @@ describe('setupRubyDeps', () => {
       (args: unknown[]) => typeof args[0] === 'string' && args[0].includes('db:migrate'),
     );
     expect(migrateCalls).toHaveLength(0);
-  });
-});
-
-// ── setupNpmDeps ──────────────────────────────────────────────────────────
-
-describe('setupNpmDeps', () => {
-  it('package.json が存在しない場合は何もしない', () => {
-    mockExistsSync.mockReturnValue(false);
-    setupNpmDeps('/tmp/nextjs');
-    expect(mockExecSync).not.toHaveBeenCalled();
-  });
-
-  it('package.json が存在する場合は npm install を実行する', () => {
-    mockExistsSync.mockImplementation((p: string) =>
-      (p as string).endsWith('package.json'),
-    );
-    setupNpmDeps('/tmp/nextjs');
-    expect(mockExecSync).toHaveBeenCalledWith(
-      'npm install',
-      expect.objectContaining({ cwd: '/tmp/nextjs' }),
-    );
-  });
-
-  it('package-lock.json が存在する場合は削除する', () => {
-    mockExistsSync.mockReturnValue(true);
-    setupNpmDeps('/tmp/nextjs');
-    expect(mockUnlinkSync).toHaveBeenCalledWith(
-      expect.stringContaining('package-lock.json'),
-    );
-  });
-
-  it('package-lock.json が存在しない場合は削除しない', () => {
-    mockExistsSync.mockImplementation((p: string) =>
-      (p as string).endsWith('package.json') && !(p as string).includes('lock'),
-    );
-    setupNpmDeps('/tmp/nextjs');
-    expect(mockUnlinkSync).not.toHaveBeenCalled();
   });
 });
