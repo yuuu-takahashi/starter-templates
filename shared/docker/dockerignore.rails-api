@@ -3,6 +3,7 @@
 # Ignore git directory.
 /.git/
 /.gitignore
+/.github
 
 # Ignore bundler config.
 /.bundle
@@ -31,11 +32,29 @@
 /tmp/storage/*
 !/tmp/storage/.keep
 
-# Ignore CI service files.
-/.github
+# Ignore development-related files
+/.claude/
+/.specify/
+/node_modules/
+/vendor/bundle/
+
+# Ignore test and coverage
+/coverage/
+/spec/cassettes/
+
+# Ignore Kamal deployment
+/kamal-secrets/
+/config/deploy.yml.lock
 
 # Ignore Docker-related files
 /.dockerignore
 /Dockerfile*
 /docker-compose*.yml
 /compose*.yml
+
+# Ignore documentation and utility files
+/*.md
+/.prettierrc.json
+/.rspec
+/.rubocop.yml
+/knip.config.ts

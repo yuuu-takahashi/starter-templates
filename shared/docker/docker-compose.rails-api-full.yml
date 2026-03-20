@@ -1,0 +1,46 @@
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+      args:
+        TZ: ${TZ:-UTC}
+        CLAUDE_CODE_VERSION: latest
+    volumes:
+      - ..:/workspace
+    environment:
+      RAILS_ENV: development
+      REDIS_URL: redis://redis:6379/0
+      BUNDLER_VERSION: 2.3.7
+    tty: true
+    stdin_open: true
+    command: ['sleep', 'infinity']
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  worker:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+      args:
+        TZ: ${TZ:-UTC}
+        CLAUDE_CODE_VERSION: latest
+    volumes:
+      - ..:/workspace
+    environment:
+      RAILS_ENV: development
+      REDIS_URL: redis://redis:6379/0
+      BUNDLER_VERSION: 2.3.7
+    depends_on:
+      - redis
+    command: ['bundle', 'exec', 'sidekiq']
+
+volumes:
+  redis_data:

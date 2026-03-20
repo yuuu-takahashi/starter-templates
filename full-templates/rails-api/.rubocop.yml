@@ -1,0 +1,75 @@
+inherit_gem:
+  rubocop-rails-omakase: rubocop.yml
+
+plugins:
+  - rubocop-rspec
+  - rubocop-factory_bot
+
+AllCops:
+  TargetRubyVersion: 3.3
+  TargetRailsVersion: 8.1
+  Exclude:
+    - bin/**/*
+    - db/migrate/**/*
+    - db/schema.rb
+    - node_modules/**/*
+    - vendor/**/*
+  SuggestExtensions: false
+
+# Override style rules as needed
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - config/**/*
+    - spec/**/*
+
+FactoryBot/SyntaxMethods:
+  Enabled: true
+
+RSpec/ContextWording:
+  Enabled: true
+
+RSpec/DescribeClass:
+  Exclude:
+    - spec/requests/**/*
+    - spec/features/**/*
+
+RSpec/MultipleExpectations:
+  Enabled: true
+
+# New RSpec cops (v3.6+)
+RSpec/IncludeExamples:
+  Enabled: true
+
+RSpec/LeakyLocalVariable:
+  Enabled: true
+
+RSpec/Output:
+  Enabled: true
+
+# New FactoryBot cops
+FactoryBot/AssociationStyle:
+  Enabled: true
+
+FactoryBot/ConsistentParenthesesStyle:
+  Enabled: true
+
+FactoryBot/ExcessiveCreateList:
+  Enabled: true
+
+FactoryBot/FactoryAssociationWithStrategy:
+  Enabled: true
+
+FactoryBot/FactoryNameStyle:
+  Enabled: true
+
+FactoryBot/IdSequence:
+  Enabled: true
+
+FactoryBot/RedundantFactoryOption:
+  Enabled: true

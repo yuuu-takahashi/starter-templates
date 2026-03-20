@@ -103,6 +103,7 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
   },
   {
     dir: `${td}/rails-api`,
+    fullDir: 'full-templates/rails-api',
     id: 'rails_api',
     runtime: 'ruby',
     codeCheckWorkflow: 'code-check-ruby.yml',
@@ -112,6 +113,9 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
     hasNpm: true,
     hasGemfile: true,
     monorepoPrefix: false,
+    fullNpmDiffSlug: 'rails-api-full',
+    fullCodeCheckWorkflow: 'code-check-rails-api-full.yml',
+    ciWorkflow: 'ci-rails-api-full.yml',
   },
   {
     dir: `${td}/sinatra`,

@@ -1,0 +1,42 @@
+name: Security Check
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  brakeman:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-ruby
+
+      - name: Run Brakeman
+        run: bundle exec brakeman --no-summary
+
+  bundler-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-ruby
+
+      - name: Run bundler-audit
+        run: bundle audit check --update
+
+  yarn-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-node
+
+      - name: Run yarn audit
+        run: yarn audit

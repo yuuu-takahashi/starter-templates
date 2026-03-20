@@ -1,0 +1,33 @@
+service: rails-api
+image: your-registry/rails-api
+
+servers:
+  web:
+    hosts:
+      - your-server-ip
+    options:
+      publish:
+        - "80:3000"
+
+env:
+  clear:
+    RAILS_ENV: production
+    REDIS_URL: redis://localhost:6379
+  secret:
+    - SENTRY_DSN
+    - API_TOKEN
+    - DATABASE_URL
+
+volumes:
+  - /data/rails-api/storage:/rails/storage
+  - /data/rails-api/log:/rails/log
+
+builder:
+  local:
+    multiarch: false
+
+registry:
+  server: your-registry-server
+  username: your-username
+  password:
+    - REGISTRY_PASSWORD
