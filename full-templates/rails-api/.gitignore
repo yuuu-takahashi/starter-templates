@@ -41,3 +41,5 @@ config/deploy.yml.lock
 # Test
 spec/fixtures/*
 spec/cassettes/
+
+/.bundle
