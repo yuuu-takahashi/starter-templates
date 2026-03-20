@@ -8,85 +8,93 @@ import { execSync } from 'child_process';
 import { existsSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import { bundleInstallVendorPath } from './lib/bundle-vendor-path.js';
-import { STACK_DEFINITIONS } from './lib/stacks.js';
+import { STACK_DEFINITIONS, type StackDefinition } from './lib/stacks.js';
 import { ROOT } from './lib/utils.js';
+import { logger } from './lib/logger.js';
 
-async function setupTemplates() {
-  console.log('🚀 Setting up templates...\n');
+export function setupRubyDeps(
+  stack: StackDefinition,
+  templatePath: string,
+): void {
+  const gemfilePath = join(templatePath, 'Gemfile');
+  if (!existsSync(gemfilePath)) return;
+
+  let hasBundler = false;
+  try {
+    execSync('bundle --version', { stdio: 'pipe' });
+    hasBundler = true;
+  } catch {
+    logger.info(`⏭️  Skipping bundle install (bundler not installed)`);
+  }
+
+  if (!hasBundler) return;
+
+  logger.info(
+    `   → bundle config set --local path vendor/bundle && bundle install`,
+  );
+  bundleInstallVendorPath(templatePath);
+
+  if (stack.dir.includes('rails')) {
+    logger.info(`   → bundle exec rails db:migrate`);
+    execSync('bundle exec rails db:migrate', {
+      cwd: templatePath,
+      stdio: 'inherit',
+    });
+  }
+}
+
+export function setupNpmDeps(templatePath: string): void {
+  const packageJsonPath = join(templatePath, 'package.json');
+  if (!existsSync(packageJsonPath)) return;
+
+  logger.info(`   → npm install`);
+  execSync('npm install', { cwd: templatePath, stdio: 'inherit' });
+
+  const packageLockPath = join(templatePath, 'package-lock.json');
+  if (existsSync(packageLockPath)) {
+    unlinkSync(packageLockPath);
+  }
+}
+
+export async function setupTemplates(): Promise<void> {
+  logger.info('🚀 Setting up templates...\n');
 
   for (const stack of STACK_DEFINITIONS) {
     const templatePath = join(ROOT, stack.dir);
 
     if (!existsSync(templatePath)) {
-      console.log(`⚠️  ${stack.dir} does not exist, skipping`);
+      logger.warn(`${stack.dir} does not exist, skipping`);
       continue;
     }
 
-    console.log(`📦 Setting up ${stack.dir}...`);
+    logger.info(`📦 Setting up ${stack.dir}...`);
 
     try {
-      // Setup Gemfile dependencies (Rails, Sinatra, Ruby)
       if (stack.hasGemfile) {
-        const gemfilePath = join(templatePath, 'Gemfile');
-        if (existsSync(gemfilePath)) {
-          let hasBundler = false;
-          try {
-            execSync('bundle --version', { stdio: 'pipe' });
-            hasBundler = true;
-          } catch {
-            console.log(`⏭️  Skipping bundle install (bundler not installed)`);
-          }
-
-          if (hasBundler) {
-            // Project-local gems (Bundler 3+: config set path, not --path)
-            console.log(
-              `   → bundle config set --local path vendor/bundle && bundle install`,
-            );
-            bundleInstallVendorPath(templatePath);
-
-            // Run migrations for Rails-based templates
-            if (stack.dir.includes('rails')) {
-              console.log(`   → bundle exec rails db:migrate`);
-              execSync('bundle exec rails db:migrate', {
-                cwd: templatePath,
-                stdio: 'inherit',
-              });
-            }
-          }
-        }
+        setupRubyDeps(stack, templatePath);
       }
 
-      // Setup npm dependencies
       if (stack.hasNpm) {
-        const packageJsonPath = join(templatePath, 'package.json');
-        if (existsSync(packageJsonPath)) {
-          console.log(`   → npm install`);
-          execSync('npm install', {
-            cwd: templatePath,
-            stdio: 'inherit',
-          });
-
-          // Remove package-lock.json (use yarn.lock instead)
-          const packageLockPath = join(templatePath, 'package-lock.json');
-          if (existsSync(packageLockPath)) {
-            unlinkSync(packageLockPath);
-          }
-        }
+        setupNpmDeps(templatePath);
       }
 
-      console.log(`✅ ${stack.dir} setup complete\n`);
+      logger.success(`${stack.dir} setup complete\n`);
     } catch (error) {
-      console.error(
-        `❌ Error setting up ${stack.dir}: ${(error as Error).message}\n`,
+      logger.error(
+        `Error setting up ${stack.dir}`,
+        error instanceof Error ? error : new Error(String(error)),
       );
       process.exit(1);
     }
   }
 
-  console.log('🎉 All templates setup complete!');
+  logger.success('All templates setup complete!');
 }
 
-setupTemplates().catch((error) => {
-  console.error('Fatal error:', error);
+setupTemplates().catch((error: unknown) => {
+  logger.error(
+    'Fatal error',
+    error instanceof Error ? error : new Error(String(error)),
+  );
   process.exit(1);
 });

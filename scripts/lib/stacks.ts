@@ -43,7 +43,7 @@ export interface StackDefinition {
 }
 
 /** スタック名（dir の "minimal-templates/" 以降、例: nextjs, rails-api） */
-function slug(dir: string): string {
+export function slug(dir: string): string {
   return dir.replace(new RegExp(`^${TEMPLATES_DIR}/`), '');
 }
 
