@@ -33,10 +33,6 @@
 !/tmp/storage/.keep
 
 # Ignore development-related files
-/.devcontainer/Dockerfile
-/.devcontainer/devcontainer.json
-/.devcontainer/docker-compose.yml
-/.devcontainer/docker-compose*.yml
 /.claude/
 /.specify/
 /node_modules/
