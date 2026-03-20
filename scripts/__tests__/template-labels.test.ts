@@ -23,7 +23,7 @@ describe('template-labels', () => {
     });
 
     it('全値が非空文字列', () => {
-      for (const [key, value] of Object.entries(TEMPLATE_LABELS)) {
+      for (const value of Object.values(TEMPLATE_LABELS)) {
         expect(typeof value).toBe('string');
         expect(value.length).toBeGreaterThan(0);
       }
