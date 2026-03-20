@@ -20,7 +20,9 @@ services:
       BUNDLER_VERSION: 2.3.7
     tty: true
     stdin_open: true
-    command: /bin/sh -c "yarn install && bundle config set --local path vendor/bundle && bundle install && sleep infinity"
+    # sleep infinity: postStart（ファイアウォール）より先に yarn/bundle が落ちてコンテナが止まるのを防ぐ。
+    # 依存インストールは CI の devcontainer exec またはローカルで実行する（ruby-db テンプレートと同じ方針）。
+    command: ['sleep', 'infinity']
     depends_on:
       - db
 
