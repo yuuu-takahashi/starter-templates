@@ -4,6 +4,8 @@
   "type": "module",
   "scripts": {
     "create-project": "tsx scripts/select-template.ts",
+    "kill:dev-ports": "bash scripts/kill-dev-ports.sh",
+    "predev": "bash scripts/kill-dev-ports.sh",
     "dev": "concurrently \"cd minimal-templates/nextjs && yarn dev\" \"cd minimal-templates/react && yarn dev\" \"cd minimal-templates/nodejs && yarn dev\" \"cd minimal-templates/rails && bin/rails server -p 3003\" \"cd minimal-templates/rails-api && bin/rails server -p 3004\" \"cd minimal-templates/ruby && ruby lib/hello.rb\" \"cd minimal-templates/sinatra && PORT=3007 bundle exec ruby index.rb\"",
     "generate:ci": "tsx scripts/generate-root-workflow.ts",
     "generate:devcontainer": "tsx scripts/generate-devcontainer.ts",
@@ -16,8 +18,8 @@
     "test": "vitest run",
     "lint": "eslint scripts/ && yarn lint:md",
     "lint:fix": "eslint scripts/ --fix",
-    "lint:md": "markdownlint '**/*.md' --ignore node_modules",
-    "lint:md:fix": "markdownlint '**/*.md' --ignore node_modules --fix",
+    "lint:md": "markdownlint '**/*.md' --ignore '**/node_modules/**' --ignore '**/vendor/bundle/**'",
+    "lint:md:fix": "markdownlint '**/*.md' --ignore '**/node_modules/**' --ignore '**/vendor/bundle/**' --fix",
     "format": "prettier --write \"scripts/**/*.ts\""
   },
   "devDependencies": {

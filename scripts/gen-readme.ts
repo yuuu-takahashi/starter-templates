@@ -12,7 +12,7 @@ import {
   type TemplateReadmeConfig,
   type ExtensionSetKey,
 } from './lib/template-readme-config.js';
-import { STACK_DEFINITIONS, TEMPLATES_DIR } from './lib/stacks.js';
+import { STACK_DEFINITIONS, TEMPLATES_DIR, slug } from './lib/stacks.js';
 import { TEMPLATE_LABELS } from './lib/template-labels.js';
 import {
   NPM_DESCRIPTIONS,
@@ -21,10 +21,6 @@ import {
 } from './lib/readme-descriptions.js';
 import { ROOT, SHARED_NPM, SHARED_GEMFILE } from './lib/utils.js';
 import { GenerationError } from './lib/errors.js';
-
-function slug(dir: string): string {
-  return dir.replace(new RegExp(`^${TEMPLATES_DIR}/`), '');
-}
 
 const README_TEMPLATE_PATH = join(ROOT, 'shared', 'readme', 'README.md.hbs');
 
@@ -35,7 +31,7 @@ function withDesc(name: string, map: Record<string, string>): string {
 
 // ── セクション生成 ─────────────────────────────────────────────────────────────
 
-function buildStackSection(
+export function buildStackSection(
   c: TemplateReadmeConfig,
   devcontainerDefaults: { extensions: Record<ExtensionSetKey, string[]> },
 ): string | undefined {
@@ -124,7 +120,7 @@ function buildStackSection(
     .trimEnd();
 }
 
-function prepareTemplateContext(
+export function prepareTemplateContext(
   config: TemplateReadmeConfig,
   stackSection: string | undefined,
 ): Record<string, unknown> {
