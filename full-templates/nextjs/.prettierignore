@@ -30,9 +30,6 @@ next-env.d.ts
 coverage
 .nyc_output
 
-# Vercel
-.vercel
-
 # Storybook
 *storybook.log
 
