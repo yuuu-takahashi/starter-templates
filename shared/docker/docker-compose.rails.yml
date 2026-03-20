@@ -19,7 +19,7 @@ services:
       BUNDLER_VERSION: 2.3.7
     tty: true
     stdin_open: true
-    command: /bin/sh -c "yarn install && bundle install && sleep infinity"
+    command: /bin/sh -c "yarn install && bundle config set --local path vendor/bundle && bundle install && sleep infinity"
     depends_on:
       - db
 

@@ -145,7 +145,7 @@ jobs:
               devcontainer exec --workspace-folder "${{ matrix.path }}" yarn install --frozen-lockfile
               ;;
             ruby)
-              devcontainer exec --workspace-folder "${{ matrix.path }}" bundle install
+              devcontainer exec --workspace-folder "${{ matrix.path }}" sh -lc "bundle config set --local path vendor/bundle && bundle install"
               ;;
             python)
               devcontainer exec --workspace-folder "${{ matrix.path }}" pip install -r requirements.txt 2>/dev/null || true

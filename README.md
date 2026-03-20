@@ -42,6 +42,10 @@
   yarn install
   ```
 
+### Dev Container（リポジトリルート）
+
+モノレポ全体を Dev Containers で開く場合は、クローンしたリポジトリの**ルート**を開き、エディタの **Reopen in Container** から起動できます。ビルド定義の正本は [shared/docker/Dockerfile.ruby-monorepo](shared/docker/Dockerfile.ruby-monorepo) で、Ruby 3.3・Node.js 24・Yarn・Claude Code CLI（他テンプレートの `Dockerfile.ruby` と同系）が入ります。コンテナ作成後に `yarn install` が自動で走ります。Ruby テンプレート用の gem は各プロジェクトで `bundle config set --local path vendor/bundle` のあと `bundle install`（または `yarn setup:templates`）が必要です。設定を変えたら [scripts/generate-devcontainer.ts](scripts/generate-devcontainer.ts) を編集し、`yarn generate:devcontainer` を実行してください。
+
 ### 新規プロジェクトを作る
 
 1. **リポジトリをクローンする**

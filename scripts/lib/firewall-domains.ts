@@ -91,6 +91,8 @@ export const COMMON_FIREWALL_DOMAINS: readonly string[] = [
 
 // ── STACK（スタック別：パッケージレジストリ等）─────────────────────────────
 export const STACK_FIREWALL_DOMAINS: Readonly<Record<string, string[]>> = {
+  // リポジトリルート devcontainer（各テンプレートで bundle install するため）
+  monorepo: ['rubygems.org', 'gems.rubygems.org'],
   nextjs: [],
   nodejs: [],
   react: [],

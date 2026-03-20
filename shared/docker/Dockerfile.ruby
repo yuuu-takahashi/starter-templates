@@ -58,7 +58,7 @@ COPY package.json yarn.lock ./
 RUN yarn install && yarn cache clean
 
 COPY Gemfile Gemfile.lock ./
-RUN bundle install --path 'vendor/bundle'
+RUN bundle config set --local path vendor/bundle && bundle install
 
 COPY . .
 

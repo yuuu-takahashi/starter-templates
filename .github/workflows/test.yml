@@ -135,7 +135,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install dependencies
-        run: bundle install --path vendor/bundle
+        run: |
+          bundle config set --local path vendor/bundle
+          bundle install
         working-directory: minimal-templates/rails
       - name: Install JS dependencies
         run: yarn install
@@ -171,7 +173,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gems-
       - name: Install dependencies
-        run: bundle install --path vendor/bundle
+        run: |
+          bundle config set --local path vendor/bundle
+          bundle install
         working-directory: minimal-templates/rails-api
       - name: Run tests
         run: |
@@ -231,7 +235,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gems-
       - name: Install dependencies
-        run: bundle install --path vendor/bundle
+        run: |
+          bundle config set --local path vendor/bundle
+          bundle install
         working-directory: minimal-templates/sinatra
       - name: Run tests
         run: |

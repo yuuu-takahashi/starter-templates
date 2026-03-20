@@ -4,30 +4,30 @@
  * Run: yarn create-project
  */
 
-import * as fs from "node:fs";
-import * as os from "node:os";
-import * as path from "node:path";
-import * as readline from "node:readline";
-import { fileURLToPath } from "node:url";
-import { STACK_DEFINITIONS, TEMPLATES_DIR } from "./lib/stacks.js";
-import { TEMPLATE_LABELS } from "./lib/template-labels.js";
+import * as fs from 'node:fs';
+import * as os from 'node:os';
+import * as path from 'node:path';
+import * as readline from 'node:readline';
+import { fileURLToPath } from 'node:url';
+import { STACK_DEFINITIONS, TEMPLATES_DIR } from './lib/stacks.js';
+import { TEMPLATE_LABELS } from './lib/template-labels.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = path.resolve(__dirname, "..");
+const REPO_ROOT = path.resolve(__dirname, '..');
 
 function slug(dir: string): string {
-  return dir.replace(new RegExp(`^${TEMPLATES_DIR}/`), "");
+  return dir.replace(new RegExp(`^${TEMPLATES_DIR}/`), '');
 }
 
 function ask(rl: readline.Interface, question: string): Promise<string> {
   return new Promise((resolve) => {
-    rl.question(question, (answer) => resolve((answer ?? "").trim()));
+    rl.question(question, (answer) => resolve((answer ?? '').trim()));
   });
 }
 
 /** ディレクトリの中身を削除する（.git, .claude は残す）。ディレクトリ自体は残す。 */
 function clearDir(dir: string): void {
-  const preserve = new Set([".git", ".claude"]);
+  const preserve = new Set(['.git', '.claude']);
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   for (const ent of entries) {
     if (preserve.has(ent.name)) continue;
@@ -42,14 +42,14 @@ function clearDir(dir: string): void {
 
 function copyTemplate(sourceDir: string, destDir: string): void {
   const exclude = new Set([
-    "node_modules",
-    ".git",
-    ".claude",
-    "vendor",
-    "__pycache__",
-    ".venv",
-    "bin",
-    "obj",
+    'node_modules',
+    '.git',
+    '.claude',
+    'vendor',
+    '__pycache__',
+    '.venv',
+    'bin',
+    'obj',
   ]);
 
   function shouldExclude(name: string): boolean {
@@ -71,7 +71,8 @@ function copyTemplate(sourceDir: string, destDir: string): void {
 }
 
 async function main(): Promise<void> {
-  const templates: { dir: string; id: string; slug: string; label: string }[] = [];
+  const templates: { dir: string; id: string; slug: string; label: string }[] =
+    [];
   for (const s of STACK_DEFINITIONS) {
     templates.push({
       dir: s.dir,
@@ -86,23 +87,27 @@ async function main(): Promise<void> {
         dir: s.fullDir,
         id: fullId,
         slug: fullSlug,
-        label: TEMPLATE_LABELS[fullId] ?? `${TEMPLATE_LABELS[s.id] ?? s.id} - 実用`,
+        label:
+          TEMPLATE_LABELS[fullId] ?? `${TEMPLATE_LABELS[s.id] ?? s.id} - 実用`,
       });
     }
   }
 
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
 
-  console.log("\nテンプレートを選んでください:\n");
+  console.log('\nテンプレートを選んでください:\n');
   templates.forEach((t, i) => {
     console.log(`  ${i + 1}. ${t.label} (${t.slug})`);
   });
-  console.log("");
+  console.log('');
 
-  const numStr = await ask(rl, "番号を入力 (1–" + templates.length + "): ");
+  const numStr = await ask(rl, '番号を入力 (1–' + templates.length + '): ');
   const num = parseInt(numStr, 10);
   if (Number.isNaN(num) || num < 1 || num > templates.length) {
-    console.error("無効な番号です。");
+    console.error('無効な番号です。');
     rl.close();
     process.exit(1);
   }
@@ -117,7 +122,7 @@ async function main(): Promise<void> {
 
   const destInput = await ask(
     rl,
-    "作成先のパス (未入力ならこのリポジトリをテンプレートで完全に入れ替え): "
+    '作成先のパス (未入力ならこのリポジトリをテンプレートで完全に入れ替え): ',
   );
   rl.close();
 
@@ -131,7 +136,7 @@ async function main(): Promise<void> {
 
   if (pathEmpty) {
     replaceCurrentDir = true;
-    destPath = ".";
+    destPath = '.';
     destDir = insideRepo ? REPO_ROOT : cwd;
   } else {
     destPath = destInput.trim();
@@ -139,11 +144,13 @@ async function main(): Promise<void> {
   }
 
   if (replaceCurrentDir) {
-    console.log("\nテンプレートを一時保存しています...");
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), `starter-templates-${chosen.slug}-`));
+    console.log('\nテンプレートを一時保存しています...');
+    const tempDir = fs.mkdtempSync(
+      path.join(os.tmpdir(), `starter-templates-${chosen.slug}-`),
+    );
     try {
       copyTemplate(sourceDir, tempDir);
-      console.log("このリポジトリをクリアしています（.git を残す）...");
+      console.log('このリポジトリをクリアしています（.git を残す）...');
       clearDir(destDir);
       console.log(`${chosen.label} をルートにコピーしています...`);
       copyTemplate(tempDir, destDir);
@@ -158,26 +165,32 @@ async function main(): Promise<void> {
     console.log(`\n${chosen.label} を ${destDir} にコピーしています...`);
     copyTemplate(sourceDir, destDir);
   }
-  console.log("完了しました。\n");
+  console.log('完了しました。\n');
   if (replaceCurrentDir) {
-    console.log("このディレクトリがプロジェクトルートです。");
+    console.log('このディレクトリがプロジェクトルートです。');
   } else {
-    console.log("次のコマンドでプロジェクトに移動してください:");
+    console.log('次のコマンドでプロジェクトに移動してください:');
     console.log(`  cd ${destPath}`);
   }
-  console.log("\n依存関係のインストール:");
-  if (chosen.slug === "rails" || chosen.slug === "rails-api" || chosen.slug === "sinatra") {
-    console.log("  bundle install && yarn install");
-  } else if (chosen.slug === "laravel") {
-    console.log("  composer install");
-  } else if (chosen.slug === "django") {
-    console.log("  pip install -r requirements.txt");
-  } else if (chosen.slug === "csharp") {
-    console.log("  dotnet restore");
-  } else if (chosen.slug === "go" || chosen.slug === "rust") {
-    console.log("  (必要に応じて依存取得)");
+  console.log('\n依存関係のインストール:');
+  if (
+    chosen.slug === 'rails' ||
+    chosen.slug === 'rails-api' ||
+    chosen.slug === 'sinatra'
+  ) {
+    console.log(
+      '  bundle config set --local path vendor/bundle && bundle install && yarn install',
+    );
+  } else if (chosen.slug === 'laravel') {
+    console.log('  composer install');
+  } else if (chosen.slug === 'django') {
+    console.log('  pip install -r requirements.txt');
+  } else if (chosen.slug === 'csharp') {
+    console.log('  dotnet restore');
+  } else if (chosen.slug === 'go' || chosen.slug === 'rust') {
+    console.log('  (必要に応じて依存取得)');
   } else {
-    console.log("  yarn install");
+    console.log('  yarn install');
   }
 }
 
