@@ -11,7 +11,9 @@
 
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
+import { pathToFileURL } from 'url';
 import { getFirewallDomainsForStack } from './lib/firewall-domains.js';
+import { logger } from './lib/logger.js';
 import {
   DEVCONTAINER_DOCKERFILE_MAP,
   STACK_DEFINITIONS,
@@ -622,7 +624,7 @@ function writeInitFirewall(outDir: string, templateDir: string): void {
     ...lines.slice(1),
   ].join('\n');
   writeFileSync(firewallOut, withHeader, 'utf8');
-  console.log('Generated:', firewallOut);
+  logger.generated(firewallOut);
 }
 
 const FULL_DEVCONTAINER_DOCKERFILE_MAP: Record<string, string | null> =
@@ -633,132 +635,138 @@ const FULL_DEVCONTAINER_DOCKERFILE_MAP: Record<string, string | null> =
     ]),
   );
 
-for (const [dir, dockerfileName] of Object.entries({
-  ...DEVCONTAINER_DOCKERFILE_MAP,
-  ...FULL_DEVCONTAINER_DOCKERFILE_MAP,
-})) {
-  if (dockerfileName === null) continue;
-  const outDir = join(ROOT, dir, '.devcontainer');
-  mkdirSync(outDir, { recursive: true });
-  const outPath = join(outDir, 'Dockerfile');
-  const content = readFileSync(DOCKERFILE_SRCS[dockerfileName], 'utf8');
-  writeFileSync(outPath, dockerfileHeader(dockerfileName) + content, 'utf8');
-  console.log('Generated:', outPath);
-  writeInitFirewall(outDir, dir);
-}
+export function run(): void {
+  for (const [dir, dockerfileName] of Object.entries({
+    ...DEVCONTAINER_DOCKERFILE_MAP,
+    ...FULL_DEVCONTAINER_DOCKERFILE_MAP,
+  })) {
+    if (dockerfileName === null) continue;
+    const outDir = join(ROOT, dir, '.devcontainer');
+    mkdirSync(outDir, { recursive: true });
+    const outPath = join(outDir, 'Dockerfile');
+    const content = readFileSync(DOCKERFILE_SRCS[dockerfileName], 'utf8');
+    writeFileSync(outPath, dockerfileHeader(dockerfileName) + content, 'utf8');
+    logger.generated(outPath);
+    writeInitFirewall(outDir, dir);
+  }
 
-// Repository root: Ruby 3.3 + Node (monorepo maintenance / yarn dev / bundle in templates)
-const ROOT_DEVCONTAINER_DIR = join(ROOT, '.devcontainer');
-mkdirSync(ROOT_DEVCONTAINER_DIR, { recursive: true });
-const rootDockerfileOut = join(ROOT_DEVCONTAINER_DIR, 'Dockerfile');
-writeFileSync(
-  rootDockerfileOut,
-  dockerfileHeader('Dockerfile.ruby-monorepo') +
-    readFileSync(RUBY_MONOREPO_DOCKERFILE_SRC, 'utf8'),
-  'utf8',
-);
-console.log('Generated:', rootDockerfileOut);
-writeInitFirewall(ROOT_DEVCONTAINER_DIR, 'monorepo');
+  // Repository root: Ruby 3.3 + Node (monorepo maintenance / yarn dev / bundle in templates)
+  const ROOT_DEVCONTAINER_DIR = join(ROOT, '.devcontainer');
+  mkdirSync(ROOT_DEVCONTAINER_DIR, { recursive: true });
+  const rootDockerfileOut = join(ROOT_DEVCONTAINER_DIR, 'Dockerfile');
+  writeFileSync(
+    rootDockerfileOut,
+    dockerfileHeader('Dockerfile.ruby-monorepo') +
+      readFileSync(RUBY_MONOREPO_DOCKERFILE_SRC, 'utf8'),
+    'utf8',
+  );
+  logger.generated(rootDockerfileOut);
+  writeInitFirewall(ROOT_DEVCONTAINER_DIR, 'monorepo');
 
-const DEVCONTAINER_FEATURES = DEFAULTS.features ?? {};
-const DEVCONTAINER_FEATURES_FULL_ONLY = DEFAULTS.featuresFullOnly ?? {};
-const isFullTemplate = (d: string) => d.startsWith('full-templates/');
+  const DEVCONTAINER_FEATURES = DEFAULTS.features ?? {};
+  const DEVCONTAINER_FEATURES_FULL_ONLY = DEFAULTS.featuresFullOnly ?? {};
+  const isFullTemplate = (d: string) => d.startsWith('full-templates/');
 
-for (const { dir, config } of STACKS) {
-  const outPath = join(ROOT, dir, '.devcontainer', 'devcontainer.json');
-  const features =
-    Object.keys(DEVCONTAINER_FEATURES).length > 0 ||
-    Object.keys(DEVCONTAINER_FEATURES_FULL_ONLY).length > 0
-      ? {
-          ...DEVCONTAINER_FEATURES,
-          ...(isFullTemplate(dir) ? DEVCONTAINER_FEATURES_FULL_ONLY : {}),
-        }
-      : undefined;
-  const configWithCursor = {
-    ...config,
-    ...(features && Object.keys(features).length > 0 && { features }),
+  for (const { dir, config } of STACKS) {
+    const outPath = join(ROOT, dir, '.devcontainer', 'devcontainer.json');
+    const features =
+      Object.keys(DEVCONTAINER_FEATURES).length > 0 ||
+      Object.keys(DEVCONTAINER_FEATURES_FULL_ONLY).length > 0
+        ? {
+            ...DEVCONTAINER_FEATURES,
+            ...(isFullTemplate(dir) ? DEVCONTAINER_FEATURES_FULL_ONLY : {}),
+          }
+        : undefined;
+    const configWithCursor = {
+      ...config,
+      ...(features && Object.keys(features).length > 0 && { features }),
+      customizations: {
+        vscode: config.customizations.vscode,
+        cursor: config.customizations.vscode,
+      },
+    };
+    writeFileSync(
+      outPath,
+      JSON_HEADER + JSON.stringify(configWithCursor, null, 2) + '\n',
+      'utf8',
+    );
+    logger.generated(outPath);
+  }
+
+  const rootDevcontainerConfig: DevcontainerConfig = {
+    name: 'starter-templates',
+    build: {
+      dockerfile: 'Dockerfile',
+      context: '..',
+      args: BUILD_ARGS_DEVCONTAINER,
+    },
+    workspaceFolder: '/workspace',
+    workspaceMount: WORKSPACE_MOUNT,
+    remoteUser: 'node',
+    mounts: NODE_MOUNTS,
+    runArgs: NODE_RUN_ARGS,
+    containerEnv: NODE_CONTAINER_ENV,
+    postStartCommand: NODE_POST_START,
+    waitFor: 'postStartCommand',
+    postCreateCommand: 'yarn install',
+    forwardPorts: [3001, 3002, 3003, 3004, 3007],
     customizations: {
-      vscode: config.customizations.vscode,
-      cursor: config.customizations.vscode,
+      vscode: {
+        extensions: [
+          ...BASE_EXTENSIONS,
+          ...NODE_EXTENSIONS,
+          ...RUBY_EXTENSIONS,
+          ...ERB_EXTENSIONS,
+          ...TOOLING_EXTENSIONS,
+        ],
+        settings: {
+          ...BASE_SETTINGS,
+          ...NODE_TERMINAL_SETTINGS,
+          ...RUBY_SETTINGS,
+          ...ERB_SETTINGS,
+          'eslint.validate': ['javascript', 'typescript'],
+        },
+      },
+    },
+  };
+  const rootFeatures =
+    Object.keys(DEVCONTAINER_FEATURES).length > 0
+      ? DEVCONTAINER_FEATURES
+      : undefined;
+  const rootDevcontainerPath = join(ROOT_DEVCONTAINER_DIR, 'devcontainer.json');
+  const rootConfigWithCursor = {
+    ...rootDevcontainerConfig,
+    ...(rootFeatures && Object.keys(rootFeatures).length > 0 && { features: rootFeatures }),
+    customizations: {
+      vscode: rootDevcontainerConfig.customizations.vscode,
+      cursor: rootDevcontainerConfig.customizations.vscode,
     },
   };
   writeFileSync(
-    outPath,
-    JSON_HEADER + JSON.stringify(configWithCursor, null, 2) + '\n',
+    rootDevcontainerPath,
+    JSON_HEADER + JSON.stringify(rootConfigWithCursor, null, 2) + '\n',
     'utf8',
   );
-  console.log('Generated:', outPath);
+  logger.generated(rootDevcontainerPath);
+
+  const rubyDbComposeContent = readFileSync(RUBY_DB_COMPOSE_SRC, 'utf8');
+  for (const dir of [`${TEMPLATES_DIR}/sinatra`, `${TEMPLATES_DIR}/rails-api`]) {
+    const outPath = join(ROOT, dir, '.devcontainer', 'docker-compose.yml');
+    writeFileSync(outPath, YAML_HEADER_RUBY_DB + rubyDbComposeContent, 'utf8');
+    logger.generated(outPath);
+  }
+
+  const railsComposeContent = readFileSync(RAILS_COMPOSE_SRC, 'utf8');
+  const railsComposeOut = join(
+    ROOT,
+    `${TEMPLATES_DIR}/rails`,
+    '.devcontainer',
+    'docker-compose.yml',
+  );
+  writeFileSync(railsComposeOut, YAML_HEADER_RAILS + railsComposeContent, 'utf8');
+  logger.generated(railsComposeOut);
 }
 
-const rootDevcontainerConfig: DevcontainerConfig = {
-  name: 'starter-templates',
-  build: {
-    dockerfile: 'Dockerfile',
-    context: '..',
-    args: BUILD_ARGS_DEVCONTAINER,
-  },
-  workspaceFolder: '/workspace',
-  workspaceMount: WORKSPACE_MOUNT,
-  remoteUser: 'node',
-  mounts: NODE_MOUNTS,
-  runArgs: NODE_RUN_ARGS,
-  containerEnv: NODE_CONTAINER_ENV,
-  postStartCommand: NODE_POST_START,
-  waitFor: 'postStartCommand',
-  postCreateCommand: 'yarn install',
-  forwardPorts: [3001, 3002, 3003, 3004, 3007],
-  customizations: {
-    vscode: {
-      extensions: [
-        ...BASE_EXTENSIONS,
-        ...NODE_EXTENSIONS,
-        ...RUBY_EXTENSIONS,
-        ...ERB_EXTENSIONS,
-        ...TOOLING_EXTENSIONS,
-      ],
-      settings: {
-        ...BASE_SETTINGS,
-        ...NODE_TERMINAL_SETTINGS,
-        ...RUBY_SETTINGS,
-        ...ERB_SETTINGS,
-        'eslint.validate': ['javascript', 'typescript'],
-      },
-    },
-  },
-};
-const rootFeatures =
-  Object.keys(DEVCONTAINER_FEATURES).length > 0
-    ? DEVCONTAINER_FEATURES
-    : undefined;
-const rootDevcontainerPath = join(ROOT_DEVCONTAINER_DIR, 'devcontainer.json');
-const rootConfigWithCursor = {
-  ...rootDevcontainerConfig,
-  ...(rootFeatures && Object.keys(rootFeatures).length > 0 && { features: rootFeatures }),
-  customizations: {
-    vscode: rootDevcontainerConfig.customizations.vscode,
-    cursor: rootDevcontainerConfig.customizations.vscode,
-  },
-};
-writeFileSync(
-  rootDevcontainerPath,
-  JSON_HEADER + JSON.stringify(rootConfigWithCursor, null, 2) + '\n',
-  'utf8',
-);
-console.log('Generated:', rootDevcontainerPath);
-
-const rubyDbComposeContent = readFileSync(RUBY_DB_COMPOSE_SRC, 'utf8');
-for (const dir of [`${TEMPLATES_DIR}/sinatra`, `${TEMPLATES_DIR}/rails-api`]) {
-  const outPath = join(ROOT, dir, '.devcontainer', 'docker-compose.yml');
-  writeFileSync(outPath, YAML_HEADER_RUBY_DB + rubyDbComposeContent, 'utf8');
-  console.log('Generated:', outPath);
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  run();
 }
-
-const railsComposeContent = readFileSync(RAILS_COMPOSE_SRC, 'utf8');
-const railsComposeOut = join(
-  ROOT,
-  `${TEMPLATES_DIR}/rails`,
-  '.devcontainer',
-  'docker-compose.yml',
-);
-writeFileSync(railsComposeOut, YAML_HEADER_RAILS + railsComposeContent, 'utf8');
-console.log('Generated:', railsComposeOut);

@@ -19,6 +19,7 @@ import {
   STACK_DEFINITIONS,
 } from './lib/stacks.js';
 import { ROOT, VERSIONS } from './lib/utils.js';
+import { logger } from './lib/logger.js';
 
 const STACKS = ROOT_STACKS;
 
@@ -398,7 +399,7 @@ export function run(): void {
     header + codeCheckTemplate + '\n' + codeCheckJobsYaml,
     'utf8',
   );
-  console.log('Generated:', codeCheckOutPath);
+  logger.generated(codeCheckOutPath);
 
   // Generate test.yml
   const testTemplatePath = join(ROOT, 'scripts', 'templates', 'test.yml');
@@ -407,7 +408,7 @@ export function run(): void {
   const testJobsYaml = YAML.stringify({ jobs: testJobs }, { lineWidth: 0 });
   const testOutPath = join(ROOT, '.github', 'workflows', 'test.yml');
   writeFileSync(testOutPath, header + testTemplate + '\n' + testJobsYaml, 'utf8');
-  console.log('Generated:', testOutPath);
+  logger.generated(testOutPath);
 
   // Generate devcontainer-build.yml
   const devcontainerTemplatePath = join(
@@ -436,7 +437,7 @@ export function run(): void {
     header + devcontainerTemplate + '\n' + devcontainerJobsYaml,
     'utf8',
   );
-  console.log('Generated:', devcontainerOutPath);
+  logger.generated(devcontainerOutPath);
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
