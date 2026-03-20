@@ -24,13 +24,8 @@ jobs:
       react: ${{ steps.filter.outputs.react }}
       rails: ${{ steps.filter.outputs.rails }}
       rails_api: ${{ steps.filter.outputs.rails_api }}
-      laravel: ${{ steps.filter.outputs.laravel }}
       sinatra: ${{ steps.filter.outputs.sinatra }}
       ruby: ${{ steps.filter.outputs.ruby }}
-      csharp: ${{ steps.filter.outputs.csharp }}
-      go: ${{ steps.filter.outputs.go }}
-      rust: ${{ steps.filter.outputs.rust }}
-      django: ${{ steps.filter.outputs.django }}
       full_nextjs: ${{ steps.filter.outputs.full_nextjs }}
     steps:
       - uses: actions/checkout@v4
@@ -48,20 +43,10 @@ jobs:
               - 'minimal-templates/rails/.devcontainer/**'
             rails_api:
               - 'minimal-templates/rails-api/.devcontainer/**'
-            laravel:
-              - 'minimal-templates/laravel/.devcontainer/**'
             sinatra:
               - 'minimal-templates/sinatra/.devcontainer/**'
             ruby:
               - 'minimal-templates/ruby/.devcontainer/**'
-            csharp:
-              - 'minimal-templates/csharp/.devcontainer/**'
-            go:
-              - 'minimal-templates/go/.devcontainer/**'
-            rust:
-              - 'minimal-templates/rust/.devcontainer/**'
-            django:
-              - 'minimal-templates/django/.devcontainer/**'
             full_nextjs:
               - 'full-templates/nextjs/.devcontainer/**'
   nextjs:
@@ -114,16 +99,6 @@ jobs:
         with:
           dockerfile: minimal-templates/rails-api/.devcontainer/Dockerfile
           failure-threshold: error
-  laravel:
-    needs: changes
-    if: needs.changes.outputs.laravel == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: hadolint/hadolint-action@v3.1.0
-        with:
-          dockerfile: minimal-templates/laravel/.devcontainer/Dockerfile
-          failure-threshold: error
   sinatra:
     needs: changes
     if: needs.changes.outputs.sinatra == 'true'
@@ -143,46 +118,6 @@ jobs:
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: minimal-templates/ruby/.devcontainer/Dockerfile
-          failure-threshold: error
-  csharp:
-    needs: changes
-    if: needs.changes.outputs.csharp == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: hadolint/hadolint-action@v3.1.0
-        with:
-          dockerfile: minimal-templates/csharp/.devcontainer/Dockerfile
-          failure-threshold: error
-  go:
-    needs: changes
-    if: needs.changes.outputs.go == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: hadolint/hadolint-action@v3.1.0
-        with:
-          dockerfile: minimal-templates/go/.devcontainer/Dockerfile
-          failure-threshold: error
-  rust:
-    needs: changes
-    if: needs.changes.outputs.rust == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: hadolint/hadolint-action@v3.1.0
-        with:
-          dockerfile: minimal-templates/rust/.devcontainer/Dockerfile
-          failure-threshold: error
-  django:
-    needs: changes
-    if: needs.changes.outputs.django == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: hadolint/hadolint-action@v3.1.0
-        with:
-          dockerfile: minimal-templates/django/.devcontainer/Dockerfile
           failure-threshold: error
   full_nextjs:
     needs: changes

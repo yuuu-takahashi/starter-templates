@@ -126,22 +126,10 @@ for domain in \
   "qiita.com" \
   "zenn.dev" \
   "teratail.com" \
-  "docs.python.org" \
   "nodejs.org" \
-  "go.dev" \
-  "pkg.go.dev" \
-  "rust-lang.org" \
-  "doc.rust-lang.org" \
-  "docs.rs" \
-  "learn.microsoft.com" \
-  "docs.microsoft.com" \
   "ruby-lang.org" \
-  "www.php.net" \
-  "laravel.com" \
   "nextjs.org" \
   "react.dev" \
-  "vuejs.org" \
-  "getcomposer.org" \
   "github.io" \
   "docs.aws.amazon.com" \
   "aws.amazon.com" \

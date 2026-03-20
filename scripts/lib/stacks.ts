@@ -8,14 +8,7 @@
 export const TEMPLATES_DIR = 'minimal-templates';
 
 /** ランタイム種別（.xxx-version の配布先判定に使用） */
-export type Runtime =
-  | 'node'
-  | 'ruby'
-  | 'python'
-  | 'php'
-  | 'go'
-  | 'dotnet'
-  | 'rust';
+export type Runtime = 'node' | 'ruby';
 
 /** 1テンプレート分の定義。ここだけ編集すれば他定数は自動で整合する */
 export interface StackDefinition {
@@ -121,18 +114,6 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
     monorepoPrefix: false,
   },
   {
-    dir: `${td}/laravel`,
-    id: 'laravel',
-    runtime: 'php',
-    codeCheckWorkflow: 'code-check-laravel.yml',
-    testWorkflow: 'test-laravel.yml',
-    gitignore: '.gitignore.laravel',
-    devcontainerDockerfile: 'Dockerfile.php',
-    hasNpm: false,
-    hasGemfile: false,
-    monorepoPrefix: true,
-  },
-  {
     dir: `${td}/sinatra`,
     id: 'sinatra',
     runtime: 'ruby',
@@ -154,54 +135,6 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
     hasNpm: true,
     hasGemfile: true,
     monorepoPrefix: false,
-  },
-  {
-    dir: `${td}/csharp`,
-    id: 'csharp',
-    runtime: 'dotnet',
-    codeCheckWorkflow: 'code-check-dotnet.yml',
-    testWorkflow: 'test-dotnet.yml',
-    gitignore: '.gitignore.dotnet',
-    devcontainerDockerfile: 'Dockerfile.dotnet',
-    hasNpm: false,
-    hasGemfile: false,
-    monorepoPrefix: true,
-  },
-  {
-    dir: `${td}/go`,
-    id: 'go',
-    runtime: 'go',
-    codeCheckWorkflow: 'code-check-go.yml',
-    testWorkflow: 'test-go.yml',
-    gitignore: '.gitignore.go',
-    devcontainerDockerfile: 'Dockerfile.go',
-    hasNpm: false,
-    hasGemfile: false,
-    monorepoPrefix: true,
-  },
-  {
-    dir: `${td}/rust`,
-    id: 'rust',
-    runtime: 'rust',
-    codeCheckWorkflow: 'code-check-rust.yml',
-    testWorkflow: 'test-rust.yml',
-    gitignore: '.gitignore.rust',
-    devcontainerDockerfile: 'Dockerfile.rust',
-    hasNpm: false,
-    hasGemfile: false,
-    monorepoPrefix: true,
-  },
-  {
-    dir: `${td}/django`,
-    id: 'django',
-    runtime: 'python',
-    codeCheckWorkflow: 'code-check-django.yml',
-    testWorkflow: 'test-django.yml',
-    gitignore: '.gitignore.python',
-    devcontainerDockerfile: 'Dockerfile.python',
-    hasNpm: false,
-    hasGemfile: false,
-    monorepoPrefix: true,
   },
 ];
 
@@ -230,21 +163,6 @@ export const NODE_VERSION_DIRS: readonly string[] = STACK_DEFINITIONS.filter(
 /** .ruby-version を配布するテンプレート */
 export const RUBY_VERSION_DIRS: readonly string[] = STACK_DEFINITIONS.filter(
   (s) => s.runtime === 'ruby',
-).map((s) => s.dir);
-
-/** .python-version を配布するテンプレート */
-export const PYTHON_VERSION_DIRS: readonly string[] = STACK_DEFINITIONS.filter(
-  (s) => s.runtime === 'python',
-).map((s) => s.dir);
-
-/** .php-version を配布するテンプレート */
-export const PHP_VERSION_DIRS: readonly string[] = STACK_DEFINITIONS.filter(
-  (s) => s.runtime === 'php',
-).map((s) => s.dir);
-
-/** .go-version を配布するテンプレート */
-export const GO_VERSION_DIRS: readonly string[] = STACK_DEFINITIONS.filter(
-  (s) => s.runtime === 'go',
 ).map((s) => s.dir);
 
 /** code-check.yml の元ワークフロー名（shared/workflows/ 内のファイル名） */
@@ -350,9 +268,8 @@ export const ROOT_STACKS: readonly RootStackEntry[] = STACK_DEFINITIONS.map(
 );
 
 /** full-templates/ の CI エントリ（id は full_<id> でプレフィックス） */
-export const FULL_ROOT_STACKS: readonly RootStackEntry[] = STACK_DEFINITIONS
-  .filter((s) => s.fullDir != null)
-  .map((s) => ({
+export const FULL_ROOT_STACKS: readonly RootStackEntry[] =
+  STACK_DEFINITIONS.filter((s) => s.fullDir != null).map((s) => ({
     id: `full_${s.id}`,
     dir: s.fullDir!,
     pathFilter: `${s.fullDir}/**`,

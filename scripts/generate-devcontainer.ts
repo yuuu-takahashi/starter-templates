@@ -34,11 +34,6 @@ const DEFAULTS = JSON.parse(readFileSync(DEFAULTS_PATH, 'utf8')) as {
     node: string[];
     ruby: string[];
     erb: string[];
-    php: string[];
-    python: string[];
-    csharp: string[];
-    go: string[];
-    rust: string[];
     tooling: string[];
     markdownPreview: string[];
   };
@@ -53,11 +48,6 @@ const BASE_EXTENSIONS = DEFAULTS.extensions.base;
 const NODE_EXTENSIONS = DEFAULTS.extensions.node;
 const RUBY_EXTENSIONS = DEFAULTS.extensions.ruby;
 const ERB_EXTENSIONS = DEFAULTS.extensions.erb;
-const CSHARP_EXTENSIONS = DEFAULTS.extensions.csharp;
-const GO_EXTENSIONS = DEFAULTS.extensions.go;
-const RUST_EXTENSIONS = DEFAULTS.extensions.rust;
-const PHP_EXTENSIONS = DEFAULTS.extensions.php;
-const PYTHON_EXTENSIONS = DEFAULTS.extensions.python;
 const TOOLING_EXTENSIONS = DEFAULTS.extensions.tooling;
 const MARKDOWN_PREVIEW_EXTENSIONS = DEFAULTS.extensions.markdownPreview;
 
@@ -116,21 +106,6 @@ const RUBY_MONOREPO_DOCKERFILE_SRC = join(
   'shared',
   'docker',
   'Dockerfile.ruby-monorepo',
-);
-const DOTNET_DOCKERFILE_SRC = join(
-  ROOT,
-  'shared',
-  'docker',
-  'Dockerfile.dotnet',
-);
-const GO_DOCKERFILE_SRC = join(ROOT, 'shared', 'docker', 'Dockerfile.go');
-const RUST_DOCKERFILE_SRC = join(ROOT, 'shared', 'docker', 'Dockerfile.rust');
-const PHP_DOCKERFILE_SRC = join(ROOT, 'shared', 'docker', 'Dockerfile.php');
-const PYTHON_DOCKERFILE_SRC = join(
-  ROOT,
-  'shared',
-  'docker',
-  'Dockerfile.python',
 );
 
 // Common devcontainer options (reference: anthropics/claude-code .devcontainer)
@@ -406,139 +381,6 @@ const STACKS: Stack[] = [
       },
     },
   },
-  {
-    dir: `${TEMPLATES_DIR}/csharp`,
-    config: {
-      name: 'template-csharp',
-      build: {
-        dockerfile: 'Dockerfile',
-        context: '..',
-        args: BUILD_ARGS_DEVCONTAINER,
-      },
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: CLAUDE_BASE_MOUNTS,
-      runArgs: RUN_ARGS_FIREWALL,
-      containerEnv: CONTAINER_ENV_FIREWALL,
-      postStartCommand: POST_START_FIREWALL,
-      waitFor: 'postStartCommand',
-      customizations: {
-        vscode: {
-          extensions: [...BASE_EXTENSIONS, ...CSHARP_EXTENSIONS],
-          settings: { ...BASE_SETTINGS },
-        },
-      },
-    },
-  },
-  {
-    dir: `${TEMPLATES_DIR}/go`,
-    config: {
-      name: 'template-go',
-      build: {
-        dockerfile: 'Dockerfile',
-        context: '..',
-        args: BUILD_ARGS_DEVCONTAINER,
-      },
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: CLAUDE_BASE_MOUNTS,
-      runArgs: RUN_ARGS_FIREWALL,
-      containerEnv: CONTAINER_ENV_FIREWALL,
-      postStartCommand: POST_START_FIREWALL,
-      waitFor: 'postStartCommand',
-      customizations: {
-        vscode: {
-          extensions: [...BASE_EXTENSIONS, ...GO_EXTENSIONS],
-          settings: { ...BASE_SETTINGS },
-        },
-      },
-    },
-  },
-  {
-    dir: `${TEMPLATES_DIR}/rust`,
-    config: {
-      name: 'template-rust',
-      build: {
-        dockerfile: 'Dockerfile',
-        context: '..',
-        args: BUILD_ARGS_DEVCONTAINER,
-      },
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: CLAUDE_BASE_MOUNTS,
-      runArgs: RUN_ARGS_FIREWALL,
-      containerEnv: CONTAINER_ENV_FIREWALL,
-      postStartCommand: POST_START_FIREWALL,
-      waitFor: 'postStartCommand',
-      customizations: {
-        vscode: {
-          extensions: [...BASE_EXTENSIONS, ...RUST_EXTENSIONS],
-          settings: { ...BASE_SETTINGS },
-        },
-      },
-    },
-  },
-  {
-    dir: `${TEMPLATES_DIR}/laravel`,
-    config: {
-      name: 'template-laravel',
-      build: {
-        dockerfile: 'Dockerfile',
-        context: '..',
-        args: BUILD_ARGS_DEVCONTAINER,
-      },
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: CLAUDE_BASE_MOUNTS,
-      runArgs: RUN_ARGS_FIREWALL,
-      containerEnv: CONTAINER_ENV_FIREWALL,
-      postStartCommand: POST_START_FIREWALL,
-      waitFor: 'postStartCommand',
-      customizations: {
-        vscode: {
-          extensions: [
-            ...BASE_EXTENSIONS,
-            ...PHP_EXTENSIONS,
-            ...TOOLING_EXTENSIONS,
-          ],
-          settings: { ...BASE_SETTINGS },
-        },
-      },
-    },
-  },
-  {
-    dir: `${TEMPLATES_DIR}/django`,
-    config: {
-      name: 'template-django',
-      build: {
-        dockerfile: 'Dockerfile',
-        context: '..',
-        args: BUILD_ARGS_DEVCONTAINER,
-      },
-      workspaceFolder: '/workspace',
-      workspaceMount: WORKSPACE_MOUNT,
-      remoteUser: 'node',
-      mounts: CLAUDE_BASE_MOUNTS,
-      runArgs: RUN_ARGS_FIREWALL,
-      containerEnv: CONTAINER_ENV_FIREWALL,
-      postStartCommand: POST_START_FIREWALL,
-      waitFor: 'postStartCommand',
-      forwardPorts: [8000],
-      portsAttributes: {
-        '8000': { label: 'Django', onAutoForward: 'openPreview' },
-      },
-      customizations: {
-        vscode: {
-          extensions: [...BASE_EXTENSIONS, ...PYTHON_EXTENSIONS],
-          settings: { ...BASE_SETTINGS },
-        },
-      },
-    },
-  },
 ];
 
 // ── Shared docker-compose ──────────────────────────────────────────────────────
@@ -571,11 +413,6 @@ const DOCKERFILE_SRCS: Record<string, string> = {
   'Dockerfile.node': NODE_DOCKERFILE_SRC,
   'Dockerfile.ruby': RUBY_DOCKERFILE_SRC,
   'Dockerfile.ruby-monorepo': RUBY_MONOREPO_DOCKERFILE_SRC,
-  'Dockerfile.dotnet': DOTNET_DOCKERFILE_SRC,
-  'Dockerfile.go': GO_DOCKERFILE_SRC,
-  'Dockerfile.rust': RUST_DOCKERFILE_SRC,
-  'Dockerfile.php': PHP_DOCKERFILE_SRC,
-  'Dockerfile.python': PYTHON_DOCKERFILE_SRC,
 };
 
 function dockerfileHeader(srcFile: string): string {
@@ -612,7 +449,9 @@ function writeInitFirewall(outDir: string, templateDir: string): void {
   const firewallOut = join(outDir, 'init-firewall.sh');
   let firewallContent = readFileSync(INIT_FIREWALL_SRC, 'utf8');
   if (!firewallContent.includes(FIREWALL_PLACEHOLDER)) {
-    throw new Error(`init-firewall.sh missing placeholder ${FIREWALL_PLACEHOLDER}`);
+    throw new Error(
+      `init-firewall.sh missing placeholder ${FIREWALL_PLACEHOLDER}`,
+    );
   }
   firewallContent = firewallContent.replace(FIREWALL_PLACEHOLDER, domainBlock);
 
@@ -709,7 +548,7 @@ export function run(): void {
     postStartCommand: NODE_POST_START,
     waitFor: 'postStartCommand',
     postCreateCommand: 'yarn install',
-    forwardPorts: [3001, 3002, 3003, 3004, 3007],
+    forwardPorts: [3000, 3001, 3002, 3003, 3004, 3007, 4567, 5173],
     customizations: {
       vscode: {
         extensions: [
@@ -736,7 +575,8 @@ export function run(): void {
   const rootDevcontainerPath = join(ROOT_DEVCONTAINER_DIR, 'devcontainer.json');
   const rootConfigWithCursor = {
     ...rootDevcontainerConfig,
-    ...(rootFeatures && Object.keys(rootFeatures).length > 0 && { features: rootFeatures }),
+    ...(rootFeatures &&
+      Object.keys(rootFeatures).length > 0 && { features: rootFeatures }),
     customizations: {
       vscode: rootDevcontainerConfig.customizations.vscode,
       cursor: rootDevcontainerConfig.customizations.vscode,
@@ -750,7 +590,10 @@ export function run(): void {
   logger.generated(rootDevcontainerPath);
 
   const rubyDbComposeContent = readFileSync(RUBY_DB_COMPOSE_SRC, 'utf8');
-  for (const dir of [`${TEMPLATES_DIR}/sinatra`, `${TEMPLATES_DIR}/rails-api`]) {
+  for (const dir of [
+    `${TEMPLATES_DIR}/sinatra`,
+    `${TEMPLATES_DIR}/rails-api`,
+  ]) {
     const outPath = join(ROOT, dir, '.devcontainer', 'docker-compose.yml');
     writeFileSync(outPath, YAML_HEADER_RUBY_DB + rubyDbComposeContent, 'utf8');
     logger.generated(outPath);
@@ -763,7 +606,11 @@ export function run(): void {
     '.devcontainer',
     'docker-compose.yml',
   );
-  writeFileSync(railsComposeOut, YAML_HEADER_RAILS + railsComposeContent, 'utf8');
+  writeFileSync(
+    railsComposeOut,
+    YAML_HEADER_RAILS + railsComposeContent,
+    'utf8',
+  );
   logger.generated(railsComposeOut);
 }
 

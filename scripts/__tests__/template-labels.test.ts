@@ -13,9 +13,9 @@ describe('template-labels', () => {
       const stackIds = new Set(
         STACK_DEFINITIONS.map((s) => s.id).concat(
           STACK_DEFINITIONS.filter((s) => s.fullDir != null).map(
-            (s) => `${s.id}_full`
-          )
-        )
+            (s) => `${s.id}_full`,
+          ),
+        ),
       );
       for (const key of Object.keys(TEMPLATE_LABELS)) {
         expect(stackIds.has(key)).toBe(true);

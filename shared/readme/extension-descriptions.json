@@ -1,10 +1,6 @@
 {
   "esbenp.prettier-vscode": "コードフォーマット（Prettier）",
   "dbaeumer.vscode-eslint": "ESLint の静的解析",
-  "ms-dotnettools.csharp": "C# 言語サポート（IntelliSense・リファクタ等）",
-  "ms-dotnettools.csdevkit": "C# Dev Kit（Solution Explorer・テスト・NuGet 等）",
-  "golang.go": "Go 言語サポート（gopls・IntelliSense・テスト・デバッグ等）",
-  "rust-lang.rust-analyzer": "Rust 言語サポート（補完・ナビゲーション・型チェック等）",
   "Shopify.ruby-extensions-pack": "Ruby 開発ツール一式（Ruby LSP など）",
   "aliariff.vscode-erb-beautify": "ERB テンプレートのフォーマット",
   "eamodio.gitlens": "Git 履歴・差分の強力な可視化",
@@ -15,7 +11,6 @@
   "github.vscode-github-actions": "GitHub Actions のサポート",
   "yzhang.markdown-all-in-one": "Markdown 編集支援",
   "DavidAnson.vscode-markdownlint": "Markdown の構文チェック",
-  "ms-python.python": "Python 言語サポート（IntelliSense・デバッグ・テスト等）",
-  "ms-python.vscode-pylance": "Python の型チェック・補完（Pylance）",
-  "bmewburn.vscode-intelephense-client": "PHP の IntelliSense・補完（Intelephense）"
+  "bierner.markdown-mermaid": "Markdown 内の Mermaid プレビュー",
+  "anthropic.claude-code": "Claude Code（エディタ連携）"
 }

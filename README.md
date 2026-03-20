@@ -8,15 +8,76 @@
 
 このリポジトリで `yarn create-project` や `yarn generate:all` などを**ローカルで実行する**には、Node.js と Yarn が必要です。Dev Container で開く場合は不要です。
 
-- **Node.js**（推奨: v22 以上。テンプレートは Node 24 を想定）
+#### anyenv を使用した準備（推奨）
 
-  - [nodejs.org](https://nodejs.org/ja/) から LTS をインストールする
-  - または [nodenv](https://github.com/nodenv/nodenv) を使う場合:
+Ruby テンプレートも含めて複数のランタイムを扱う場合は、[anyenv](https://github.com/anyenv/anyenv) で統一管理できます。
+
+1. **anyenv のインストール**
+
+   ```bash
+   git clone https://github.com/anyenv/anyenv ~/.anyenv
+   echo 'export PATH="$HOME/.anyenv/bin:$PATH"' >> ~/.zshrc
+   eval "$(anyenv init -)"
+   ```
+
+2. **言語マネージャーをインストール（anyenv 対応言語）**
+
+   ```bash
+   anyenv install nodenv
+   anyenv install rbenv
+   ```
+
+3. **各言語をインストール**
+
+   **anyenv で管理:**
+
+   ```bash
+   # 必須（このリポジトリ・テンプレート用）
+   nodenv install 24.11.0
+   rbenv install 3.3.6
+   ```
+
+   **利用可能なバージョンを確認:**
+
+   ```bash
+   nodenv install --list | grep 24
+   rbenv install --list | grep 3.3
+   ```
+
+4. **このリポジトリで言語をセットアップ**
+
+   ```bash
+   cd starter-templates
+   ```
+
+   リポジトリルートに `.node-version` と `.ruby-version` があるため、以降このディレクトリで Node / Ruby の推奨バージョンが切り替わります。
+
+5. **Yarn と依存関係をインストール**
+
+   ```bash
+   corepack enable
+   yarn install
+   ```
+
+#### 従来の方法（言語マネージャーまたは直接インストール）
+
+- **Node.js**（v24.11.0）
+
+  - [nodejs.org](https://nodejs.org/ja/) から LTS をインストール
+  - または [nodenv](https://github.com/nodenv/nodenv):
 
     ```bash
-    # nodenv の例（rbenv と同じ思想。Rails などと合わせて使いやすい）
-    nodenv install 24
-    nodenv local 24
+    nodenv install 24.11.0
+    nodenv local 24.11.0
+    ```
+
+- **Ruby**（v3.3.6、テンプレート用・scripts 実行用）
+
+  - [rbenv](https://github.com/rbenv/rbenv):
+
+    ```bash
+    rbenv install 3.3.6
+    rbenv local 3.3.6
     ```
 
 - **Yarn**
@@ -41,6 +102,30 @@
   ```bash
   yarn install
   ```
+
+#### インストール確認
+
+環境が正しくセットアップされているか確認するには、以下のコマンドで各言語のバージョンを確認できます。
+
+**このリポジトリで必須:**
+
+```bash
+node --version        # Node.js（v24 以上）
+ruby --version        # Ruby（3.3.6）
+yarn --version        # Yarn
+```
+
+**anyenv を使用している場合:**
+
+ディレクトリを移動すると `.node-version` / `.ruby-version` から自動的にバージョンが切り替わります:
+
+```bash
+cd minimal-templates/rails
+ruby --version         # 3.3.6（rails/.ruby-version から自動切り替え）
+
+cd ../nextjs
+node --version         # 24.x（nextjs/.node-version から自動切り替え）
+```
 
 ### Dev Container（リポジトリルート）
 
@@ -84,12 +169,8 @@
 | [minimal-templates/react](minimal-templates/react) | React + Vite |
 | [minimal-templates/rails](minimal-templates/rails) | Ruby on Rails |
 | [minimal-templates/rails-api](minimal-templates/rails-api) | Rails API |
-| [minimal-templates/laravel](minimal-templates/laravel) | Laravel（PHP） |
 | [minimal-templates/sinatra](minimal-templates/sinatra) | Sinatra |
-| [minimal-templates/csharp](minimal-templates/csharp) | ASP.NET Core Minimal API（C#） |
-| [minimal-templates/go](minimal-templates/go) | Go（Gin） |
-| [minimal-templates/rust](minimal-templates/rust) | Rust（Axum） |
-| [minimal-templates/django](minimal-templates/django) | Django（Python） |
+| [minimal-templates/ruby](minimal-templates/ruby) | Ruby |
 
 ## テンプレート一覧（full-templates/）
 
@@ -118,7 +199,7 @@
 | `yarn lint:fix` | ESLint の自動修正 |
 | `yarn format` | Prettier で `scripts/**/*.ts` をフォーマット |
 
-テンプレートの README を変更する場合は `scripts/template-readme-config.ts` を編集してから `yarn generate:configs` を実行してください。
+テンプレートの README を変更する場合は `scripts/lib/template-readme-config.ts` を編集してから `yarn generate:configs` を実行してください。
 
 ## CI の管理
 

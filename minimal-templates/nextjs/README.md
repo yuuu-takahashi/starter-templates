@@ -34,7 +34,7 @@
 
 ### Dev Container でインストールされる主な拡張機能
 
-- anthropic.claude-code
+- anthropic.claude-code — Claude Code（エディタ連携）
 - dbaeumer.vscode-eslint — ESLint の静的解析
 - eamodio.gitlens — Git 履歴・差分の強力な可視化
 - esbenp.prettier-vscode — コードフォーマット（Prettier）

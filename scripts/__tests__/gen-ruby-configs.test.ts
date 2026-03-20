@@ -48,7 +48,7 @@ describe('gen-ruby-configs 生成ファイル検証', () => {
         'shared',
         'lint-format',
         'rubocop',
-        'rubocop.rails_api.yml'
+        'rubocop.rails_api.yml',
       );
       if (existsSync(generatedPath) && existsSync(sharedPath)) {
         const generated = readFileSync(generatedPath, 'utf8');

@@ -24,13 +24,8 @@ jobs:
       react: ${{ steps.filter.outputs.react }}
       rails: ${{ steps.filter.outputs.rails }}
       rails_api: ${{ steps.filter.outputs.rails_api }}
-      laravel: ${{ steps.filter.outputs.laravel }}
       sinatra: ${{ steps.filter.outputs.sinatra }}
       ruby: ${{ steps.filter.outputs.ruby }}
-      csharp: ${{ steps.filter.outputs.csharp }}
-      go: ${{ steps.filter.outputs.go }}
-      rust: ${{ steps.filter.outputs.rust }}
-      django: ${{ steps.filter.outputs.django }}
       full_nextjs: ${{ steps.filter.outputs.full_nextjs }}
     steps:
       - uses: actions/checkout@v4
@@ -48,20 +43,10 @@ jobs:
               - 'minimal-templates/rails/**'
             rails_api:
               - 'minimal-templates/rails-api/**'
-            laravel:
-              - 'minimal-templates/laravel/**'
             sinatra:
               - 'minimal-templates/sinatra/**'
             ruby:
               - 'minimal-templates/ruby/**'
-            csharp:
-              - 'minimal-templates/csharp/**'
-            go:
-              - 'minimal-templates/go/**'
-            rust:
-              - 'minimal-templates/rust/**'
-            django:
-              - 'minimal-templates/django/**'
             full_nextjs:
               - 'full-templates/nextjs/**'
   generate_check:
@@ -197,33 +182,6 @@ jobs:
       - name: rubocop
         run: bundle exec rubocop
         working-directory: minimal-templates/rails-api
-  laravel:
-    needs: changes
-    if: needs.changes.outputs.laravel == 'true'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: minimal-templates/laravel
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.3"
-          extensions: mbstring, zip, exif, pcntl, bcmath, gd
-          coverage: none
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: minimal-templates/laravel/.composer-cache
-          key: ${{ runner.os }}-composer-${{ hashFiles('minimal-templates/laravel/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-      - name: Install dependencies
-        run: COMPOSER_CACHE_DIR=.composer-cache composer install --prefer-dist --no-progress
-        working-directory: minimal-templates/laravel
-      - name: Laravel Pint (format & lint)
-        run: ./vendor/bin/pint --test
-        working-directory: minimal-templates/laravel
   sinatra:
     needs: changes
     if: needs.changes.outputs.sinatra == 'true'
@@ -278,116 +236,6 @@ jobs:
       - name: rubocop
         run: bundle exec rubocop
         working-directory: minimal-templates/ruby
-  csharp:
-    needs: changes
-    if: needs.changes.outputs.csharp == 'true'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: minimal-templates/csharp
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          global-json-file: minimal-templates/csharp/global.json
-      - name: Restore
-        run: dotnet restore
-        working-directory: minimal-templates/csharp
-      - name: Build
-        run: dotnet build --no-restore
-        working-directory: minimal-templates/csharp
-  go:
-    needs: changes
-    if: needs.changes.outputs.go == 'true'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: minimal-templates/go
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version-file: minimal-templates/go/.go-version
-      - name: Download Go modules
-        run: go mod download
-        working-directory: minimal-templates/go
-      - name: Tidy Go modules
-        run: go mod tidy
-        working-directory: minimal-templates/go
-      - name: golangci-lint
-        run: |
-          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-          "$(go env GOPATH)/bin/golangci-lint" run
-        working-directory: minimal-templates/go
-      - name: Build
-        run: go build ./...
-        working-directory: minimal-templates/go
-  rust:
-    needs: changes
-    if: needs.changes.outputs.rust == 'true'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: minimal-templates/rust
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt, clippy
-      - name: Cache cargo
-        uses: actions/cache@v4
-        with:
-          path: minimal-templates/rust/target
-          key: ${{ runner.os }}-cargo-rust-${{ hashFiles('minimal-templates/rust/Cargo.lock', 'minimal-templates/rust/Cargo.toml') }}
-          restore-keys: ${{ runner.os }}-cargo-rust-
-      - name: Check format
-        run: cargo fmt --all -- --check
-        working-directory: minimal-templates/rust
-      - name: Clippy
-        run: cargo clippy --all-targets -- -D warnings
-        working-directory: minimal-templates/rust
-      - name: Build
-        run: cargo build
-        working-directory: minimal-templates/rust
-  django:
-    needs: changes
-    if: needs.changes.outputs.django == 'true'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: minimal-templates/django
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: minimal-templates/django/.python-version
-      - name: Cache pip
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('minimal-templates/django/requirements*.txt') }}
-          restore-keys: ${{ runner.os }}-pip-
-      - name: Install dependencies
-        run: |
-          python -m venv .venv
-          . .venv/bin/activate
-          pip install -r requirements.txt
-          pip install ruff black
-        working-directory: minimal-templates/django
-      - name: Ruff
-        run: |
-          . .venv/bin/activate
-          ruff check .
-        working-directory: minimal-templates/django
-      - name: Black
-        run: |
-          . .venv/bin/activate
-          black --check .
-        working-directory: minimal-templates/django
   full_nextjs:
     needs: changes
     if: needs.changes.outputs.full_nextjs == 'true'

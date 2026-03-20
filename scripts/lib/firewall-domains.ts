@@ -2,8 +2,7 @@
  * ファイアウォール許可ドメイン: カテゴリ別管理。
  * init-firewall.sh 生成時に scripts/generate-devcontainer.ts で参照する。
  *
- * 設計: npm install / pip install / bundle install / docker pull など
- * 全パッケージマネージャが通るよう、カテゴリごとに整理する。
+ * 設計: npm / yarn / bundle install や docker pull、開発時の参照先に合わせて整理する。
  */
 
 // ── GitHub ─────────────────────────────────────────────────────────────────
@@ -58,23 +57,11 @@ export const COMMON_FIREWALL_DOMAINS: readonly string[] = [
   'qiita.com',
   'zenn.dev',
   'teratail.com',
-  // 公式ドキュメント
-  'docs.python.org',
+  // 公式ドキュメント（Node / Ruby テンプレート範囲）
   'nodejs.org',
-  'go.dev',
-  'pkg.go.dev',
-  'rust-lang.org',
-  'doc.rust-lang.org',
-  'docs.rs',
-  'learn.microsoft.com',
-  'docs.microsoft.com',
   'ruby-lang.org',
-  'www.php.net',
-  'laravel.com',
   'nextjs.org',
   'react.dev',
-  'vuejs.org',
-  'getcomposer.org',
   'github.io',
   // インフラ・クラウド
   'docs.aws.amazon.com',
@@ -100,11 +87,6 @@ export const STACK_FIREWALL_DOMAINS: Readonly<Record<string, string[]>> = {
   'rails-api': ['rubygems.org'],
   ruby: ['rubygems.org'],
   sinatra: ['rubygems.org'],
-  laravel: ['packagist.org', 'repo.packagist.org'],
-  django: ['pypi.org', 'files.pythonhosted.org'],
-  csharp: ['api.nuget.org', 'nuget.org', 'globalcdn.nuget.org'],
-  go: ['proxy.golang.org', 'sum.golang.org'],
-  rust: ['crates.io', 'static.crates.io'],
 };
 
 /**

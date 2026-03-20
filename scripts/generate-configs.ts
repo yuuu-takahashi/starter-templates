@@ -9,12 +9,12 @@
  * Run: yarn generate:configs
  */
 
-import { run as genCommonFiles } from "./gen-common-files.js";
-import { run as genToolConfigs } from "./gen-tool-configs.js";
-import { run as genRubyConfigs } from "./gen-ruby-configs.js";
-import { run as genWorkflows } from "./gen-workflows.js";
-import { run as genReadme } from "./gen-readme.js";
-import { logger } from "./lib/logger.js";
+import { run as genCommonFiles } from './gen-common-files.js';
+import { run as genToolConfigs } from './gen-tool-configs.js';
+import { run as genRubyConfigs } from './gen-ruby-configs.js';
+import { run as genWorkflows } from './gen-workflows.js';
+import { run as genReadme } from './gen-readme.js';
+import { logger } from './lib/logger.js';
 
 const run = async (): Promise<void> => {
   logger.info('🔄 Starting configuration generation...\n');
@@ -42,7 +42,10 @@ const run = async (): Promise<void> => {
 
     logger.success('All configurations generated successfully!');
   } catch (error) {
-    logger.error('Configuration generation failed', error instanceof Error ? error : undefined);
+    logger.error(
+      'Configuration generation failed',
+      error instanceof Error ? error : undefined,
+    );
     process.exit(1);
   }
 };

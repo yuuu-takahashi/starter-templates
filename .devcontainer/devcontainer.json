@@ -29,11 +29,14 @@
   "waitFor": "postStartCommand",
   "postCreateCommand": "yarn install",
   "forwardPorts": [
+    3000,
     3001,
     3002,
     3003,
     3004,
-    3007
+    3007,
+    4567,
+    5173
   ],
   "customizations": {
     "vscode": {

@@ -9,7 +9,11 @@ import {
 
 describe('GenerationError', () => {
   it('正しいメッセージ形式でエラーを生成する', () => {
-    const error = new GenerationError('eslint', '/path/to/file', 'File not found');
+    const error = new GenerationError(
+      'eslint',
+      '/path/to/file',
+      'File not found',
+    );
     expect(error.message).toBe('[eslint] File not found');
     expect(error.operation).toBe('eslint');
     expect(error.context).toBe('/path/to/file');
@@ -51,12 +55,16 @@ describe('ensureDirectoryExists', () => {
 
   it('存在しないディレクトリで GenerationError を投げる', () => {
     const dirPath = '/nonexistent/directory/path';
-    expect(() => ensureDirectoryExists(dirPath, 'test')).toThrow(GenerationError);
+    expect(() => ensureDirectoryExists(dirPath, 'test')).toThrow(
+      GenerationError,
+    );
   });
 
   it('エラーメッセージに "Directory not found" が含まれる', () => {
     const dirPath = '/nonexistent/dir';
-    expect(() => ensureDirectoryExists(dirPath, 'test')).toThrow(GenerationError);
+    expect(() => ensureDirectoryExists(dirPath, 'test')).toThrow(
+      GenerationError,
+    );
   });
 });
 
@@ -68,11 +76,15 @@ describe('ensureDirectoryIsDir', () => {
 
   it('ファイルで GenerationError を投げる', () => {
     const filePath = join(process.cwd(), 'package.json');
-    expect(() => ensureDirectoryIsDir(filePath, 'test')).toThrow(GenerationError);
+    expect(() => ensureDirectoryIsDir(filePath, 'test')).toThrow(
+      GenerationError,
+    );
   });
 
   it('エラーメッセージに "Not a directory" が含まれる', () => {
     const filePath = join(process.cwd(), 'package.json');
-    expect(() => ensureDirectoryIsDir(filePath, 'test')).toThrow(GenerationError);
+    expect(() => ensureDirectoryIsDir(filePath, 'test')).toThrow(
+      GenerationError,
+    );
   });
 });

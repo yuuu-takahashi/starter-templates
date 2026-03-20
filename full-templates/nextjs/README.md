@@ -34,10 +34,12 @@
 
 ### Dev Container でインストールされる主な拡張機能
 
-- anthropic.claude-code
+- anthropic.claude-code — Claude Code（エディタ連携）
+- bierner.markdown-mermaid — Markdown 内の Mermaid プレビュー
 - dbaeumer.vscode-eslint — ESLint の静的解析
 - eamodio.gitlens — Git 履歴・差分の強力な可視化
 - esbenp.prettier-vscode — コードフォーマット（Prettier）
+- yzhang.markdown-all-in-one — Markdown 編集支援
 
 ## 開発環境構築
 
