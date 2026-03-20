@@ -10,9 +10,9 @@ describe "Health", type: :request do
         schema type: :object,
                properties: {
                  status: { type: :string },
-                 timestamp: { type: :string, format: "date-time" },
+                 timestamp: { type: :string, format: "date-time" }
                },
-               required: ["status", "timestamp"]
+               required: [ "status", "timestamp" ]
 
         run_test!
       end

@@ -37,8 +37,8 @@ module ApiErrorHandler
       error: {
         code: code,
         message: message,
-        errors: errors,
-      },
+        errors: errors
+      }
     }, status: status
   end
 end

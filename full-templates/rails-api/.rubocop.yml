@@ -1,7 +1,7 @@
 inherit_gem:
   rubocop-rails-omakase: rubocop.yml
 
-require:
+plugins:
   - rubocop-rspec
   - rubocop-factory_bot
 
@@ -40,4 +40,36 @@ RSpec/DescribeClass:
     - spec/features/**/*
 
 RSpec/MultipleExpectations:
+  Enabled: true
+
+# New RSpec cops (v3.6+)
+RSpec/IncludeExamples:
+  Enabled: true
+
+RSpec/LeakyLocalVariable:
+  Enabled: true
+
+RSpec/Output:
+  Enabled: true
+
+# New FactoryBot cops
+FactoryBot/AssociationStyle:
+  Enabled: true
+
+FactoryBot/ConsistentParenthesesStyle:
+  Enabled: true
+
+FactoryBot/ExcessiveCreateList:
+  Enabled: true
+
+FactoryBot/FactoryAssociationWithStrategy:
+  Enabled: true
+
+FactoryBot/FactoryNameStyle:
+  Enabled: true
+
+FactoryBot/IdSequence:
+  Enabled: true
+
+FactoryBot/RedundantFactoryOption:
   Enabled: true
