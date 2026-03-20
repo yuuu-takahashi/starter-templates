@@ -2,7 +2,34 @@
  * テンプレート・スタックの一覧を一元定義。
  * 新規テンプレート追加時は STACK_DEFINITIONS に1エントリ追加するだけで、
  * TEMPLATE_DIRS / CODE_CHECK_SOURCE / ROOT_STACKS 等はすべてここから導出される。
+ *
+ * ## 新規スタック追加手順
+ *
+ * 1. STACK_DEFINITIONS に新しいスタック定義を追加
+ * 2. 各フィールド（dir, id, runtime, workflow, devcontainer など）を適切に設定
+ * 3. devcontainer フィールドに Dev Container 設定を記述
+ *    - buildMode: 'node' | 'ruby' | 'docker-compose'
+ *    - remoteUser: コンテナ内のユーザー（通常は 'node'）
+ *    - extensionSets: 必要なVSCode拡張機能セット
+ *    - extraSettings: VSCode 設定のカスタマイズ（オプション）
+ *    - composeKey: docker-compose ファイルの種類（docker-compose の場合）
+ *    - full: full-templates 版の設定（オプション）
+ * 4. shared/npm/<stack>.json を作成（hasNpm=true の場合）
+ * 5. shared/gemfile/Gemfile.<stack> を作成（hasGemfile=true の場合）
+ * 6. yarn generate:all で自動生成
+ *
+ * ## 設定の一元性
+ *
+ * STACK_DEFINITIONS は単一の真実の源（Single Source of Truth）として機能します。
+ * ここに記述された情報から以下が自動導出されます：
+ * - package.json / Gemfile の生成箇所
+ * - .node-version / .ruby-version の配布先
+ * - GitHub Workflows の生成
+ * - .devcontainer/devcontainer.json の生成
+ * - ルート CI 設定
  */
+
+import type { DevcontainerStackConfig } from './devcontainer-types.js';
 
 /** minimal-templates: 最低限。full-templates: 実用（OSS で直感的な対比） */
 export const TEMPLATES_DIR = 'minimal-templates';
@@ -40,6 +67,10 @@ export interface StackDefinition {
   hasGemfile: boolean;
   /** ルート CI でモノレポ向け path/working-directory 変換を適用する */
   monorepoPrefix: boolean;
+  /** minimal用の devcontainer.json 設定。新規スタック追加時には指定が推奨される */
+  devcontainer?: DevcontainerStackConfig;
+  /** full-templates 用の devcontainer.json 設定。undefined なら full版なし */
+  devcontainerFull?: DevcontainerStackConfig;
 }
 
 /** スタック名（dir の "minimal-templates/" 以降、例: nextjs, rails-api） */
@@ -64,6 +95,24 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
     fullNpmDiffSlug: 'nextjs-full',
     fullCodeCheckWorkflow: 'code-check-nextjs-full.yml',
     ciWorkflow: 'ci-nextjs-full.yml',
+    devcontainer: {
+      name: 'template-nextjs',
+      buildMode: 'node',
+      remoteUser: 'node',
+      extensionSets: ['base', 'node'],
+      extraSettings: {
+        'eslint.validate': [
+          'javascript',
+          'javascriptreact',
+          'typescript',
+          'typescriptreact',
+        ],
+      },
+      full: {
+        name: 'full-template-nextjs',
+        extensionSets: ['base', 'node', 'markdownPreview'],
+      },
+    },
   },
   {
     dir: `${td}/nodejs`,
@@ -76,6 +125,15 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
     hasNpm: true,
     hasGemfile: false,
     monorepoPrefix: false,
+    devcontainer: {
+      name: 'template-nodejs',
+      buildMode: 'node',
+      remoteUser: 'node',
+      extensionSets: ['base', 'node'],
+      extraSettings: {
+        'eslint.validate': ['javascript'],
+      },
+    },
   },
   {
     dir: `${td}/react`,
@@ -88,6 +146,20 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
     hasNpm: true,
     hasGemfile: false,
     monorepoPrefix: false,
+    devcontainer: {
+      name: 'template-react',
+      buildMode: 'node',
+      remoteUser: 'node',
+      extensionSets: ['base', 'node'],
+      extraSettings: {
+        'eslint.validate': [
+          'javascript',
+          'javascriptreact',
+          'typescript',
+          'typescriptreact',
+        ],
+      },
+    },
   },
   {
     dir: `${td}/rails`,
@@ -100,6 +172,16 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
     hasNpm: true,
     hasGemfile: true,
     monorepoPrefix: false,
+    devcontainer: {
+      name: 'template-rails',
+      buildMode: 'docker-compose',
+      remoteUser: 'node',
+      extensionSets: ['base', 'ruby', 'erb', 'node', 'tooling'],
+      extraSettings: {
+        'eslint.validate': ['javascript'],
+      },
+      composeKey: 'rails',
+    },
   },
   {
     dir: `${td}/rails-api`,
@@ -116,6 +198,17 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
     fullNpmDiffSlug: 'rails-api-full',
     fullCodeCheckWorkflow: 'code-check-rails-api-full.yml',
     ciWorkflow: 'ci-rails-api-full.yml',
+    devcontainer: {
+      name: 'template-rails-api',
+      buildMode: 'docker-compose',
+      remoteUser: 'node',
+      extensionSets: ['base', 'ruby'],
+      composeKey: 'ruby-db',
+      full: {
+        name: 'full-template-rails-api',
+        extensionSets: ['base', 'ruby', 'tooling'],
+      },
+    },
   },
   {
     dir: `${td}/sinatra`,
@@ -128,6 +221,13 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
     hasNpm: true,
     hasGemfile: true,
     monorepoPrefix: false,
+    devcontainer: {
+      name: 'template-sinatra',
+      buildMode: 'docker-compose',
+      remoteUser: 'node',
+      extensionSets: ['base', 'ruby', 'erb'],
+      composeKey: 'ruby-db',
+    },
   },
   {
     dir: `${td}/ruby`,
@@ -139,6 +239,12 @@ export const STACK_DEFINITIONS: readonly StackDefinition[] = [
     hasNpm: true,
     hasGemfile: true,
     monorepoPrefix: false,
+    devcontainer: {
+      name: 'template-ruby',
+      buildMode: 'ruby',
+      remoteUser: 'node',
+      extensionSets: ['base', 'ruby'],
+    },
   },
 ];
 

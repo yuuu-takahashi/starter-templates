@@ -2,16 +2,33 @@
  * Generates README.md for each template.
  * Run via generate-configs.ts
  * Template: shared/readme/README.md.hbs
+ *
+ * ## 生成プロセス
+ *
+ * 1. TEMPLATE_README_CONFIGS から各テンプレートの設定を取得
+ * 2. buildStackSection() で「主なライブラリ」「主な Gem」「拡張機能」セクションを生成
+ *    - npm/gemfile ファイルが存在しない場合は existsSync でチェック（エラーなく黙ってスキップ）
+ * 3. prepareTemplateContext() で Handlebars テンプレート用のコンテキストを準備
+ * 4. shared/readme/README.md.hbs で README.md を生成
+ * 5. outputDir で出力先を決定
+ *
+ * ## outputDir の重要性
+ *
+ * - minimal テンプレート: outputDir なし → minimal-templates/${id} に出力
+ * - full テンプレート: outputDir 指定 → full-templates/${id} に出力
+ *
+ * 従来のハック（-full サフィックスから出力先を計算）は廃止され、
+ * 明示的な outputDir で管理する構造に変更されました。
  */
 
-import { readFileSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import Handlebars from 'handlebars';
 import {
   TEMPLATE_README_CONFIGS,
   type TemplateReadmeConfig,
-  type ExtensionSetKey,
 } from './lib/template-readme-config.js';
+import type { ExtensionSetKey } from './lib/devcontainer-types.js';
 import { STACK_DEFINITIONS, TEMPLATES_DIR, slug } from './lib/stacks.js';
 import { TEMPLATE_LABELS } from './lib/template-labels.js';
 import {
@@ -20,7 +37,7 @@ import {
   EXTENSION_DESCRIPTIONS,
 } from './lib/readme-descriptions.js';
 import { ROOT, SHARED_NPM, SHARED_GEMFILE } from './lib/utils.js';
-import { GenerationError } from './lib/errors.js';
+import { handleGenerationError } from './lib/errors.js';
 
 const README_TEMPLATE_PATH = join(ROOT, 'shared', 'readme', 'README.md.hbs');
 
@@ -39,7 +56,7 @@ export function buildStackSection(
 
   if (c.npmStack) {
     const npmPath = join(SHARED_NPM, `${c.npmStack}.json`);
-    try {
+    if (existsSync(npmPath)) {
       const pkg = JSON.parse(readFileSync(npmPath, 'utf8')) as {
         dependencies?: Record<string, string>;
         devDependencies?: Record<string, string>;
@@ -64,14 +81,12 @@ export function buildStackSection(
           parts.push('');
         }
       }
-    } catch {
-      // ファイルが無い場合はスキップ
     }
   }
 
   if (c.gemfileStack) {
     const gemfilePath = join(SHARED_GEMFILE, `Gemfile.${c.gemfileStack}`);
-    try {
+    if (existsSync(gemfilePath)) {
       const gemfileContent = readFileSync(gemfilePath, 'utf8');
       const gemNames = [
         ...gemfileContent.matchAll(/gem\s+['"]([^'"]+)['"]/g),
@@ -83,8 +98,6 @@ export function buildStackSection(
         unique.forEach((name) => parts.push(withDesc(name, GEM_DESCRIPTIONS)));
         parts.push('');
       }
-    } catch {
-      // ファイルが無い場合はスキップ
     }
   }
 
@@ -123,12 +136,19 @@ export function buildStackSection(
 export function prepareTemplateContext(
   config: TemplateReadmeConfig,
   stackSection: string | undefined,
+  extraSections: string | undefined,
 ): Record<string, unknown> {
   const setupSteps = config.setupSteps.map((step, i) => ({
     num: i + 1,
     label: step.label,
     commands: step.commands,
     hasCommands: step.commands.length > 0,
+  }));
+
+  // Convert devGuide.commands from array to newline-separated string for template
+  const devGuide = config.devGuide.map((guide) => ({
+    title: guide.title,
+    commands: guide.commands.join('\n'),
   }));
 
   const stackIndex = STACK_DEFINITIONS.findIndex(
@@ -140,9 +160,10 @@ export function prepareTemplateContext(
   const selectLabel =
     config.selectLabel ??
     (stack ? (TEMPLATE_LABELS[stack.id] ?? config.id) : config.id);
+  const title = config.title ?? `template-${config.id}`;
 
   return {
-    title: config.title,
+    title,
     description: config.description,
     id: config.id,
     stackSection: stackSection ?? '',
@@ -152,9 +173,9 @@ export function prepareTemplateContext(
     previewLine: config.previewUrl
       ? `ブラウザで <${config.previewUrl}> を開き、表示確認`
       : '',
-    devGuide: config.devGuide,
-    hasDevGuide: config.devGuide.length > 0,
-    extraSections: config.extraSections ?? '',
+    devGuide,
+    hasDevGuide: devGuide.length > 0,
+    extraSections: extraSections ?? '',
   };
 }
 
@@ -175,26 +196,27 @@ export async function run(): Promise<void> {
 
     for (const config of TEMPLATE_README_CONFIGS) {
       const stackSection = buildStackSection(config, devcontainerDefaults);
-      const context = prepareTemplateContext(config, stackSection);
+
+      // Load extra sections from external file if specified
+      let extraSections: string | undefined;
+      if (config.extraSectionsPath) {
+        const extraPath = join(ROOT, config.extraSectionsPath);
+        if (existsSync(extraPath)) {
+          extraSections = readFileSync(extraPath, 'utf8');
+        }
+      }
+
+      const context = prepareTemplateContext(config, stackSection, extraSections);
       const content = template(context);
       const normalized = content.replace(/\n{3,}/g, '\n\n').trimEnd() + '\n';
-      const outDir = config.id.endsWith('-full')
-        ? join(ROOT, 'full-templates', config.id.replace(/-full$/, ''))
+      const outDir = config.outputDir
+        ? join(ROOT, config.outputDir)
         : join(ROOT, TEMPLATES_DIR, config.id);
       const outPath = join(outDir, 'README.md');
       writeFileSync(outPath, normalized, 'utf8');
       console.log('Generated:', outPath);
     }
   } catch (error) {
-    if (error instanceof GenerationError) {
-      console.error(`\n❌ ${error.message}`);
-      console.error(`   Context: ${error.context}`);
-    } else if (error instanceof Error) {
-      console.error(`\n❌ Unexpected error: ${error.message}`);
-      console.error(error.stack);
-    } else {
-      console.error('\n❌ Unknown error occurred');
-    }
-    process.exit(1);
+    handleGenerationError(error);
   }
 }

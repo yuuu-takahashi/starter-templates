@@ -20,7 +20,7 @@ import {
   RUBY_VERSION_DIRS,
   STACK_DEFINITIONS,
 } from './lib/stacks.js';
-import { ensureFileExists, GenerationError } from './lib/errors.js';
+import { ensureFileExists, handleGenerationError } from './lib/errors.js';
 import { logger } from './lib/logger.js';
 
 export const run = (): void => {
@@ -95,15 +95,6 @@ export const run = (): void => {
       logger.generated(outPath);
     }
   } catch (error) {
-    if (error instanceof GenerationError) {
-      console.error(`\n❌ ${error.message}`);
-      console.error(`   Context: ${error.context}`);
-    } else if (error instanceof Error) {
-      console.error(`\n❌ Unexpected error: ${error.message}`);
-      console.error(error.stack);
-    } else {
-      console.error('\n❌ Unknown error occurred');
-    }
-    process.exit(1);
+    handleGenerationError(error);
   }
 };

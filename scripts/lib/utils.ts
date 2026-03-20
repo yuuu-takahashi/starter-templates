@@ -42,29 +42,29 @@ export const SHARED_NPM = join(ROOT, 'shared', 'npm');
 export const SHARED_GEMFILE = join(ROOT, 'shared', 'gemfile');
 export const SHARED_RUBOCOP = join(SHARED_LINT_FORMAT, 'rubocop');
 
-export function deepMerge<T extends Record<string, unknown>>(
+export const deepMerge = <T extends Record<string, unknown>>(
   a: T,
   b: Record<string, unknown>,
-): T {
-  const r = { ...a } as Record<string, unknown>;
-  for (const k of Object.keys(b)) {
-    const av = r[k];
-    const bv = b[k];
+): T => {
+  const result = { ...a } as Record<string, unknown>;
+  for (const key of Object.keys(b)) {
+    const aValue = result[key];
+    const bValue = b[key];
     if (
-      bv != null &&
-      typeof bv === 'object' &&
-      !Array.isArray(bv) &&
-      av != null &&
-      typeof av === 'object' &&
-      !Array.isArray(av)
+      bValue != null &&
+      typeof bValue === 'object' &&
+      !Array.isArray(bValue) &&
+      aValue != null &&
+      typeof aValue === 'object' &&
+      !Array.isArray(aValue)
     ) {
-      r[k] = deepMerge(
-        av as Record<string, unknown>,
-        bv as Record<string, unknown>,
+      result[key] = deepMerge(
+        aValue as Record<string, unknown>,
+        bValue as Record<string, unknown>,
       );
     } else {
-      r[k] = bv;
+      result[key] = bValue;
     }
   }
-  return r as T;
-}
+  return result as T;
+};

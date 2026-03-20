@@ -6,7 +6,7 @@ import { TEMPLATE_README_CONFIGS } from '../lib/template-readme-config.js';
 import {
   buildStackSection,
   prepareTemplateContext,
-} from '../gen-readme.js';
+} from '../generate-readme.js';
 
 // ── 生成済み README ファイル ─────────────────────────────────────────────────
 
@@ -15,7 +15,7 @@ const README_ENTRIES = TEMPLATE_README_CONFIGS.map((c) => ({
   path: c.id.endsWith('-full')
     ? join(ROOT, 'full-templates', c.id.replace(/-full$/, ''), 'README.md')
     : join(ROOT, 'minimal-templates', c.id, 'README.md'),
-  title: c.title,
+  title: c.title ?? `template-${c.id}`,
 }));
 
 describe('gen-readme: 生成済み README ファイル存在確認', () => {
@@ -251,7 +251,7 @@ describe('prepareTemplateContext', () => {
       description: '',
       repoSlug: '',
       setupSteps: [],
-      devGuide: [{ title: 'テスト', commands: 'yarn test' }],
+      devGuide: [{ title: 'テスト', commands: ['yarn test'] }],
     };
     const ctx = prepareTemplateContext(config, undefined);
     expect(ctx.hasDevGuide).toBe(true);
