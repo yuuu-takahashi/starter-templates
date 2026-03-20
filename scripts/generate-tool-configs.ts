@@ -198,7 +198,11 @@ export const generateMarkuplint = async (): Promise<void> => {
   const markuplintPath = join(SHARED_MARKUPLINT, '.markuplintrc.react.json');
   ensureFileExists(markuplintPath, 'markuplint');
 
-  for (const dir of FULL_TEMPLATE_DIRS) {
+  // Only generate for frontend templates (exclude rails-api which is backend-only)
+  const frontendTemplates = FULL_TEMPLATE_DIRS.filter(
+    (dir) => !dir.includes('rails-api'),
+  );
+  for (const dir of frontendTemplates) {
     const outPath = join(ROOT, dir, '.markuplintrc.json');
     writeFileSync(outPath, readFileSync(markuplintPath, 'utf8'), 'utf8');
     logger.generated(outPath);
