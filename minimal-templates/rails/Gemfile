@@ -36,7 +36,7 @@ end
 group :development do
   gem 'rubocop', '~> 1.71.0'
   gem 'rubocop-rspec', require: false
-  gem 'ruby-lsp', '~> 0.4.0'
+  gem 'ruby-lsp', '~> 0.26.9'
   gem 'web-console'
 end
 
