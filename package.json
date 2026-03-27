@@ -42,7 +42,7 @@
     "concurrently": "^9",
     "eslint": "^9",
     "eslint-config-prettier": "^10",
-    "handlebars": "^4.7.8",
+    "handlebars": "^4.7.9",
     "husky": "^9",
     "lint-staged": "^15",
     "markdownlint-cli": "^0.48.0",
